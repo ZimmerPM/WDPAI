@@ -112,6 +112,7 @@ nav {
     display: flex; 
     justify-content: space-around; 
     align-items: center; /* Wyśrodkowuje przyciski w pionie */
+
 }
 
 nav .nav-button {
@@ -129,6 +130,8 @@ nav .nav-button {
     justify-content: center;
     align-items: center;
     transition: background 0.3s ease; /* Płynne przejście dla efektu hover */
+    overflow: hidden;
+
 }
 
 /* Styl dla efektu hover */
@@ -144,6 +147,7 @@ nav .nav-button i {
     font-size: 1.5em; /* lub inna wartość, którą chcesz ustawić */
 }
 
+
 nav .nav-button.active {
     background: #d8d7d6;
     color: #7F7874;
@@ -151,4 +155,5 @@ nav .nav-button.active {
 
 nav .nav-button.active:hover {
     background: #c2c2c2; /* Ciemniejsze tło dla efektu hover */
+    
 }
