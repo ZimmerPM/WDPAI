@@ -25,7 +25,7 @@ form {
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    width: 90%;
+    width: 85%;
     height: 40vh;
     position: relative;
     top: -10vh;
@@ -81,7 +81,7 @@ input:focus {
     input {
         width: 70%;
     }
-    
+
     button {
         width: 40%;
     }
@@ -104,24 +104,22 @@ input:focus {
     height: 80%;
 }
 
-/* Styl dla paska nawigacyjnego */
 nav {
-    height: 8vh; 
+    height: 8vh;
     width: 100%;
     background-color: #D2BBA0;
-    display: flex; 
-    justify-content: space-around; 
-    align-items: center; /* Wyśrodkowuje przyciski w pionie */
-
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
 nav .nav-button {
     width: 12vw;
-    height: 6vh; 
-    border-radius: 1em; 
+    height: 6vh;
+    border-radius: 1em;
     background: rgba(91, 91, 98, 0.70);
     box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
-    text-decoration: none; /* Usunięcie podkreślenia dla linku */
+    text-decoration: none;
     color: white;
     font-family: 'Poppins', sans-serif;
     letter-spacing: 0.05em;
@@ -129,24 +127,21 @@ nav .nav-button {
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: background 0.3s ease; /* Płynne przejście dla efektu hover */
+    transition: background 0.3s ease;
     overflow: hidden;
-
 }
 
-/* Styl dla efektu hover */
 nav .nav-button:hover {
-    background: rgba(91, 91, 98, 1); /* Ciemniejsze tło dla efektu hover */
+    background: rgba(91, 91, 98, 1);
 }
 
 nav .nav-button i, nav .nav-button span {
-    margin: 0 0.3em; /* Dodaje odstęp pomiędzy ikoną a tekstem i tekstem a ramką przycisku */
+    margin: 0 0.3em;
 }
 
 nav .nav-button i {
-    font-size: 1.5em; /* lub inna wartość, którą chcesz ustawić */
+    font-size: 1.5em;
 }
-
 
 nav .nav-button.active {
     background: #d8d7d6;
@@ -154,6 +149,5 @@ nav .nav-button.active {
 }
 
 nav .nav-button.active:hover {
-    background: #c2c2c2; /* Ciemniejsze tło dla efektu hover */
-    
+    background: #c2c2c2;
 }
