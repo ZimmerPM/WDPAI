@@ -12,12 +12,10 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
 }
 
 .logo {
     height: 60%;
-    width: 70%;
     text-align: center;
     margin: 1em;
 }
@@ -27,57 +25,64 @@ form {
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    width: 80%;
+    width: 90%;
     height: 40vh;
     position: relative;
     top: -10vh;
-
 }
 
-input {
+input, button {
     border-radius: 0.3em;
-    opacity: 0.75;
-    background: linear-gradient(180deg, rgba(207, 185, 158, 0.20) 56.04%, rgba(210, 187, 160, 0.00) 100%);
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 4px 5px 0px rgba(0, 0, 0, 0.1) inset;
-    border: none;
-    border: none;
-    color: #9F7E69;
     padding: 0.5em;
     margin: 0.5em;
-    width: 30%;
     text-align: center;
     font-family: 'Poppins', sans-serif;
     line-height: 2em;
     letter-spacing: 0.25em;
-    
+    border: none;
+    box-sizing: content-box;
+}
+
+input {
+    opacity: 0.75;
+    width: 40%;
+    color: #5B5B62;
+    background: linear-gradient(180deg, rgba(207, 185, 158, 0.20) 56.04%, rgba(210, 187, 160, 0.00) 100%);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 4px 5px 0px rgba(0, 0, 0, 0.1) inset;
+}
+
+button {
+    opacity: 0.9;
+    width: 25%;
+    color: #9F7E69;
+    background: rgba(207, 185, 158, 0.66);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 4px 5px 0px rgba(0, 0, 0, 0.1) inset;
 }
 
 input:focus {
     outline: none;
 }
 
+@media only screen and (max-device-width: 850px) {
+    .login-container {
+        width: 100%;
+    }
 
-button {
-    border-radius: 0.3em;
-    opacity: 0.9;
-    background: rgba(207, 185, 158, 0.66);
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25), 0px 4px 5px 0px rgba(0, 0, 0, 0.1) inset;
-    border: none;
-    color: #9F7E69;
-    padding: 0.5em;
-    margin: 0.5em;
-    width: 25%;
-    text-align: center;
-    font-family: 'Poppins', sans-serif;
-    line-height: 2em;
-    letter-spacing: 0.25em;
-    box-sizing: content-box;
+    .logo {
+        width: 100%;
+        height: 20em;
+    }
+
+    form {
+        width: 100%;
+        top: 0;
+    }
+
+    input {
+        width: 70%;
+    }
     
-}
-
-
-@media screen and (max-width: 420px) {
     button {
-        font-size: 12px; /* Dostosowanie rozmiaru czcionki na małych ekranach */
+        width: 40%;
     }
 }

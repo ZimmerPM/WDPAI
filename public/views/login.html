@@ -1,32 +1,35 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Styles -->
     <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500&display=swap" rel="stylesheet">
 
+    <!-- Preconnects for Performance Improvement -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500&display=swap" rel="stylesheet">
     
     <title>Logowanie</title>
 </head>
+
 <body>
-
     <div class="login-container">
-    
-        <img class="logo" src="../img/logo-with-slogan.svg" alt="Nazwa Twojej Firmy - Slogan" class="logo">
 
+        <!-- Logo -->
+        <img class="logo" src="../img/logo-with-slogan.svg" alt="Nazwa Twojej Firmy - Slogan">
+
+        <!-- Login Form -->
         <form action="your_login_script.php" method="post">
-            
-            <input name="email" type="text" placeholder="e-mail">
-            <input name="password" type="password" placeholder="password">
-       
-            <button>zaloguj</button>
-       
+            <input type="text" name="email" placeholder="e-mail">
+            <input type="password" name="password" placeholder="password">
+            <button type="submit">zaloguj</button>
         </form>
 
     </div>
 </body>
+
 </html>
