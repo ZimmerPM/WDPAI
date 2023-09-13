@@ -30,4 +30,9 @@ class User
     {
         return $this->name;
     }
+
+    public function getLastname(): string
+    {
+        return $this->lastname;
+    }
 }

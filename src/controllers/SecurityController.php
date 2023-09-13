@@ -30,6 +30,7 @@ class SecurityController extends AppController
         $_SESSION['user'] = [
             'email' => $user->getEmail(),
             'name' => $user->getName(),
+            'lastname' => $user->getLastname()
         ];
 
         $url = "http://$_SERVER[HTTP_HOST]";

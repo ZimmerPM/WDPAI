@@ -13,7 +13,7 @@
 
     <link rel="stylesheet" type="text/css" href="public/css/style.css">
     <link rel="stylesheet" type="text/css" href="public/css/table-styles.css">
-    <title>Katalog książek</title>
+    <title>Dodawanie książek do katalogu</title>
 </head>
 <body class="catalog">
 
