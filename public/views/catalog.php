@@ -38,7 +38,7 @@
             <i class="fa-solid fa-user"></i> <span>Moje dane</span>
         </a>
 
-        <a href="link5.html" class="nav-button">
+        <a href="/logout" class="nav-button">
             <i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Wyloguj</span>
         </a>
     </nav>
