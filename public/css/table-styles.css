@@ -1,17 +1,22 @@
 .catalog-table {
-    margin: 2em 2em 0 auto;
+    margin-top: 2em;
     border-radius: 1.5em;
     box-shadow: 0 0 0 1px #ccc inset;
     overflow: hidden;
     border-collapse: collapse;
     width: 85%;
     font-family: 'Comfortaa', cursive;
+    width: 100%; 
+    table-layout: fixed; 
 }
 
 .catalog-table th, .catalog-table td {
     padding: 10px;
     text-align: center;
+    white-space: normal;
+    word-wrap: break-word;
 }
+
 
 .catalog-table th {
     font-family: 'Sarabun', sans-serif;
@@ -22,28 +27,27 @@
     border: 1px solid #D2BBA0;
 }
 
-.catalog-table th:nth-child(6) {
-    white-space: normal;
-    width: 3em;
+.header-container
+{
+    display: flex;
+    margin-bottom: 1em; 
+}
+
+.header-container .empty-field
+{
+    width: 9em;
+    display: hidden;
+    margin-right: 3em;
+}
+
+
+.catalog-table tr {
+    height: auto;
 }
 
 .catalog-table td {
-    border: 1px solid #F7FFE0;
-}
-
-.catalog-table tbody tr:nth-child(odd) {
-    background-color: #D2BBA0;
-    color: #5B5B62;
-}
-
-.catalog-table tbody tr:nth-child(even) {
-    background-color: rgba(159, 126, 105, 0.9);
-    color: #F2EFC7;
-}
-
-.catalog-table tbody tr:hover {
-    background-color: rgba(221, 159, 97, 0.8);
-    color: #1c1c1c;
+    border: 1px solid #5b5b6295;
+    width: 10%
 }
 
 /* Stylowanie przycisku wypożyczenia */
@@ -51,7 +55,7 @@
     margin: auto;
     padding: 0.8em 4em;  /* Zwiększenie paddingu dla przycisku */
     font-family: 'Comfortaa', cursive;  
-    font-size: 0.8em;  /* Ewentualne zmniejszenie wielkości czcionki, jeśli tekst nadal wystaje */
+    font-size: 0.8em;  
     background-color: #5B5B62;  
     color: #F2EFC7;  
     border: none;  
@@ -80,6 +84,49 @@
     background-color: #c2c2c2;  
 }
 
+.book-entry {
+    display: flex;
+    align-items: center;
+    margin-left: 1em;
+    margin-bottom: 1em;
+}
+
+/* Stylowanie dla obrazka okładki */
+.book-cover {
+    width: 9em;
+    height: 9em;
+    border-radius: 1em;
+    margin-right: 1em;
+    background-color: #D2BBA0; /* Tymczasowy kolor dla podglądu, później do usunięcia */
+    flex-shrink: 0;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Aktualizacja stylowania dla naprzemiennych wierszy */
+.book-entry:nth-child(odd) .catalog-table tr {
+    background-color: #D2BBA0;
+    color: #5B5B62;
+    
+}
+
+.book-entry:nth-child(even) .catalog-table tr {
+    background-color: rgba(159, 126, 105, 0.9);
+    color: #F2EFC7;
+}
+
+.book-entry:hover .catalog-table tr {
+    background-color: rgba(221, 159, 97, 0.8);
+    color: #1c1c1c;
+}
+
+.book-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    border-radius: 1em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
 
 
