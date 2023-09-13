@@ -23,7 +23,18 @@
         <img class="logo" src="public/img/logo-with-slogan.svg" alt="combination mark logo">
 
         <!-- Login Form -->
-        <form action="your_login_script.php" method="post">
+        <form action="login" method="POST">
+            <div class="messages">
+                <?php
+                if (isset($messages))
+                {
+                    foreach ($messages as $message)
+                    {
+                        echo $message;
+                    }
+                }
+                ?>
+            </div>
             <input type="text" name="email" placeholder="e-mail">
             <input type="password" name="password" placeholder="password">
             <button type="submit">zaloguj</button>
