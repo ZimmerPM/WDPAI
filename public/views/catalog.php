@@ -149,7 +149,7 @@
                     <td>Realizm magiczny</td>
                     <td>Niedostępna</td>
                     <td>0</td>
-                    <td><button disabled>Wypożycz</button></t>
+                    <td><button disabled>Wypożycz</button></td>
                 </tr>
             </tbody>
         </table>
