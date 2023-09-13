@@ -13,5 +13,6 @@ Router::get('catalog', 'DefaultController');
 Router::post('login', 'SecurityController');
 Router::get('logout', 'SecurityController');
 
+Router::post('addBook', 'BookController');
 
 Router::run($path);

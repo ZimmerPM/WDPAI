@@ -151,3 +151,37 @@ nav .nav-button.active {
 nav .nav-button.active:hover {
     background: #c2c2c2;
 }
+
+section.book-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin: 2em;
+}
+
+section.book-form h1{
+    margin: 0.25em;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 1.2em;
+    color: #9F7E69;
+    opacity: 0.75;
+}
+
+.book-form form{
+    top: 0;
+    width: 100%;
+    height: 90%;
+}
+
+.book-form input{
+    margin: 1em;
+}
+
+input.file-upload{
+    background-color: transparent;
+    text-align: center;
+    border: none;
+    border-bottom: 0.5px solid gray;
+    box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.02);
+}

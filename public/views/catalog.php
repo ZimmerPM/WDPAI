@@ -62,97 +62,28 @@
 
     <div class="book-entry">
         <div class="book-cover">
-            <img src="public/img/covers/wiedzmin.jpg" alt="Andrzej Sapkowski, Wiedźmin">
+            <img src="public/uploads/<?=$book->getImage() ?>" >
         </div>
         <table class="catalog-table">
             <tbody>
                 <tr>
-                    <td>Wiedźmin</td>
-                    <td>Andrzej Sapkowski</td>
-                    <td>1994</td>
-                    <td>Fantasy</td>
-                    <td>Dostępna</td>
-                    <td>3</td>
+                    <td><?= $book->getTitle() ?></td>
+                    <td><?= $book->getAuthor() ?></td>
+                    <td><?= $book->getPublicationYear() ?></td>
+                    <td><?= $book->getGenre() ?></td>
+                    <td><?= $book->getAvailability() ? 'Dostępna' : 'Niedostępna' ?></td>
+                    <td><?= $book->getStock() ?></td>
                     <td><button>Wypożycz</button></td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    <div class="book-entry">
-        <div class="book-cover">
-            <img src="public/img/covers/bnw.jpg" alt="Aldous Huxley, Brave New World">
-        </div>
-        <table class="catalog-table">
-            <tbody>
-                <tr>
-                    <td>Brave New World</td>
-                    <td>Aldous Huxley</td>
-                    <td>1932</td>
-                    <td>Sci-Fi, dystopia</td>
-                    <td>Dostępna</td>
-                    <td>1</td>
-                    <td><button>Wypożycz</button></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
 
-    <div class="book-entry">
-        <div class="book-cover">
-            <img src="public/img/covers/rok1984.jpg" alt="George Orwell, rok 1984">
-        </div>
-        <table class="catalog-table">
-            <tbody>
-                <tr>
-                    <td>1984</td>
-                    <td>George Orwell</td>
-                    <td>1949</td>
-                    <td>Sci-Fi, dystopia</t>
-                    <td>Dostępna</td>
-                    <td>2</td>
-                    <td><button>Wypożycz</button></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+
+
             
-    <div class="book-entry">
-        <div class="book-cover">
-            <img src="public/img/covers/MiM.jpg" alt="Michaił Bułkakow, Mistrz i Magłorzata">
-        </div>
-        <table class="catalog-table">
-            <tbody>
-                <tr>
-                    <td>Mistrz i Małgorzata</td>
-                    <td>Michaił Bułhakow</td>
-                    <td>1967</td>
-                    <td>Fikcja literacka</td>
-                    <td>Niedostępna</td>
-                    <td>0</td>
-                    <td><button disabled>Wypożycz</button></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-            
-    <div class="book-entry">
-        <div class="book-cover">
-            <img src="public/img/covers/100LS.jpg" alt="Gabriel García Márquez, Sto lat samotności">
-        </div>
-        <table class="catalog-table">
-            <tbody>
-                <tr>
-                    <td>Sto lat samotności</td>
-                    <td>Gabriel García Márquez</td>
-                    <td>1967</td>
-                    <td>Realizm magiczny</td>
-                    <td>Niedostępna</td>
-                    <td>0</td>
-                    <td><button disabled>Wypożycz</button></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+
+
 </body>
 </html>
