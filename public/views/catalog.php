@@ -53,7 +53,7 @@
                     <th>Rok wydania</th>
                     <th>Gatunek</th>
                     <th>Dostępność</th>
-                 git   <th>Liczba dostępnych egzemplarzy</th>
+                    <th>Liczba dostępnych egzemplarzy</th>
                     <th>Operacje</th>
                 </tr>
             </thead>
@@ -119,7 +119,7 @@
             
     <div class="book-entry">
         <div class="book-cover">
-            <img src="public/img/covers/MiM.jpg" alt="Michaił Bułhakow, Mistrz i Magłorzata">
+            <img src="public/img/covers/MiM.jpg" alt="Michaił Bułkakow, Mistrz i Magłorzata">
         </div>
         <table class="catalog-table">
             <tbody>
