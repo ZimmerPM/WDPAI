@@ -185,3 +185,16 @@ input.file-upload{
     border-bottom: 0.5px solid gray;
     box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.02);
 }
+
+.register-container {
+    /* tutaj możemy użyć tych samych stylów co dla .login-container, ewentualnie dokonać drobnych modyfikacji */
+    width: 100vw;
+    height: 100vh;
+    border: 1px solid #9F7E69;
+    background: #F2EFC7;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

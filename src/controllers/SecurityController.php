@@ -7,7 +7,6 @@ require_once __DIR__.'/../repository/UserRepository.php';
 class SecurityController extends AppController
 {
     public function login()
-
     {
         $userRepository = new UserRepository();
 
@@ -18,19 +17,15 @@ class SecurityController extends AppController
         $email = $_POST['email'];
         $password = $_POST['password'];
 
+        // Pobierz użytkownika na podstawie e-maila:
         $user = $userRepository->getUser($email);
 
-        if(!$user) {
+        if (!$user) {
             return $this->render('login', ['messages' => ['Nie ma takiego użytkownika!']]);
         }
 
-        // Sprawdzanie adresu e-mail:
-        if ($user->getEmail() !== $email) {
-            return $this->render('login', ['messages' => ['Brak użytkownika o podanym adresie e-mail!']]);
-        }
-
-        // Sprawdzanie hasła:
-        if ($user->getPassword() !== $password) {
+        // Sprawdzanie hasła z użyciem funkcji password_verify:
+        if (!password_verify($password, $user->getPassword())) {
             return $this->render('login', ['messages' => ['Niepoprawne hasło!']]);
         }
 
@@ -38,7 +33,8 @@ class SecurityController extends AppController
         $_SESSION['user'] = [
             'email' => $user->getEmail(),
             'name' => $user->getName(),
-            'lastname' => $user->getLastname()
+            'lastname' => $user->getLastname(),
+            'role' => $user->getRole()
         ];
 
         $url = "http://$_SERVER[HTTP_HOST]";
@@ -54,4 +50,3 @@ class SecurityController extends AppController
         header("Location: {$url}/login");
     }
 }
-

@@ -7,8 +7,8 @@ class UserRepository extends Repository
     public function getUser(string $email): ?User
     {
         $stmt = $this->database->connect()->prepare('
-            SELECT * FROM public.users WHERE email = :email
-        ');
+        SELECT * FROM public.users WHERE email = :email
+    ');
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
 
@@ -16,13 +16,30 @@ class UserRepository extends Repository
 
         if ($user == false) {
             return null;
-
         }
+
         return new User(
             $user['email'],
             $user['password'],
             $user['name'],
-            $user['lastname']
+            $user['lastname'],
+            $user['role']  // przekazanie roli do konstruktora User
         );
+    }
+
+    public function save(User $user)
+    {
+        $stmt = $this->database->connect()->prepare('
+        INSERT INTO users (email, password, name, lastname, role) 
+        VALUES (?, ?, ?, ?, ?)
+    ');
+
+        $stmt->execute([
+            $user->getEmail(),
+            $user->getPassword(),
+            $user->getName(),
+            $user->getLastname(),
+            $user->getRole()
+        ]);
     }
 }
