@@ -25,4 +25,38 @@ class UserRepository extends Repository
             $user['lastname']
         );
     }
+
+    public function addUser(User $user)
+    {
+        $database = $this->database->connect();
+
+        try {
+            $stmt = $database->prepare('
+            INSERT INTO public.users (email, password, name, lastname, role)
+            VALUES (?, ?, ?, ?, ?)
+        ');
+
+            // Pobierz dane z obiektu User
+            $email = $user->getEmail();
+            $password = $user->getPassword();
+            $name = $user->getName();
+            $lastname = $user->getLastname();
+            $role = $user->getRole(); // Upewnij się, że metoda getRole istnieje w klasie User i zwraca odpowiednią rolę (np. 'user')
+
+            $stmt->execute([
+                $email,
+                $password,
+                $name,
+                $lastname,
+                $role
+            ]);
+        } catch (PDOException $e) {
+            // Jeśli coś pójdzie nie tak, możesz tutaj obsłużyć wyjątek
+            die("Błąd podczas dodawania użytkownika do bazy danych: " . $e->getMessage());
+        }
+    }
+
 }
+
+
+

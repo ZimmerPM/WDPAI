@@ -33,5 +33,15 @@ class AppController
         }
 
         print $output;
-    } 
+    }
+
+    protected function isAdmin(): bool
+    {
+        return isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin';
+    }
+
+    protected function isUser(): bool
+    {
+        return isset($_SESSION['user']) && $_SESSION['user']['role'] === 'user';
+    }
 }

@@ -7,12 +7,21 @@ require 'Router.php';
 $path = trim($_SERVER['REQUEST_URI'], '/');
 $path = parse_url($path, PHP_URL_PATH);
 
-Router::get('', 'DefaultController');
-Router::get('catalog', 'DefaultController');
+$httpMethod = $_SERVER['REQUEST_METHOD'];
 
-Router::post('login', 'SecurityController');
-Router::get('logout', 'SecurityController');
-
-Router::post('addBook', 'BookController');
-
-Router::run($path);
+if ($httpMethod == 'GET' && $path == 'register') {
+    require_once 'src/controllers/RegistrationController.php';
+    $controller = new RegistrationController();
+    $controller->showRegistrationForm();
+} elseif ($httpMethod == 'POST' && $path == 'register') {
+    require_once 'src/controllers/RegistrationController.php';
+    $controller = new RegistrationController();
+    $controller->register();
+} else {
+    Router::get('', 'DefaultController');
+    Router::get('catalog', 'DefaultController');
+    Router::post('login', 'SecurityController');
+    Router::get('logout', 'SecurityController');
+    Router::post('addBook', 'BookController');
+    Router::run($path);
+}

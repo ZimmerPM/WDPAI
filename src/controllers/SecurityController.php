@@ -7,7 +7,6 @@ require_once __DIR__.'/../repository/UserRepository.php';
 class SecurityController extends AppController
 {
     public function login()
-
     {
         $userRepository = new UserRepository();
 
@@ -24,13 +23,8 @@ class SecurityController extends AppController
             return $this->render('login', ['messages' => ['Nie ma takiego użytkownika!']]);
         }
 
-        // Sprawdzanie adresu e-mail:
-        if ($user->getEmail() !== $email) {
-            return $this->render('login', ['messages' => ['Brak użytkownika o podanym adresie e-mail!']]);
-        }
-
         // Sprawdzanie hasła:
-        if ($user->getPassword() !== $password) {
+        if (!password_verify($password, $user->getPassword())) {
             return $this->render('login', ['messages' => ['Niepoprawne hasło!']]);
         }
 
@@ -38,12 +32,14 @@ class SecurityController extends AppController
         $_SESSION['user'] = [
             'email' => $user->getEmail(),
             'name' => $user->getName(),
-            'lastname' => $user->getLastname()
+            'lastname' => $user->getLastname(),
+            'role' => $user->getRole()
         ];
 
         $url = "http://$_SERVER[HTTP_HOST]";
         header("Location: {$url}/catalog");
     }
+
 
     public function logout() {
         // Usuń dane użytkownika z sesji:
