@@ -12,6 +12,7 @@
     <!-- Preconnects for Performance Improvement -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script type="text/javascript" src="./public/js/validation.js" defer></script>
     
     <title>Logowanie</title>
 </head>

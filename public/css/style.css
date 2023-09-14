@@ -205,4 +205,8 @@ input.file-upload{
     color: #F2EFC7; /* Kolor tła formularza logowania */
 }
 
+.no-valid {
+    border: 2px solid red; /* Dodaj podświetlenie błędnego pola */
+}
+
 
