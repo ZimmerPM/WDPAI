@@ -85,6 +85,8 @@ input:focus {
     button {
         width: 40%;
     }
+
+
 }
 
 .catalog {
@@ -203,6 +205,52 @@ input.file-upload{
 .register-link:hover {
     background-color: #9F7E69;
     color: #F2EFC7; /* Kolor tła formularza logowania */
+}
+
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1em 0;
+    gap: 1em; /* Odstęp pomiędzy polem wyszukiwania a przyciskiem */
+}
+
+.search-input {
+    padding: 0.5em;
+    font-family: "Comfortaa", cursive;
+    border: 1px solid #5b5b6295;
+    border-radius: 0.5em;
+    outline: none;
+    flex-grow: 1; /* pozwala na rozciągnięcie się pola tekstowego */
+    max-width: 400px; /* maksymalna szerokość pola tekstowego */
+}
+
+.search-button {
+    padding: 0.5em 1.5em;
+    font-family: "Comfortaa", cursive;
+    background-color: #5b5b62;
+    color: #f2efc7;
+    border: none;
+    border-radius: 0.8em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.search-button:hover {
+    background-color: #444;
+}
+
+/* Odpowiednie style dla urządzeń mobilnych */
+@media only screen and (max-width: 600px) {
+    .search-container {
+        flex-direction: column;
+    }
+
+    .search-input,
+    .search-button {
+        width: 100%;
+        margin-bottom: 0.5em;
+    }
 }
 
 .no-valid {

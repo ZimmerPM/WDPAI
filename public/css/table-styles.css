@@ -123,3 +123,53 @@
 	border-radius: 1em;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+
+@media only screen and (max-width: 600px) {
+	/* Ukrywanie obrazków w książkach */
+	.book-entry .book-cover {
+		display: none;
+	}
+
+	/* Ukrywanie opisów w menu nawigacyjnym */
+	nav .nav-button span {
+		display: none;
+	}
+
+	.empty-field{
+		display: none;
+
+	}
+
+	/* Ukrywanie nagłówków trzeciej, czwartej i piątej kolumny */
+	.catalog-table th:nth-child(3),
+	.catalog-table th:nth-child(4),
+	.catalog-table th:nth-child(5) {
+		display: none;
+	}
+
+	/* Ukrywanie danych trzeciej, czwartej i piątej kolumny */
+	.catalog-table td:nth-child(3),
+	.catalog-table td:nth-child(4),
+	.catalog-table td:nth-child(5) {
+		display: none;
+	}
+	.catalog-table td {
+		padding: 8px;
+		font-size: 14px;
+	}
+	.catalog-table td button {
+		min-width: 70px;
+		padding: 6px 10px;
+		font-size: 0.7em;
+		margin-right: 2em;
+
+	}
+
+	.catalog-table th {
+		padding: 8px;
+		font-size: 14px;
+	}
+}
+
+

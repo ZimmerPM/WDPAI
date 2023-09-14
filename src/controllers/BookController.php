@@ -2,6 +2,7 @@
 
 require_once 'AppController.php';
 require_once __DIR__.'/../models/Book.php';
+require_once __DIR__.'/../repository/BookRepository.php';
 
 class BookController extends AppController
 {
@@ -26,7 +27,7 @@ class BookController extends AppController
                 $book = new Book(
                     $_POST['author'],
                     $_POST['title'],
-                    $_POST['publicationYear'],
+                    $_POST['publicationyear'],
                     $_POST['genre'],
                     $availability,
                     $stock,
@@ -57,4 +58,41 @@ class BookController extends AppController
         }
         return true;
     }
+
+    public function showCatalog()
+    {
+        $bookRepository = new BookRepository();
+        $books = $bookRepository->getBooks();
+
+        return $this->render('catalog', ['books' => $books]);
+
+    }
+    public function search()
+    {
+        header('Content-type: application/json');
+        $response = [];
+
+        if ($this->isPost()) {
+            $searchTerm = $_POST['query'];
+
+            $bookRepository = new BookRepository();
+            $books = $bookRepository->searchBooks($searchTerm);
+
+            foreach ($books as $book) {
+                $response[] = [
+                    'title' => $book->getTitle(),
+                    'author' => $book->getAuthor(),
+                    'publicationYear' => $book->getPublicationYear(),
+                    'genre' => $book->getGenre(),
+                    'availability' => $book->isAvailable() ? 'Dostępna' : 'Niedostępna',
+                    'stock' => $book->getStock(),
+                    'image' => $book->getImage()
+                ];
+            }
+        }
+
+        echo json_encode($response);
+    }
+
+
 }

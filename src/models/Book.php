@@ -4,18 +4,18 @@ class Book
 {
     private $author;
     private $title;
-    private $publicationYear;
+    private $publicationyear;
     private $genre;
     private $availability;
     private $stock;
 
     private $image;
 
-    public function __construct($author, $title, $publicationYear, $genre, $availability, $stock, $image)
+    public function __construct($author, $title, $publicationyear, $genre, $availability, $stock, $image)
     {
         $this->author = $author;
         $this->title = $title;
-        $this->publicationYear = $publicationYear;
+        $this->publicationyear = $publicationyear;
         $this->genre = $genre;
         $this->availability = $availability;
         $this->stock = $stock;
@@ -85,15 +85,19 @@ class Book
         $this->image = $image;
     }
 
-    public function getPublicationYear()
+    public function getPublicationyear()
     {
-        return $this->publicationYear;
+        return $this->publicationyear;
     }
 
-    public function setPublicationYear($publicationYear)
+    public function setPublicationYear($publicationyear)
     {
-        $this->publicationYear = $publicationYear;
+        $this->publicationyear = $publicationyear;
     }
 
+    public function isAvailable(): bool
+    {
+        return $this->availability;
+    }
 
 }
