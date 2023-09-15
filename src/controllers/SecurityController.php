@@ -17,9 +17,11 @@ class SecurityController extends AppController
         $email = $_POST['email'];
         $password = $_POST['password'];
 
+
         $user = $userRepository->getUser($email);
 
-        if(!$user) {
+        if (!$user)
+        {
             return $this->render('login', ['messages' => ['Nie ma takiego użytkownika!']]);
         }
 
@@ -41,7 +43,8 @@ class SecurityController extends AppController
     }
 
 
-    public function logout() {
+    public function logout()
+    {
         // Usuń dane użytkownika z sesji:
         unset($_SESSION['user']);
 
@@ -49,5 +52,15 @@ class SecurityController extends AppController
         $url = "http://$_SERVER[HTTP_HOST]";
         header("Location: {$url}/login");
     }
+
+
+    public function profile()
+    {
+        if ($this->isLoggedIn())
+        {
+            return $this->render('profile');
+        }
+    }
+
 }
 

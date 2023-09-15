@@ -7,7 +7,10 @@ class UserRepository extends Repository
     public function getUser(string $email): ?User
     {
         $stmt = $this->database->connect()->prepare('
-            SELECT * FROM public.users WHERE email = :email
+            SELECT u.email, u.password, ud.name, ud.lastname, u.role
+            FROM public.users u
+            LEFT JOIN public.userdetails ud ON u.id = ud.user_id
+            WHERE u.email = :email
         ');
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
@@ -16,13 +19,15 @@ class UserRepository extends Repository
 
         if ($user == false) {
             return null;
-
         }
+
         return new User(
             $user['email'],
             $user['password'],
             $user['name'],
-            $user['lastname']
+            $user['lastname'],
+            $user['role']
+
         );
     }
 
@@ -32,31 +37,29 @@ class UserRepository extends Repository
 
         try {
             $stmt = $database->prepare('
-            INSERT INTO public.users (email, password, name, lastname, role)
-            VALUES (?, ?, ?, ?, ?)
-        ');
+                INSERT INTO public.users (email, password)
+                VALUES (?, ?)
+                RETURNING id
+            ');
 
-            // Pobierz dane z obiektu User
             $email = $user->getEmail();
             $password = $user->getPassword();
+
+            $stmt->execute([$email, $password]);
+
+            $userId = $stmt->fetchColumn();
+
+            $stmt = $database->prepare('
+                INSERT INTO public.userdetails (user_id, name, lastname)
+                VALUES (?, ?, ?)
+            ');
+
             $name = $user->getName();
             $lastname = $user->getLastname();
-            $role = $user->getRole(); // Upewnij się, że metoda getRole istnieje w klasie User i zwraca odpowiednią rolę (np. 'user')
 
-            $stmt->execute([
-                $email,
-                $password,
-                $name,
-                $lastname,
-                $role
-            ]);
+            $stmt->execute([$userId, $name, $lastname]);
         } catch (PDOException $e) {
-            // Jeśli coś pójdzie nie tak, możesz tutaj obsłużyć wyjątek
             die("Błąd podczas dodawania użytkownika do bazy danych: " . $e->getMessage());
         }
     }
-
 }
-
-
-

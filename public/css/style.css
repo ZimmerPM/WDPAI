@@ -20,6 +20,23 @@ body {
     margin: 1em;
 }
 
+.user-info {
+    font-family: "Comfortaa", cursive;
+    font-size: 1vw;
+    color: #5b5b62;
+    background-color: #f7ffe0;
+    padding: 0.3em 0.6em;
+    border-radius: 0.3em;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    bottom: 1.5em;
+    right: 6em;
+}
+
+.top-bar {
+    position: relative;
+}
+
 form {
     display: flex;
     flex-direction: column;
@@ -94,11 +111,11 @@ input:focus {
 
 }
 
-.catalog {
+.catalog, .profile {
     background-color: #FFEEE2;
 }
 
-.catalog .top-bar {
+.top-bar {
     height: 15vh;
     width: 100%;
     background-color: #F2EFC7;
@@ -107,7 +124,7 @@ input:focus {
     align-items: center;
 }
 
-.top-bar .logo {
+.logo {
     height: 80%;
 }
 
@@ -258,6 +275,61 @@ input.file-upload{
     text-align: center;
 }
 
+.profile-container {
+    height: 100%;
+    margin-top: 5em;
+    margin-left: 5em;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-name {
+    font-family: 'Comfortaa', cursive;
+    margin: 0 auto;
+    color: #9F7E69;
+    font-size: 2.5em;
+}
+
+.profile-role {
+    font-family: 'Comfortaa', cursive;
+    margin: 1em auto;
+    color: #9F7E69;
+    font-size: 1.5em;
+}
+
+
+.profile-info {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.2em;
+    letter-spacing: 3px;
+    color: #5b5b62; /* Kolor tekstu */
+
+    line-height: 5em; /* Odstęp między liniami tekstu */
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+#openPasswordModal {
+    background-color: #5b5b62;
+    color: #f2efc7;
+    border: none;
+    border-radius: 0.8em;
+    padding: 0.5em 1.5em;
+    font-family: "Comfortaa", cursive;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#openPasswordModal:hover {
+    background-color: #444;
+}
+
 /* Odpowiednie style dla urządzeń mobilnych */
 @media only screen and (max-width: 600px) {
     .search-container {
@@ -269,6 +341,3 @@ input.file-upload{
         margin-bottom: 0.5em;
     }
 }
-
-
-

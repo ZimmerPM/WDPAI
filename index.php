@@ -25,7 +25,9 @@ if ($httpMethod == 'GET' && $path == 'register') {
     Router::get('logout', 'SecurityController');
 
     Router::post('search', 'BookController');
-    Router::post('addBook', 'BookController');
+    Router::get('addBook', 'BookController');
+
+    Router::get('profile', 'SecurityController');
 
     Router::run($path);
 }

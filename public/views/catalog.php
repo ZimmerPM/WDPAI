@@ -22,10 +22,11 @@
 
 <div class="top-bar">
     <img class="logo" src="public/img/logo.svg" alt="logo">
+    <span class="user-info"><?php echo $_SESSION['user']['name'] . " " . $_SESSION['user']['lastname']; ?></span>
 </div>
 
 <nav>
-    <a href="link1.html" class="nav-button active">
+    <a href="/catalog" class="nav-button active">
         <i class="fa-solid fa-list"></i> <span>Katalog</span>
     </a>
 
@@ -37,7 +38,7 @@
         <i class="fa-regular fa-calendar-check"></i> <span>Rezerwacje</span>
     </a>
 
-    <a href="link4.html" class="nav-button">
+    <a href="/profile" class="nav-button">
         <i class="fa-solid fa-user"></i> <span>Moje dane</span>
     </a>
 
