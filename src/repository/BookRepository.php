@@ -33,7 +33,6 @@ class BookRepository extends Repository
         return $result;
     }
 
-
     public function searchBooks(string $query): array
     {
         $searchQuery = '%' . strtolower($query) . '%';
@@ -43,7 +42,7 @@ class BookRepository extends Repository
         FROM books
         INNER JOIN booksauthors ON books.id = booksauthors.book_id
         INNER JOIN authors ON authors.id = booksauthors.author_id
-        WHERE LOWER(books.title) LIKE :query OR LOWER(authors.name) LIKE :query
+        WHERE LOWER(books.title) LIKE :query OR LOWER(authors.name) LIKE :query OR LOWER(books.genre) LIKE :query
     ');
 
         $stmt->bindParam(':query', $searchQuery, PDO::PARAM_STR);

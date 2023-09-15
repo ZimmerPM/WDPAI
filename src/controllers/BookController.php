@@ -59,7 +59,7 @@ class BookController extends AppController
         return true;
     }
 
-    public function showCatalog()
+    public function catalog()
     {
         $bookRepository = new BookRepository();
         $books = $bookRepository->getBooks();
@@ -73,7 +73,8 @@ class BookController extends AppController
         $response = [];
 
         if ($this->isPost()) {
-            $searchTerm = $_POST['query'];
+            $inputData = json_decode(file_get_contents('php://input'), true);
+            $searchTerm = $inputData['query'];
 
             $bookRepository = new BookRepository();
             $books = $bookRepository->searchBooks($searchTerm);
@@ -90,9 +91,6 @@ class BookController extends AppController
                 ];
             }
         }
-
         echo json_encode($response);
     }
-
-
 }

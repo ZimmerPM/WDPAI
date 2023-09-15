@@ -19,7 +19,7 @@ if ($httpMethod == 'GET' && $path == 'register') {
     $controller->register();
 } else {
     Router::get('', 'DefaultController');
-    Router::get('catalog', 'DefaultController');
+    Router::post('catalog', 'BookController');
 
     Router::post('login', 'SecurityController');
     Router::get('logout', 'SecurityController');

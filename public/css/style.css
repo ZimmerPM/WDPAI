@@ -63,6 +63,11 @@ input:focus {
     outline: none;
 }
 
+.no-valid {
+    border: 2px solid red; /* Dodaj podświetlenie błędnego pola */
+}
+
+
 @media only screen and (max-device-width: 850px) {
     .login-container {
         width: 100%;
@@ -123,6 +128,7 @@ nav .nav-button {
     box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
     text-decoration: none;
     color: white;
+    font-size: 1vw;
     font-family: 'Poppins', sans-serif;
     letter-spacing: 0.05em;
     line-height: 2vh;
@@ -211,7 +217,7 @@ input.file-upload{
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 1em 0;
+    margin: 2em 0;
     gap: 1em; /* Odstęp pomiędzy polem wyszukiwania a przyciskiem */
 }
 
@@ -240,6 +246,18 @@ input.file-upload{
     background-color: #444;
 }
 
+.no-results-message {
+    font-size: 1.5em;
+    font-family: 'Sarabun', sans-serif;
+    background-color: #f7ffe0;
+    margin: 1em 0;
+    padding: 1.5em;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
 /* Odpowiednie style dla urządzeń mobilnych */
 @media only screen and (max-width: 600px) {
     .search-container {
@@ -248,13 +266,9 @@ input.file-upload{
 
     .search-input,
     .search-button {
-        width: 100%;
         margin-bottom: 0.5em;
     }
 }
 
-.no-valid {
-    border: 2px solid red; /* Dodaj podświetlenie błędnego pola */
-}
 
 

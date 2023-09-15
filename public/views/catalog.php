@@ -1,13 +1,3 @@
-<?php
-require_once __DIR__.'/../../src/models/Book.php'; // Poprawiona ścieżka do Book.php
-require_once __DIR__.'/../../src/repository/BookRepository.php'; // Poprawiona ścieżka do BookRepository.php
-
-
-$bookRepository = new BookRepository();
-$books = $bookRepository->getBooks();
-
-?>
-
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -78,31 +68,38 @@ $books = $bookRepository->getBooks();
     </table>
 </div>
 
-<?php foreach ($books as $book): ?>
-    <div class="book-entry">
-        <div class="book-cover">
-            <img src="<?php echo $book->getImage(); ?>" alt="<?php echo $book->getTitle(); ?>">
+<div class="books-container">
+    <?php if (isset($books))
+    {foreach ($books as $book): ?>
+        <div class="book-entry">
+            <div class="book-cover">
+                <img src="<?php echo $book->getImage(); ?>" alt="<?php echo $book->getTitle(); ?>">
+            </div>
+            <table class="catalog-table">
+                <tbody>
+                <tr>
+                    <td><?php echo $book->getTitle(); ?></td>
+                    <td><?php echo $book->getAuthor(); ?></td>
+                    <td><?php echo $book->getPublicationYear(); ?></td>
+                    <td><?php echo $book->getGenre(); ?></td>
+                    <td><?php echo $book->isAvailable() ? 'Dostępna' : 'Niedostępna'; ?></td>
+                    <td><?php echo $book->getStock(); ?></td>
+                    <td>
+                        <div class="btn-container">
+                            <?php if ($book->isAvailable()): ?>
+                                <button>Wypożycz</button>
+                                <button class="reserve-btn">Rezerwuj</button>
+                            <?php else: ?>
+                                <button disabled>Wypożycz</button>
+                                <button class="reserve-btn" disabled>Rezerwuj</button>
+                            <?php endif; ?>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-        <table class="catalog-table">
-            <tbody>
-            <tr>
-                <td><?php echo $book->getTitle(); ?></td>
-                <td><?php echo $book->getAuthor(); ?></td>
-                <td><?php echo $book->getPublicationYear(); ?></td>
-                <td><?php echo $book->getGenre(); ?></td>
-                <td><?php echo $book->isAvailable() ? 'Dostępna' : 'Niedostępna'; ?></td>
-                <td><?php echo $book->getStock(); ?></td>
-                <td>
-                    <?php if ($book->isAvailable()): ?>
-                        <button>Wypożycz</button>
-                    <?php else: ?>
-                        <button disabled>Wypożycz</button>
-                    <?php endif; ?>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-<?php endforeach; ?>
+    <?php endforeach; }?>
+</div>
 </body>
 </html>

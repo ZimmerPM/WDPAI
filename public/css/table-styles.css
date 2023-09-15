@@ -1,11 +1,19 @@
+.book-entry {
+	display: flex;
+	align-items: center;
+	margin-left: 1em;
+	margin-bottom: 2.5em;
+}
+
 .catalog-table {
 	margin-top: 2em;
-	border-radius: 1.5em;
+	border-radius: 1em;
 	box-shadow: 0 0 0 1px #ccc inset;
 	overflow: hidden;
 	border-collapse: collapse;
-	width: 85%;
 	font-family: "Comfortaa", cursive;
+	font-size: 1.1em;
+	height: 4em;
 	width: 100%;
 	table-layout: fixed;
 }
@@ -34,7 +42,7 @@
 
 .header-container .empty-field {
 	width: 9em;
-	display: hidden;
+	visibility: hidden;
 	margin-right: 3em;
 }
 
@@ -44,7 +52,12 @@
 
 .catalog-table td {
 	border: 1px solid #5b5b6295;
-	width: 10%;
+}
+
+.catalog-table td .btn-container {
+	display: flex;
+	justify-content: center;
+	gap: 0.5em; /* odstęp między przyciskami */
 }
 
 /* Stylowanie przycisku wypożyczenia */
@@ -81,12 +94,28 @@
 	background-color: #c2c2c2;
 }
 
-.book-entry {
-	display: flex;
-	align-items: center;
-	margin-left: 1em;
-	margin-bottom: 1em;
+.catalog-table td button.reserve-btn {
+	background-color: #5b5b62;
+	color: #f2efc7;
+	/* reszta stylów będzie taka sama jak dla przycisku "Wypożycz",
+       więc nie musisz ich powtarzać, chyba że chcesz dać specyficzny styl dla tego przycisku */
 }
+
+.catalog-table td button.reserve-btn:hover {
+	background-color: #444;
+}
+
+.catalog-table td .reserve-btn,
+.catalog-table td button {
+	padding: 0.6em 2em;
+	font-size: 0.75em;
+}
+
+.catalog-table th:nth-child(6),  /* zmień "n" na numer kolumny liczby egzemplarzy */
+.catalog-table td:nth-child(6) {  /* to samo dla komórek z wartościami */
+	width: 6em;  /* Przykładowa szerokość, możemy dostosować wg potrzeb */
+}
+
 
 /* Stylowanie dla obrazka okładki */
 .book-cover {
@@ -125,7 +154,7 @@
 }
 
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 800px) {
 	/* Ukrywanie obrazków w książkach */
 	.book-entry .book-cover {
 		display: none;
@@ -141,18 +170,34 @@
 
 	}
 
+	.book-entry {
+
+		margin-left: 0em;
+
+	}
+
+
+
 	/* Ukrywanie nagłówków trzeciej, czwartej i piątej kolumny */
 	.catalog-table th:nth-child(3),
 	.catalog-table th:nth-child(4),
-	.catalog-table th:nth-child(5) {
+	.catalog-table th:nth-child(5),
+	.catalog-table th:nth-child(7)
+	{
 		display: none;
 	}
 
 	/* Ukrywanie danych trzeciej, czwartej i piątej kolumny */
 	.catalog-table td:nth-child(3),
 	.catalog-table td:nth-child(4),
-	.catalog-table td:nth-child(5) {
+	.catalog-table td:nth-child(5),
+	.catalog-table td:nth-child(7)
+	{
 		display: none;
+	}
+
+	.catalog-table tbody{
+		height: 4em;
 	}
 	.catalog-table td {
 		padding: 8px;
@@ -160,16 +205,16 @@
 	}
 	.catalog-table td button {
 		min-width: 70px;
-		padding: 6px 10px;
+		padding: 0.5em 1.5em;
 		font-size: 0.7em;
 		margin-right: 2em;
-
 	}
 
 	.catalog-table th {
 		padding: 8px;
 		font-size: 14px;
 	}
+
 }
 
 
