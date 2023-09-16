@@ -13,6 +13,8 @@
 
     <link rel="stylesheet" type="text/css" href="public/css/style.css">
     <link rel="stylesheet" type="text/css" href="public/css/table-styles.css">
+    <link rel="stylesheet" type="text/css" href="public/css/admin-styles.css">
+
     <title>Dodawanie książek do katalogu</title>
 </head>
 <body class="catalog">

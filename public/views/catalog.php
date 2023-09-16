@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,38 +14,58 @@
 
     <link rel="stylesheet" type="text/css" href="public/css/style.css">
     <link rel="stylesheet" type="text/css" href="public/css/table-styles.css">
+    <link rel="stylesheet" type="text/css" href="public/css/admin-styles.css">
 
     <script src="public/js/search.js" defer></script>
 
     <title>Katalog książek</title>
 </head>
+
 <body class="catalog">
 
 <div class="top-bar">
     <img class="logo" src="public/img/logo.svg" alt="logo">
-    <span class="user-info"><?php echo $_SESSION['user']['name'] . " " . $_SESSION['user']['lastname']; ?></span>
-</div>
+    <?php if (isset($_SESSION['user'])): ?>
+        <span class="user-info"><?php echo $_SESSION['user']['name'] . " " . $_SESSION['user']['lastname']; ?></span>
+    <?php else: ?>
+        <span class="user-info">Przeglądasz jako Gość</span>
+    <?php endif; ?>
+</div></div>
 
 <nav>
     <a href="/catalog" class="nav-button active">
         <i class="fa-solid fa-list"></i> <span>Katalog</span>
     </a>
 
-    <a href="link2.html" class="nav-button">
-        <i class="fa-solid fa-book-open"></i> <span>Wypożyczenia</span>
-    </a>
+    <?php if ($_SESSION['user']['role'] === 'admin'): ?>
+        <a href="/addBook" class="admin-panel-button">
+            <i class="fa-solid fa-cog"></i> <span>Panel administracyjny</span>
+        </a>
+    <?php endif; ?>
 
-    <a href="link3.html" class="nav-button">
-        <i class="fa-regular fa-calendar-check"></i> <span>Rezerwacje</span>
-    </a>
+    <?php if (isset($_SESSION['user'])): ?>
+        <a href="link2.html" class="nav-button">
+            <i class="fa-solid fa-book-open"></i> <span>Wypożyczenia</span>
+        </a>
 
-    <a href="/profile" class="nav-button">
-        <i class="fa-solid fa-user"></i> <span>Moje dane</span>
-    </a>
+        <a href="link3.html" class="nav-button">
+            <i class="fa-regular fa-calendar-check"></i> <span>Rezerwacje</span>
+        </a>
 
-    <a href="/logout" class="nav-button">
-        <i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Wyloguj</span>
-    </a>
+        <a href="/profile" class="nav-button">
+            <i class="fa-solid fa-user"></i> <span>Moje dane</span>
+        </a>
+        <a href="/logout" class="nav-button">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Wyloguj</span>
+        </a>
+    <?php else: ?>
+        <a href="/login" class="nav-button">
+            <i class="fa-solid fa-user-circle"></i> <span>Logowanie</span>
+        </a>
+        <a href="/register" class="nav-button">
+            <i class="fa-solid fa-user-plus"></i> <span>Rejestracja</span>
+        </a>
+    <?php endif; ?>
 </nav>
 
 <div class="search-container">
@@ -63,7 +84,9 @@
             <th>Gatunek</th>
             <th>Dostępność</th>
             <th>Liczba dostępnych egzemplarzy</th>
-            <th>Operacje</th>
+            <?php if (isset($_SESSION['user'])): ?>
+                <th>Operacje</th>
+            <?php endif; ?>
         </tr>
         </thead>
     </table>
@@ -85,21 +108,23 @@
                     <td><?php echo $book->getGenre(); ?></td>
                     <td><?php echo $book->isAvailable() ? 'Dostępna' : 'Niedostępna'; ?></td>
                     <td><?php echo $book->getStock(); ?></td>
-                    <td>
-                        <div class="btn-container">
-                            <?php if ($book->isAvailable()): ?>
-                                <button>Wypożycz</button>
-                            <?php else: ?>
-                                <button disabled>Wypożycz</button>
-                            <?php endif; ?>
+                    <?php if (isset($_SESSION['user'])): ?>
+                        <td>
+                            <div class="btn-container">
+                                <?php if ($book->isAvailable()): ?>
+                                    <button>Wypożycz</button>
+                                <?php else: ?>
+                                    <button disabled>Wypożycz</button>
+                                <?php endif; ?>
                                 <button class="reserve-btn">Rezerwuj</button>
-                        </div>
-                    </td>
+                            </div>
+                        </td>
+                    <?php endif; ?>
                 </tr>
                 </tbody>
             </table>
         </div>
-    <?php endforeach; }?>
+    <?php endforeach; } ?>
 </div>
 </body>
 </html>

@@ -6,7 +6,7 @@ require_once __DIR__.'/../repository/BookRepository.php';
 
 class BookController extends AppController
 {
-    const MAX_FILE_SIZE = 1024*1024;
+    const MAX_FILE_SIZE = 512 * 1024;
     const SUPPORTED_TYPES = ['image/png', 'image/jpg', 'image/jpeg'];
     const UPLOAD_DIRECTORY = '/../public/uploads/';
 
@@ -18,7 +18,7 @@ class BookController extends AppController
             if (is_uploaded_file($_FILES['file']['tmp_name']) && $this->validate($_FILES['file'])) {
                 move_uploaded_file(
                     $_FILES['file']['tmp_name'],
-                    dirname(__DIR__).self::UPLOAD_DIRECTORY.$_FILES['file']['name']
+                    dirname(__DIR__) . self::UPLOAD_DIRECTORY . $_FILES['file']['name']
                 );
 
                 $stock = $_POST['stock'];
@@ -67,6 +67,7 @@ class BookController extends AppController
         return $this->render('catalog', ['books' => $books]);
 
     }
+
     public function search()
     {
         header('Content-type: application/json');
@@ -80,7 +81,7 @@ class BookController extends AppController
             $books = $bookRepository->searchBooks($searchTerm);
 
             foreach ($books as $book) {
-                $response[] = [
+                $response['books'][] = [
                     'title' => $book->getTitle(),
                     'author' => $book->getAuthor(),
                     'publicationYear' => $book->getPublicationYear(),
@@ -90,7 +91,9 @@ class BookController extends AppController
                     'image' => $book->getImage()
                 ];
             }
+            $response['isLoggedIn'] = isset($_SESSION['user']); // Dodawanie informacji o zalogowaniu
         }
+
         echo json_encode($response);
     }
 }

@@ -40,6 +40,7 @@
             <input type="password" name="password" placeholder="password">
             <button type="submit">zaloguj</button>
             <a href="register" class="register-link">Nie masz konta? Zarejestruj się!</a>
+            <a href="catalog" class="register-link">Przeglądaj katalog jako Gość</a>
         </form>
 
     </div>

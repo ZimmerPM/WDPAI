@@ -11,16 +11,16 @@ function searchFunction() {
     fetch('/search', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',  // Zmiana nagłówka na JSON
+            'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ query: query })  // Dane wysyłane w formie JSON
+        body: JSON.stringify({ query: query })
     })
         .then(response => response.json())
         .then(data => {
             let bookContainer = document.querySelector(".books-container");
-            bookContainer.innerHTML = "";  // Wyczyszczenie poprzednich wyników
+            bookContainer.innerHTML = "";
 
-            if (data.length === 0) { // Brak wyników
+            if (!data.books || data.books.length === 0) {
                 let noResultsDiv = document.createElement("div");
                 noResultsDiv.textContent = "Brak wyników wyszukiwania";
                 noResultsDiv.className = 'no-results-message';
@@ -28,8 +28,7 @@ function searchFunction() {
                 return;
             }
 
-
-            data.forEach(book => {
+            data.books.forEach(book => {
                 let bookDiv = document.createElement("div");
                 bookDiv.className = "book-entry";
 
@@ -48,39 +47,16 @@ function searchFunction() {
 
                 let titleCell = document.createElement("td");
                 titleCell.textContent = book.title;
-
                 let authorCell = document.createElement("td");
                 authorCell.textContent = book.author;
-
                 let yearCell = document.createElement("td");
                 yearCell.textContent = book.publicationYear;
-
                 let genreCell = document.createElement("td");
                 genreCell.textContent = book.genre;
-
                 let availabilityCell = document.createElement("td");
                 availabilityCell.textContent = book.availability ? 'Dostępna' : 'Niedostępna';
-
                 let stockCell = document.createElement("td");
                 stockCell.textContent = book.stock;
-
-                let operationCell = document.createElement("td");
-                let btnContainer = document.createElement("div");
-                btnContainer.className = "btn-container";
-
-                let operationButton = document.createElement("button");
-                operationButton.textContent = "Wypożycz";
-                if (!book.availability) {
-                    operationButton.disabled = true;
-                }
-                btnContainer.appendChild(operationButton);
-
-                let reserveButton = document.createElement("button");
-                reserveButton.textContent = "Rezerwuj";
-                btnContainer.appendChild(reserveButton);
-
-                operationCell.appendChild(btnContainer);
-
 
                 bookRow.appendChild(titleCell);
                 bookRow.appendChild(authorCell);
@@ -88,7 +64,27 @@ function searchFunction() {
                 bookRow.appendChild(genreCell);
                 bookRow.appendChild(availabilityCell);
                 bookRow.appendChild(stockCell);
-                bookRow.appendChild(operationCell);
+
+                // Dodajemy kolumnę "Operacje" tylko jeżeli użytkownik jest zalogowany
+                if (data.isLoggedIn) {
+                    let operationCell = document.createElement("td");
+                    let btnContainer = document.createElement("div");
+                    btnContainer.className = "btn-container";
+
+                    let operationButton = document.createElement("button");
+                    operationButton.textContent = "Wypożycz";
+                    if (!book.availability) {
+                        operationButton.disabled = true;
+                    }
+                    btnContainer.appendChild(operationButton);
+
+                    let reserveButton = document.createElement("button");
+                    reserveButton.textContent = "Rezerwuj";
+                    btnContainer.appendChild(reserveButton);
+
+                    operationCell.appendChild(btnContainer);
+                    bookRow.appendChild(operationCell);
+                }
 
                 bookTBody.appendChild(bookRow);
                 bookTable.appendChild(bookTBody);
