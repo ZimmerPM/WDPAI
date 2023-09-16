@@ -17,33 +17,13 @@
 
     <title>Dodawanie książek do katalogu</title>
 </head>
-<body class="catalog">
+<body class="add-book">
 
-<div class="top-bar">
-    <img class="logo" src="public/img/logo.svg" alt="logo">
-</div>
+<?php
+include('header.php');
+?>
 
-<nav>
-    <a href="link1.html" class="nav-button active">
-        <i class="fa-solid fa-list"></i> <span>Katalog</span>
-    </a>
 
-    <a href="link2.html" class="nav-button">
-        <i class="fa-solid fa-book-open"></i> <span>Wypożyczenia</span>
-    </a>
-
-    <a href="link3.html" class="nav-button">
-        <i class="fa-regular fa-calendar-check"></i> <span>Rezerwacje</span>
-    </a>
-
-    <a href="link4.html" class="nav-button">
-        <i class="fa-solid fa-user"></i> <span>Moje dane</span>
-    </a>
-
-    <a href="/logout" class="nav-button">
-        <i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Wyloguj</span>
-    </a>
-</nav>
 
 <section class="book-form">
     <h1>DODAWANIE POZYCJI DO KATALOGU</h1>

@@ -1,5 +1,6 @@
 body {
     margin: 0;
+    background-color: #FFEEE2;
 }
 
 .login-container, .register-container{
@@ -127,9 +128,6 @@ input:focus {
 
 }
 
-.catalog, .profile {
-    background-color: #FFEEE2;
-}
 
 .top-bar {
     height: 15vh;

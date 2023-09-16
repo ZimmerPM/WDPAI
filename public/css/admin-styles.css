@@ -42,7 +42,6 @@
 */
 
 
-
 .admin-panel-button:hover {
     background-color: #5b5b62;
     color: #FFEEE2;
@@ -51,6 +50,15 @@
 .admin-panel-button i {
     margin-right: 0.5em;
     font-size: 1.5em;
+}
+
+.admin-panel-button.active {
+    background: #d8d7d6;
+    color: #7F7874;
+}
+
+.admin-panel-button.active:hover {
+    background: #c2c2c2;
 }
 
 /*@media only screen and (max-device-width: 850px) {

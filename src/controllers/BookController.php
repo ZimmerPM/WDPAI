@@ -4,6 +4,10 @@ require_once 'AppController.php';
 require_once __DIR__.'/../models/Book.php';
 require_once __DIR__.'/../repository/BookRepository.php';
 
+
+
+
+
 class BookController extends AppController
 {
     const MAX_FILE_SIZE = 512 * 1024;
@@ -12,8 +16,15 @@ class BookController extends AppController
 
     private $message = [];
 
+
+
     public function addBook()
     {
+        if ($_SESSION['user']['role'] !== 'admin')
+        {
+            die("Brak uprawnień do wejścia na podaną stronę!" );
+        }
+
         if ($this->isPost()) {
             if (is_uploaded_file($_FILES['file']['tmp_name']) && $this->validate($_FILES['file'])) {
                 move_uploaded_file(
