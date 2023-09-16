@@ -62,4 +62,25 @@ class UserRepository extends Repository
             die("Błąd podczas dodawania użytkownika do bazy danych: " . $e->getMessage());
         }
     }
+
+    public function updatePassword(string $email, string $newPassword)
+    {
+        $database = $this->database->connect();
+
+        try {
+            $stmt = $database->prepare('
+            UPDATE public.users 
+            SET password = :password 
+            WHERE email = :email
+        ');
+
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->bindParam(':password', $newPassword, PDO::PARAM_STR);
+
+            $stmt->execute();
+        } catch (PDOException $e) {
+            die("Błąd podczas aktualizacji hasła: " . $e->getMessage());
+        }
+    }
+
 }

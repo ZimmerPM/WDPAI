@@ -65,12 +65,22 @@ function searchFunction() {
                 stockCell.textContent = book.stock;
 
                 let operationCell = document.createElement("td");
+                let btnContainer = document.createElement("div");
+                btnContainer.className = "btn-container";
+
                 let operationButton = document.createElement("button");
                 operationButton.textContent = "Wypożycz";
                 if (!book.availability) {
                     operationButton.disabled = true;
                 }
-                operationCell.appendChild(operationButton);
+                btnContainer.appendChild(operationButton);
+
+                let reserveButton = document.createElement("button");
+                reserveButton.textContent = "Rezerwuj";
+                btnContainer.appendChild(reserveButton);
+
+                operationCell.appendChild(btnContainer);
+
 
                 bookRow.appendChild(titleCell);
                 bookRow.appendChild(authorCell);

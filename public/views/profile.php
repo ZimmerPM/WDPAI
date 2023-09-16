@@ -14,8 +14,8 @@
     <link rel="stylesheet" type="text/css" href="public/css/style.css">
     <link rel="stylesheet" type="text/css" href="public/css/modal-styles.css">
 
-    <script src="public/js/password-change.js" defer></script>
 
+    <script src="public/js/password-change.js" defer></script>
 
     <title>Mój Profil</title>
 </head>
@@ -60,37 +60,33 @@
     <span class = profile-name> <?php echo $fullName; ?></span>
     <span class = profile-role> <?php echo $role; ?></span>
     <p class="profile-info">
-          <span> E-mail: <?php echo $user['email']; ?> <span>
+          <span> E-mail: <?php echo $user['email']; ?> </span>
     </p>
 
     <div class="button-container">
         <button id="openPasswordModal">Zmień hasło</button>
     </div>
 
-    <div id="passwordModal" class="modal">
+    <div id="passwordModal" style="display:none;">
         <div class="modal-content">
-            <span class="close" id="closePasswordModal">&times;</span>
+            <span class="close-button">×</span>
             <h2>Zmień hasło</h2>
+            <div id="messageBox" ></div>
             <form id="changePasswordForm">
-                <div class="form-group">
-                    <label for="currentPassword">Aktualne hasło</label>
-                    <input type="password" id="currentPassword" name="currentPassword" required>
-                </div>
-                <div class="form-group">
-                    <label for="newPassword">Nowe hasło</label>
-                    <input type="password" id="newPassword" name="newPassword" required>
-                </div>
-                <div class="form-group">
-                    <label for="confirmPassword">Potwierdź nowe hasło</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" required>
-                </div>
-                <button type="submit">Zapisz zmiany</button>
+
+                <input type="password" id="currentPassword" name="currentPassword" placeholder="Aktualne hasło" required>
+                <span class="error" id="currentPasswordError"></span>
+
+                <input type="password" id="newPassword" name="newPassword" placeholder="Nowe hasło" required>
+                <span class="error" id="newPasswordError"></span>
+
+                <input type="password" id="repeatPassword" name="repeatPassword" placeholder="Powtórz nowe hasło" required>
+                <span class="error" id="repeatPasswordError"></span>
+
+                <button type="submit">Zatwierdź</button>
             </form>
         </div>
     </div>
-
-
-</div>
 
 </body>
 </html>

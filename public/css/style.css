@@ -37,7 +37,7 @@ body {
     position: relative;
 }
 
-form {
+.login-container form {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -58,6 +58,12 @@ input, button {
     letter-spacing: 0.25em;
     border: none;
     box-sizing: content-box;
+}
+
+button:hover {
+    background-color: rgba(207, 185, 158, 0.95);
+    color: #3f3c22;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 input {
@@ -84,6 +90,12 @@ input:focus {
     border: 2px solid red; /* Dodaj podświetlenie błędnego pola */
 }
 
+
+.messages {
+    color: red;
+    text-align: center;
+    font-family: 'Sarabun', sans-serif;
+}
 
 @media only screen and (max-device-width: 850px) {
     .login-container {
@@ -209,6 +221,17 @@ input.file-upload{
     border: none;
     border-bottom: 0.5px solid gray;
     box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.02);
+}
+
+.register-container form{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    width: 85%;
+    height: 40vh;
+    position: relative;
+    top: -17vh;
 }
 
 .register-link {

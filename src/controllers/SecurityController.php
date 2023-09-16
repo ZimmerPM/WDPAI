@@ -17,7 +17,6 @@ class SecurityController extends AppController
         $email = $_POST['email'];
         $password = $_POST['password'];
 
-
         $user = $userRepository->getUser($email);
 
         if (!$user)
@@ -25,12 +24,10 @@ class SecurityController extends AppController
             return $this->render('login', ['messages' => ['Nie ma takiego użytkownika!']]);
         }
 
-        // Sprawdzanie hasła:
         if (!password_verify($password, $user->getPassword())) {
             return $this->render('login', ['messages' => ['Niepoprawne hasło!']]);
         }
 
-        // Jeśli e-mail i hasło są prawidłowe, zapisz dane w sesji i przekieruj użytkownika.
         $_SESSION['user'] = [
             'email' => $user->getEmail(),
             'name' => $user->getName(),
@@ -42,17 +39,12 @@ class SecurityController extends AppController
         header("Location: {$url}/catalog");
     }
 
-
     public function logout()
     {
-        // Usuń dane użytkownika z sesji:
         unset($_SESSION['user']);
-
-        // Przekieruj użytkownika do strony logowania (lub innej strony startowej):
         $url = "http://$_SERVER[HTTP_HOST]";
         header("Location: {$url}/login");
     }
-
 
     public function profile()
     {
@@ -62,5 +54,51 @@ class SecurityController extends AppController
         }
     }
 
-}
 
+    private function sendJsonResponse(array $response): void
+    {
+        header('Content-Type: application/json');
+        echo json_encode($response);
+    }
+
+    public function changePassword()
+    {
+        $userRepository = new UserRepository();
+
+        $response = ['success' => false]; // domyślna wartość
+
+        if (!$this->isPost()) {
+            $response['message'] = 'Invalid request method.';
+            $this->sendJsonResponse($response);
+            return;
+        }
+
+        $email = $_SESSION['user']['email'];
+        $currentPassword = $_POST['currentPassword'];
+        $newPassword = $_POST['newPassword'];
+        $repeatPassword = $_POST['repeatPassword'];
+
+        $user = $userRepository->getUser($email);
+
+        if (!password_verify($currentPassword, $user->getPassword())) {
+            $response['message'] = 'Obecne hasło jest niepoprawne!';
+            $this->sendJsonResponse($response);
+            return;
+        }
+
+        if ($newPassword !== $repeatPassword) {
+            $response['message'] = 'Nowe hasła nie są takie same!';
+            $this->sendJsonResponse($response);
+            return;
+        }
+
+        $newHashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+        $userRepository->updatePassword($email, $newHashedPassword);
+
+        $response['success'] = true;
+        $response['message'] = 'Hasło zostało zmienione!';
+        $this->sendJsonResponse($response);
+    }
+
+
+}

@@ -28,6 +28,8 @@ if ($httpMethod == 'GET' && $path == 'register') {
     Router::get('addBook', 'BookController');
 
     Router::get('profile', 'SecurityController');
+    Router::post('changePassword', 'SecurityController');
+
 
     Router::run($path);
 }

@@ -89,11 +89,10 @@
                         <div class="btn-container">
                             <?php if ($book->isAvailable()): ?>
                                 <button>Wypożycz</button>
-                                <button class="reserve-btn">Rezerwuj</button>
                             <?php else: ?>
                                 <button disabled>Wypożycz</button>
-                                <button class="reserve-btn" disabled>Rezerwuj</button>
                             <?php endif; ?>
+                                <button class="reserve-btn">Rezerwuj</button>
                         </div>
                     </td>
                 </tr>

@@ -56,15 +56,15 @@
 
 .catalog-table td .btn-container {
 	display: flex;
-	justify-content: center;
-	gap: 0.5em; /* odstęp między przyciskami */
+	flex-direction: column;
+	justify-content: space-around;
 }
 
 /* Stylowanie przycisku wypożyczenia */
 .catalog-table td button {
-	margin: auto;
+	margin: 0.2em auto;
 	padding: 0.8em 4em; /* Zwiększenie paddingu dla przycisku */
-	font-family: "Comfortaa", cursive;
+	font-family: 'Comfortaa', cursive;
 	font-size: 0.8em; /* Ewentualne zmniejszenie wielkości czcionki, jeśli tekst nadal wystaje */
 	background-color: #5b5b62;
 	color: #f2efc7;
@@ -140,10 +140,10 @@
 	color: #f2efc7;
 }
 
-.book-entry:hover .catalog-table tr {
+/*.book-entry:hover .catalog-table tr {
 	background-color: rgba(221, 159, 97, 0.8);
 	color: #1c1c1c;
-}
+}*/
 
 .book-cover img {
 	width: 100%;
