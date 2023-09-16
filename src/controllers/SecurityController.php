@@ -46,6 +46,7 @@ class SecurityController extends AppController
         header("Location: {$url}/login");
     }
 
+
     public function profile()
     {
         if ($this->isLoggedIn())
@@ -55,11 +56,6 @@ class SecurityController extends AppController
     }
 
 
-    private function sendJsonResponse(array $response): void
-    {
-        header('Content-Type: application/json');
-        echo json_encode($response);
-    }
 
     public function changePassword()
     {
@@ -100,5 +96,10 @@ class SecurityController extends AppController
         $this->sendJsonResponse($response);
     }
 
+    private function sendJsonResponse(array $response): void
+    {
+        header('Content-Type: application/json');
+        echo json_encode($response);
+    }
 
 }

@@ -13,7 +13,7 @@
     </a>
 
     <?php if ($_SESSION['user']['role'] === 'admin'): ?>
-        <a href="/addBook" class="admin-panel-button <?php echo ($_SERVER['REQUEST_URI'] == '/addBook') ? 'active' : ''; ?>">
+        <a href="/adminPanel" class="admin-panel-button <?php echo ($_SERVER['REQUEST_URI'] == '/adminPanel') ? 'active' : ''; ?>">
             <i class="fa-solid fa-cog"></i> <span>Panel administracyjny</span>
         </a>
     <?php endif; ?>

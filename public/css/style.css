@@ -253,6 +253,8 @@ nav .nav-button.active:hover {
 
 .search-button:hover {
     background-color: #444;
+    color: #f2efc7;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .no-results-message {

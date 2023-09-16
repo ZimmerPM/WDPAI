@@ -10,19 +10,57 @@ require_once __DIR__.'/../repository/BookRepository.php';
 
 class BookController extends AppController
 {
-    const MAX_FILE_SIZE = 512 * 1024;
+    const MAX_FILE_SIZE = 1024 * 1024;
     const SUPPORTED_TYPES = ['image/png', 'image/jpg', 'image/jpeg'];
     const UPLOAD_DIRECTORY = '/../public/uploads/';
 
     private $message = [];
 
 
+    public function catalog()
+    {
+        $bookRepository = new BookRepository();
+        $books = $bookRepository->getBooks();
+
+        return $this->render('catalog', ['books' => $books]);
+
+    }
+
+
+    public function search()
+    {
+        header('Content-type: application/json');
+        $response = [];
+
+        if ($this->isPost()) {
+            $inputData = json_decode(file_get_contents('php://input'), true);
+            $searchTerm = $inputData['query'];
+
+            $bookRepository = new BookRepository();
+            $books = $bookRepository->searchBooks($searchTerm);
+
+            foreach ($books as $book) {
+                $response['books'][] = [
+                    'title' => $book->getTitle(),
+                    'author' => $book->getAuthor(),
+                    'publicationYear' => $book->getPublicationYear(),
+                    'genre' => $book->getGenre(),
+                    'availability' => $book->isAvailable() ? 'Dostępna' : 'Niedostępna',
+                    'stock' => $book->getStock(),
+                    'image' => $book->getImage()
+                ];
+            }
+            $response['isLoggedIn'] = isset($_SESSION['user']); // Dodawanie informacji o zalogowaniu
+        }
+
+        echo json_encode($response);
+    }
+
 
     public function addBook()
     {
-        if ($_SESSION['user']['role'] !== 'admin')
-        {
-            die("Brak uprawnień do wejścia na podaną stronę!" );
+        if (!$this->isAdmin()) {
+            die("Brak uprawnień do wejścia na podaną stronę!");
         }
 
         if ($this->isPost()) {
@@ -70,41 +108,5 @@ class BookController extends AppController
         return true;
     }
 
-    public function catalog()
-    {
-        $bookRepository = new BookRepository();
-        $books = $bookRepository->getBooks();
 
-        return $this->render('catalog', ['books' => $books]);
-
-    }
-
-    public function search()
-    {
-        header('Content-type: application/json');
-        $response = [];
-
-        if ($this->isPost()) {
-            $inputData = json_decode(file_get_contents('php://input'), true);
-            $searchTerm = $inputData['query'];
-
-            $bookRepository = new BookRepository();
-            $books = $bookRepository->searchBooks($searchTerm);
-
-            foreach ($books as $book) {
-                $response['books'][] = [
-                    'title' => $book->getTitle(),
-                    'author' => $book->getAuthor(),
-                    'publicationYear' => $book->getPublicationYear(),
-                    'genre' => $book->getGenre(),
-                    'availability' => $book->isAvailable() ? 'Dostępna' : 'Niedostępna',
-                    'stock' => $book->getStock(),
-                    'image' => $book->getImage()
-                ];
-            }
-            $response['isLoggedIn'] = isset($_SESSION['user']); // Dodawanie informacji o zalogowaniu
-        }
-
-        echo json_encode($response);
-    }
 }

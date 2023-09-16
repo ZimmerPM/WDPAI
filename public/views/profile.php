@@ -15,8 +15,7 @@
     <link rel="stylesheet" type="text/css" href="public/css/modal-styles.css">
     <link rel="stylesheet" type="text/css" href="public/css/admin-styles.css">
 
-
-    <script src="public/js/password-change.js" defer></script>
+    <script src="public/js/change-password.js" defer></script>
 
     <title>Mój Profil</title>
 </head>

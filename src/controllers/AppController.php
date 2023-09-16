@@ -3,7 +3,7 @@
 class AppController
 {
     private $request;
-    protected $loggedInUser = null;
+
 
     public function __construct()
     {

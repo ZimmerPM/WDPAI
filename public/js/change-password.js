@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function() {
         passwordModal.style.display = "none";
         messageBox.innerText = ""; // Wyczyść messageBox przy zamknięciu okna
 
+
         document.getElementById("currentPassword").value = "";
         document.getElementById("newPassword").value = "";
         document.getElementById("repeatPassword").value = "";
@@ -32,7 +33,19 @@ document.addEventListener("DOMContentLoaded", function() {
         repeatPasswordInput.classList.remove('no-valid');
     });
 
+    document.addEventListener("keydown", function(event) {
+        if (event.key === "Escape" && passwordModal.style.display === "block") {
+            passwordModal.style.display = "none";
+            messageBox.innerText = ""; // Wyczyść messageBox przy zamknięciu okna
 
+            document.getElementById("currentPassword").value = "";
+            document.getElementById("newPassword").value = "";
+            document.getElementById("repeatPassword").value = "";
+
+            newPasswordInput.classList.remove('no-valid');
+            repeatPasswordInput.classList.remove('no-valid');
+        }
+    });
 
     function arePasswordsSame(password, confirmPassword) {
         return password === confirmPassword;

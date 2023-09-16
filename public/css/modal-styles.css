@@ -1,4 +1,4 @@
-#passwordModal {
+#passwordModal, #addBookModal{
     position: fixed;
     top: 0;
     left: 0;
@@ -21,6 +21,16 @@
     position: relative;
 }
 
+#addBookModal .modal-content {
+    top: 10%;
+    left: 35%;
+    padding:50px;
+    width: 100%;
+}
+
+
+
+
 .modal-content h2{
     font-family: 'Comfortaa', sans-serif;
     text-align: center;
@@ -39,6 +49,13 @@
     margin: 1.3em;
     width: 80%;
 }
+
+#addBookModal .modal-content input
+{
+    margin: 1.3em;
+    width: 100%;
+}
+
 
 .close-button {
     position: absolute;
