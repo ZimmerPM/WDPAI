@@ -65,6 +65,59 @@ class BookRepository extends Repository
         return $result;
     }
 
+    public function insertBook(Book $book)
+    {
+        $pdo = $this->database->connect();
+
+        $authorName = $book->getAuthor();
+        $title = $book->getTitle();
+        $publicationYear = $book->getPublicationYear();
+        $genre = $book->getGenre();
+        $availability = $book->isAvailable();
+        $stock = $book->getStock();
+        $image = $book->getImage();
+
+        // 1. Sprawdź, czy autor istnieje
+        $stmt = $pdo->prepare('SELECT id FROM authors WHERE name = :author');
+        $stmt->bindParam(':author', $authorName, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $author = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // 2. Jeśli nie istnieje, dodaj go
+        if (!$author) {
+            $stmt = $pdo->prepare('INSERT INTO authors (name) VALUES (:author)');
+            $stmt->bindParam(':author', $authorName, PDO::PARAM_STR);
+            $stmt->execute();
+
+            $authorId = $pdo->lastInsertId();
+        } else {
+            $authorId = $author['id'];
+        }
+
+        // 3. Dodaj książkę
+        $stmt = $pdo->prepare('
+        INSERT INTO books (title, publicationyear, genre, availability, stock, image)
+        VALUES (:title, :publicationyear, :genre, :availability, :stock, :image)
+    ');
+
+        $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+        $stmt->bindParam(':publicationyear', $publicationYear, PDO::PARAM_INT);
+        $stmt->bindParam(':genre', $genre, PDO::PARAM_STR);
+        $stmt->bindParam(':availability', $availability, PDO::PARAM_BOOL);
+        $stmt->bindParam(':stock', $stock, PDO::PARAM_INT);
+        $stmt->bindParam(':image', $image, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        $bookId = $pdo->lastInsertId();
+
+        // 4. Dodaj relację w tabeli booksauthors
+        $stmt = $pdo->prepare('INSERT INTO booksauthors (book_id, author_id) VALUES (:book_id, :author_id)');
+        $stmt->bindParam(':book_id', $bookId, PDO::PARAM_INT);
+        $stmt->bindParam(':author_id', $authorId, PDO::PARAM_INT);
+        $stmt->execute();
+    }
 
 }
 ?>

@@ -50,7 +50,7 @@ function searchFunction() {
                 let authorCell = document.createElement("td");
                 authorCell.textContent = book.author;
                 let yearCell = document.createElement("td");
-                yearCell.textContent = book.publicationYear;
+                yearCell.textContent = book.publicationyear;
                 let genreCell = document.createElement("td");
                 genreCell.textContent = book.genre;
                 let availabilityCell = document.createElement("td");

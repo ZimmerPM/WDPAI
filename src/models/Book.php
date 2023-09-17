@@ -85,7 +85,7 @@ class Book
         $this->image = $image;
     }
 
-    public function getPublicationyear()
+    public function getPublicationYear()
     {
         return $this->publicationyear;
     }

@@ -106,7 +106,7 @@ include('header.php');
             <?php endif; ?>
             <input name="author" type="text" placeholder="Autor">
             <input name="title" type="text" placeholder="Tytuł">
-            <input name="publicationYear" type="text" placeholder="Rok wydania">
+            <input name="publicationyear" type="text" placeholder="Rok wydania">
             <input name="genre" type="text" placeholder="Gatunek">
             <input name="stock" type="number" placeholder="Liczba egzemplarzy" min="0">
             <input class="file-upload" name="file" type="file"><br/>

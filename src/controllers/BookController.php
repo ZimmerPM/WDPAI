@@ -43,7 +43,7 @@ class BookController extends AppController
                 $response['books'][] = [
                     'title' => $book->getTitle(),
                     'author' => $book->getAuthor(),
-                    'publicationYear' => $book->getPublicationYear(),
+                    'publicationyear' => $book->getPublicationYear(),
                     'genre' => $book->getGenre(),
                     'availability' => $book->isAvailable() ? 'Dostępna' : 'Niedostępna',
                     'stock' => $book->getStock(),
@@ -59,6 +59,8 @@ class BookController extends AppController
 
     public function addBook()
     {
+        $response = [];
+
         if (!$this->isAdmin()) {
             die("Brak uprawnień do wejścia na podaną stronę!");
         }
@@ -80,18 +82,25 @@ class BookController extends AppController
                     $_POST['genre'],
                     $availability,
                     $stock,
-                    $_FILES['file']['name']
+                    "public/uploads/" . $_FILES['file']['name']
                 );
 
-                // Tu ewentualnie można dodać logikę zapisu książki do bazy danych
+                $bookRepository = new BookRepository();
+                $bookRepository->insertBook($book);
 
-                return $this->render('catalog', ['messages' => $this->message, 'book' => $book]);
+                $response['book'] = [
+                    'author' => $book->getAuthor(),
+                    'title' => $book->getTitle(),
+                    // dodaj resztę właściwości książki jeśli chcesz
+                ];
             } else {
-                // Jeśli walidacja nie powiodła się, ponownie renderuj formularz
-                return $this->render('add-book', ['messages' => $this->message]);
+                $response['messages'] = $this->message;
             }
         }
-        return $this->render('add-book', ['messages' => $this->message]);
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit;
     }
 
     private function validate(array $file): bool
