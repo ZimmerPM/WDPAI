@@ -5,7 +5,7 @@
 	margin-bottom: 2.5em;
 }
 
-.catalog-table {
+.catalog-table, .user-table {
 	margin-top: 2em;
 	border-radius: 1em;
 	box-shadow: 0 0 0 1px #ccc inset;
@@ -18,15 +18,15 @@
 	table-layout: fixed;
 }
 
-.catalog-table th,
-.catalog-table td {
+.catalog-table th, .user-table th,
+.catalog-table td, .user-table td{
 	padding: 10px;
 	text-align: center;
 	white-space: normal;
 	word-wrap: break-word;
 }
 
-.catalog-table th {
+.catalog-table th, .user-table th{
 	font-family: "Sarabun", sans-serif;
 	font-size: 1.1em;
 	background-color: #f7ffe0;
@@ -42,15 +42,15 @@
 
 .header-container .empty-field {
 	width: 9em;
-	visibility: hidden;
 	margin-right: 3em;
+	visibility: hidden;
 }
 
-.catalog-table tr {
+.catalog-table tr, .user-table tr {
 	height: auto;
 }
 
-.catalog-table td {
+.catalog-table td, .user-table td {
 	border: 1px solid #5b5b6295;
 }
 
@@ -92,20 +92,10 @@
 
 .catalog-table td button:disabled:hover {
 	background-color: #c2c2c2;
-}
-
-.catalog-table td button.reserve-btn {
-	background-color: #5b5b62;
 	color: #f2efc7;
-	/* reszta stylów będzie taka sama jak dla przycisku "Wypożycz",
-       więc nie musisz ich powtarzać, chyba że chcesz dać specyficzny styl dla tego przycisku */
+	transition: color 0.3s;
 }
 
-.catalog-table td button.reserve-btn:hover {
-	background-color: #444;
-}
-
-.catalog-table td .reserve-btn,
 .catalog-table td button {
 	padding: 0.6em 2em;
 	font-size: 0.75em;
@@ -154,6 +144,61 @@
 }
 
 
+.user-table th{
+	height: 3em;
+}
+
+.user-table tr:nth-child(odd) {
+	background-color: #d2bba0;
+	color: #5b5b62;
+}
+
+.user-table tr:nth-child(even) {
+	background-color: rgba(159, 126, 105, 0.9);
+	color: #f2efc7;
+}
+
+.user-table{
+	width: 96%;
+	margin: auto;
+	margin-bottom: 3em;
+}
+
+.user-table td .user-management-buttons {
+	width: 20%;
+	margin: 0.2em 0.4em;
+	padding: 0.8em 1.5em; /* Dopasowanie paddingu, może wymagać zmiany dla tekstu "Ranga administratora" */
+	font-family: 'Comfortaa', cursive;
+	font-size: 0.8em;
+	background-color: #5b5b62;
+	color: #f2efc7;
+	border: none;
+	border-radius: 0.8em;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+.user-table td .user-management-buttons:hover {
+	background-color: #444;
+}
+
+.user-table td .user-management-buttons:disabled {
+	background-color: #c2c2c2;
+	cursor: not-allowed;
+	color: #1c1c1c;
+}
+
+.user-table td .user-management-buttons:disabled:hover {
+	background-color: #c2c2c2;
+	color: #f2efc7;
+	transition: color 0.3s;
+}
+
+.user-table td .user-management-buttons {
+	padding: 0.6em 1.2em; /* Ponowne dostosowanie paddingu dla przycisków */
+	font-size: 0.75em;
+}
+
 @media only screen and (max-width: 800px) {
 	/* Ukrywanie obrazków w książkach */
 	.book-entry .book-cover {
@@ -199,7 +244,7 @@
 	.catalog-table tbody{
 		height: 4em;
 	}
-	.catalog-table td {
+	.catalog-table td, .user-table td {
 		padding: 8px;
 		font-size: 14px;
 	}
@@ -210,9 +255,10 @@
 		margin-right: 2em;
 	}
 
-	.catalog-table th {
+	.catalog-table th, .user-table th {
 		padding: 8px;
 		font-size: 14px;
 	}
+
 
 }

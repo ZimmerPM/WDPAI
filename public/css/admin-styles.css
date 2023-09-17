@@ -103,14 +103,14 @@ input.file-upload{
     box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.02);
 }
 
-.admin-head-container {
+.admin-button-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
-
+    align-items: center;
 }
 
-.add-button-container .add-button {
+.add-button, .users-management-link {
     padding: 0.5em 1.5em;
     font-family: "Comfortaa", cursive;
     background-color: #5b5b62;
@@ -118,9 +118,49 @@ input.file-upload{
     border: none;
     border-radius: 0.8em;
     cursor: pointer;
-    transition: background-color 0.3s;
     display:block;
-    margin: 5em auto 1em auto;
-
 }
 
+.users-management-link {
+    margin: 3em auto 3em auto;
+    font-size: 0.85em;
+    letter-spacing: 0.25em;
+    padding: 0.9em 5.1em;
+    text-decoration: none;
+}
+
+.add-button:hover, .users-management-link:hover {
+    background-color: #444;
+    color: #f2efc7;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.users-management-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 5vh;
+    margin: 3em;
+}
+
+.users-management-container .backwards-link{
+    padding: 0.9em 5.1em;
+    font-family: "Comfortaa", cursive;
+    background-color: #5b5b62;
+    color: #f2efc7;
+    border: none;
+    border-radius: 0.8em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 3em auto 3em auto;
+    font-size: 0.85em;
+    letter-spacing: 0.25em;
+    text-decoration: none;
+}
+
+.users-management-container .backwards-link:hover {
+    background-color: #444;
+    color: #f2efc7;
+    transition: background-color 0.3s, color 0.3s;
+}

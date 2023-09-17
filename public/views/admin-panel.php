@@ -23,7 +23,7 @@
     <title>Panel Administratora</title>
 </head>
 
-<body class="add-book">
+<body class="admin-panel">
 
 <?php
 include('header.php');
@@ -31,10 +31,12 @@ include('header.php');
 
 <div class="admin-head-container">
     <!-- Sekcja z przyciskiem Dodaj pozycję -->
-    <div class="add-button-container">
-        <button id="openAddBookModal" class="add-button">Dodaj pozycję</button>
-    </div>
+    <div class="admin-button-container">
 
+        <a href="/usersManagement" class="users-management-link">Zarządzanie użytkownikami</a>
+
+        <button id="openAddBookModal" class="add-button">Dodaj pozycję do katalogu</button>
+    </div>
     <div class="search-container">
         <input type="text" class="search-input" placeholder="Wyszukaj...">
         <button class="search-button">Szukaj</button>

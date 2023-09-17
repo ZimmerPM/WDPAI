@@ -5,9 +5,6 @@ require_once __DIR__.'/../models/Book.php';
 require_once __DIR__.'/../repository/BookRepository.php';
 
 
-
-
-
 class BookController extends AppController
 {
     const MAX_FILE_SIZE = 1024 * 1024;
@@ -25,7 +22,6 @@ class BookController extends AppController
         return $this->render('catalog', ['books' => $books]);
 
     }
-
 
     public function search()
     {

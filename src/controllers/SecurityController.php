@@ -55,8 +55,6 @@ class SecurityController extends AppController
         }
     }
 
-
-
     public function changePassword()
     {
         $userRepository = new UserRepository();

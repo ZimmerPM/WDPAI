@@ -70,12 +70,17 @@ include('header.php');
                     <?php if (isset($_SESSION['user'])): ?>
                         <td>
                             <div class="btn-container">
-                                <?php if ($book->isAvailable()): ?>
+                                <?php if ($book->isAvailable() && $_SESSION['user']['role'] != "admin"): ?>
                                     <button>Wypożycz</button>
                                 <?php else: ?>
                                     <button disabled>Wypożycz</button>
                                 <?php endif; ?>
-                                <button class="reserve-btn">Rezerwuj</button>
+
+                                <?php if ($_SESSION['user']['role'] != "admin"): ?>
+                                    <button class="reserve-btn">Rezerwuj</button>
+                                <?php else: ?>
+                                    <button class="reserve-btn" disabled>Rezerwuj</button>
+                                <?php endif; ?>
                             </div>
                         </td>
                     <?php endif; ?>

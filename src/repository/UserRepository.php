@@ -83,4 +83,31 @@ class UserRepository extends Repository
         }
     }
 
+    public function getAllUsers(): array
+    {
+        $stmt = $this->database->connect()->prepare('
+        SELECT u.email, u.password, ud.name, ud.lastname, u.role
+        FROM public.users u
+        LEFT JOIN public.userdetails ud ON u.id = ud.user_id
+        ORDER BY u.role, ud.lastname
+    ');
+
+        $stmt->execute();
+
+        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = [];
+
+        foreach ($users as $user) {
+            $result[] = new User(
+                $user['email'],
+                $user['password'],
+                $user['name'],
+                $user['lastname'],
+                $user['role']
+            );
+        }
+
+        return $result;
+    }
+
 }
