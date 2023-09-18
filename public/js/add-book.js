@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const addBookForm = addBookModal.querySelector("form");
     const openAddBookModalButton = document.getElementById("openAddBookModal");
     const closeButton = document.querySelector(".close-button");
-    const messageBox = document.querySelector(".modal-messageBox");  // Zaktualizowana referencja do messageBox
+    const messageBox = document.querySelector(".modal-messageBox");
 
     function clearForm(form) {
         for (let element of form.elements) {
@@ -17,17 +17,36 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    function areFieldsValid() {
-        const author = addBookForm.querySelector("input[name='author']").value;
-        const title = addBookForm.querySelector("input[name='title']").value;
-        const stock = addBookForm.querySelector("input[name='stock']").value;
+    function markValidation(element, condition) {
+        if (!condition) {
+            element.classList.add('no-valid');
+        } else {
+            element.classList.remove('no-valid');
+        }
+    }
 
-        return author && title && stock;  // Sprawdź, czy wszystkie pola mają wartość
+    function areFieldsValid(form) {
+        let isValid = true;
+        for (let element of form.elements) {
+            switch (element.type) {
+                case 'text':
+                case 'number':
+                case 'file':
+                    if (!element.value) {
+                        isValid = false;
+                        markValidation(element, false);
+                    } else {
+                        markValidation(element, true);
+                    }
+                    break;
+            }
+        }
+        return isValid;
     }
 
     openAddBookModalButton.addEventListener("click", function() {
         addBookModal.style.display = "block";
-        messageBox.innerText = "";  // Wyczyść messageBox przy otwarciu okna
+        messageBox.innerText = "";
     });
 
     closeButton.addEventListener("click", function() {
@@ -45,8 +64,8 @@ document.addEventListener("DOMContentLoaded", function() {
     addBookForm.addEventListener("submit", function(event) {
         event.preventDefault();
 
-        if (!areFieldsValid()) {
-            messageBox.innerText = "Proszę wypełnić wszystkie obowiązkowe pola!";
+        if (!areFieldsValid(addBookForm)) {
+            messageBox.innerText = "Proszę o wypełnienie wszystkich pól!";
             return;
         }
 
@@ -56,8 +75,18 @@ document.addEventListener("DOMContentLoaded", function() {
             method: 'POST',
             body: formData
         })
-            .then(response => response.json())
-            .then(data => handleResponse(data))
+            .then(response => {
+                return response.text(); // Pobierz zawartość odpowiedzi jako tekst
+            })
+            .then(data => {
+                console.log(data); // Wyświetl zawartość odpowiedzi jako tekst
+                try {
+                    const jsonData = JSON.parse(data); // Spróbuj sparsować tekst jako JSON
+                    handleResponse(jsonData); // Przetwórz jako JSON, jeśli się powiedzie
+                } catch (error) {
+                    console.error('Error parsing JSON:', error); // Obsłuż błąd parsowania JSON
+                }
+            })
             .catch(error => console.error('Error:', error));
     });
 
