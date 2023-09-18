@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const addBookForm = addBookModal.querySelector("form");
     const openAddBookModalButton = document.getElementById("openAddBookModal");
     const closeButton = document.querySelector(".close-button");
+    const messageBox = document.querySelector(".modal-messageBox");  // Zaktualizowana referencja do messageBox
 
     function clearForm(form) {
         for (let element of form.elements) {
@@ -16,8 +17,17 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    function areFieldsValid() {
+        const author = addBookForm.querySelector("input[name='author']").value;
+        const title = addBookForm.querySelector("input[name='title']").value;
+        const stock = addBookForm.querySelector("input[name='stock']").value;
+
+        return author && title && stock;  // Sprawdź, czy wszystkie pola mają wartość
+    }
+
     openAddBookModalButton.addEventListener("click", function() {
         addBookModal.style.display = "block";
+        messageBox.innerText = "";  // Wyczyść messageBox przy otwarciu okna
     });
 
     closeButton.addEventListener("click", function() {
@@ -34,6 +44,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
     addBookForm.addEventListener("submit", function(event) {
         event.preventDefault();
+
+        if (!areFieldsValid()) {
+            messageBox.innerText = "Proszę wypełnić wszystkie obowiązkowe pola!";
+            return;
+        }
 
         const formData = new FormData(addBookForm);
 

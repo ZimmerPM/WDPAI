@@ -1,33 +1,31 @@
 document.addEventListener("DOMContentLoaded", function() {
     const passwordModal = document.getElementById("passwordModal");
     const openPasswordModalButton = document.getElementById("openPasswordModal");
-    const closeButton = document.querySelector(".close-button");
-    const messageBox = document.getElementById("messageBox");
+    const closeButton = passwordModal.querySelector(".close-button");
+    const messageBox = passwordModal.querySelector(".modal-messageBox");
 
     const newPasswordInput = document.getElementById("newPassword");
     const repeatPasswordInput = document.getElementById("repeatPassword");
 
     openPasswordModalButton.addEventListener("click", function() {
         passwordModal.style.display = "block";
-        messageBox.innerText = ""; // Wyczyść messageBox przy otwarciu okna
+        messageBox.innerText = "";
 
         document.getElementById("currentPassword").value = "";
-        document.getElementById("newPassword").value = "";
-        document.getElementById("repeatPassword").value = "";
+        newPasswordInput.value = "";
+        repeatPasswordInput.value = "";
 
         newPasswordInput.classList.remove('no-valid');
         repeatPasswordInput.classList.remove('no-valid');
-
     });
 
     closeButton.addEventListener("click", function() {
         passwordModal.style.display = "none";
-        messageBox.innerText = ""; // Wyczyść messageBox przy zamknięciu okna
-
+        messageBox.innerText = "";
 
         document.getElementById("currentPassword").value = "";
-        document.getElementById("newPassword").value = "";
-        document.getElementById("repeatPassword").value = "";
+        newPasswordInput.value = "";
+        repeatPasswordInput.value = "";
 
         newPasswordInput.classList.remove('no-valid');
         repeatPasswordInput.classList.remove('no-valid');
@@ -36,11 +34,11 @@ document.addEventListener("DOMContentLoaded", function() {
     document.addEventListener("keydown", function(event) {
         if (event.key === "Escape" && passwordModal.style.display === "block") {
             passwordModal.style.display = "none";
-            messageBox.innerText = ""; // Wyczyść messageBox przy zamknięciu okna
+            messageBox.innerText = "";
 
             document.getElementById("currentPassword").value = "";
-            document.getElementById("newPassword").value = "";
-            document.getElementById("repeatPassword").value = "";
+            newPasswordInput.value = "";
+            repeatPasswordInput.value = "";
 
             newPasswordInput.classList.remove('no-valid');
             repeatPasswordInput.classList.remove('no-valid');
@@ -69,11 +67,8 @@ document.addEventListener("DOMContentLoaded", function() {
         markValidation(repeatPasswordInput, passwordsMatch);
     }
 
-
     newPasswordInput.addEventListener('keyup', validateNewPasswords);
     repeatPasswordInput.addEventListener('keyup', validateNewPasswords);
-
-
 
     const changePasswordForm = document.getElementById("changePasswordForm");
 
@@ -102,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (data.success) {
             alert("Hasło zostało zmienione!");
             passwordModal.style.display = "none";
-            messageBox.innerText = ""; // Wyczyść messageBox po udanej zmianie hasła
+            messageBox.innerText = "";
         } else {
             messageBox.innerText = data.message;
         }

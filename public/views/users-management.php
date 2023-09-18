@@ -49,8 +49,14 @@ include('header.php');
                 <td><?= $user->getRole() ?></td>
                 <td>
                     <button class="user-management-buttons">Edytuj</button>
-                    <button class="user-management-buttons">Usuń</button>
-                    <button class="user-management-buttons">Ranga</button>
+
+                    <!-- Sprawdzenie, czy e-mail zalogowanego użytkownika jest taki sam jak e-mail użytkownika w tym wierszu -->
+                    <?php if (isset($_SESSION['user']) && $_SESSION['user']['email'] != $user->getEmail()): ?>
+                        <button class="user-management-buttons">Usuń</button>
+                    <?php else: ?>
+                        <button class="user-management-buttons" disabled>Usuń</button>
+                    <?php endif; ?>
+
                 </td>
             </tr>
         <?php endforeach; ?>
@@ -61,6 +67,32 @@ include('header.php');
     <?php endif; ?>
     </tbody>
 </table>
+
+<section id="editUserModal" class="modal" id="editUserModal">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeModal()">&times;</span>
+        <h2>Edytuj użytkownika</h2>
+        <form action="path_to_your_endpoint" method="POST">
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="name">Imię:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="lastname">Nazwisko:</label>
+            <input type="text" id="lastname" name="lastname" required>
+
+            <label for="role">Rola:</label>
+            <select id="role" name="role">
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+            </select>
+
+            <input type="hidden" id="userId" name="userId">
+            <input type="submit" value="Aktualizuj">
+        </form>
+    </div>
+</section>
 
 
 </body>

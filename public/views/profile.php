@@ -44,11 +44,11 @@ include('header.php');
         <button id="openPasswordModal">Zmień hasło</button>
     </div>
 
-    <div id="passwordModal" style="display:none;">
+    <section id="passwordModal" style="display:none;">
         <div class="modal-content">
             <span class="close-button">×</span>
             <h2>Zmień hasło</h2>
-            <div id="messageBox" ></div>
+            <div class="modal-messageBox" ></div>
             <form id="changePasswordForm">
 
                 <input type="password" id="currentPassword" name="currentPassword" placeholder="Aktualne hasło" required>
@@ -63,7 +63,7 @@ include('header.php');
                 <button type="submit">Zatwierdź</button>
             </form>
         </div>
-    </div>
+    </section>
 
 </body>
 </html>

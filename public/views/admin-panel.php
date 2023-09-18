@@ -18,7 +18,7 @@
 
 
     <script src="public/js/search.js" defer></script>
-    <script src="public/js/modal.js" defer></script>
+    <script src="public/js/add-book.js" defer></script>
 
     <title>Panel Administratora</title>
 </head>
@@ -100,6 +100,7 @@ include('header.php');
     <div class="modal-content">
         <span class="close-button">&times;</span>
         <h2>Dodaj pozycję do katalogu</h2>
+        <div class="modal-messageBox" ></div>
         <form action="addBook" method="POST" enctype="multipart/form-data">
             <?php if (isset($messages)): ?>
                 <?php foreach ($messages as $message): ?>
