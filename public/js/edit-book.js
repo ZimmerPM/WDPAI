@@ -1,38 +1,58 @@
-document.addEventListener("DOMContentLoaded", function() {
+const editModal = document.getElementById("editBookModal");
+const editForm = editModal.querySelector("form");
+const hiddenFilePathInput = document.getElementById("hiddenFilePath");
 
-    // Pobranie wszystkich przycisków "Edytuj"
-    let editButtons = document.querySelectorAll(".edit-btn");
+// Nasłuchiwanie na przycisk edycji
+document.querySelectorAll(".edit-btn").forEach(button => {
+    button.addEventListener("click", function() {
+        const row = this.closest("tr");
 
-    // Pobranie modala edycji
-    let editModal = document.getElementById("editBookModal");
+        const title = this.getAttribute("data-title");
+        const author = this.getAttribute("data-author");
+        const publicationYear = this.getAttribute("data-publicationyear");
+        const genre = this.getAttribute("data-genre");
+        const stock = this.getAttribute("data-stock");
+        const image = this.getAttribute("data-image");
 
-    // Pobranie przycisku zamykającego modal
-    let closeModalButton = editModal.querySelector(".close-button");
+        // Ustawienie wartości w formularzu
+        editForm.querySelector("[name='title']").value = title;
+        editForm.querySelector("[name='author']").value = author;
+        editForm.querySelector("[name='publicationyear']").value = publicationYear;
+        editForm.querySelector("[name='genre']").value = genre;
+        editForm.querySelector("[name='stock']").value = stock;
 
-    // Funkcja otwierająca modal
-    function openModal() {
+        // Ustawienie wartości ukrytego pola dla ścieżki pliku
+        hiddenFilePathInput.value = image;
+
+        // Logowanie wartości do konsoli
+        console.log("Autor:", author);
+        console.log("Tytuł:", title);
+        console.log("Rok wydania:", publicationYear);
+        console.log("Gatunek:", genre);
+        console.log("Liczba egzemplarzy:", stock);
+        console.log("Ścieżka do obrazka:", image);
+
         editModal.style.display = "block";
-    }
 
+        // Debugowanie zmian w formularzu edycji
+        editForm.addEventListener('input', function(event) {
+            const target = event.target;
+            if (target.name) {
+                console.log(`Zmieniono wartość dla ${target.name}:`, target.value);
+            }
+        });
 
-    // Funkcja zamykająca modal
-    function closeModal() {
-        editModal.style.display = "none";
-    }
-
-    // Dodanie event listenera do każdego przycisku "Edytuj"
-    editButtons.forEach(function(button) {
-        button.addEventListener("click", openModal);
+        // Debugowanie wyboru nowego pliku
+        editForm.querySelector('.file-upload').addEventListener('change', function() {
+            const fileInput = this;
+            if (fileInput.files && fileInput.files[0]) {
+                console.log('Wybrany nowy plik:', fileInput.files[0].name);
+            }
+        });
     });
+});
 
-    // Dodanie event listenera do przycisku zamykającego modal
-    closeModalButton.addEventListener("click", closeModal);
-
-    // Zamykanie modala po kliknięciu poza jego treść
-    window.addEventListener("click", function(event) {
-        if (event.target === editModal) {
-            closeModal();
-        }
-    });
-
+// Nasłuchiwanie na przycisk zamknięcia modalu
+editModal.querySelector(".close-button").addEventListener("click", function() {
+    editModal.style.display = "none";
 });

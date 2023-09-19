@@ -31,7 +31,7 @@
         </a>
 
         <a href="/profile" class="nav-button <?php echo ($_SERVER['REQUEST_URI'] == '/profile') ? 'active' : ''; ?>">
-            <i class="fa-solid fa-user"></i> <span>Moje dane</span>
+            <i class="fa-solid fa-user"></i> <span>Moje konto</span>
         </a>
         <a href="/logout" class="nav-button">
             <i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Wyloguj</span>

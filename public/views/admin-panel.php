@@ -63,7 +63,7 @@ include('header.php');
         <?php foreach ($books as $book): ?>
             <div class="book-entry">
                 <div class="book-cover">
-                    <img src="<?php echo $book->getImage(); ?>" alt="<?php echo $book->getTitle(); ?>">
+                    <img src="<?php echo $book->getImage(); ?>" alt="<?php echo $book->getTitle(); ?>" data-filename="<?php echo basename($book->getImage()); ?>">
                 </div>
                 <table class="catalog-table">
                     <tbody>
@@ -77,7 +77,17 @@ include('header.php');
                         <?php if (isset($_SESSION['user'])): ?>
                             <td>
                                 <div class="btn-container">
-                                    <button class="edit-btn">Edytuj</button>
+                                    <button class="edit-btn"
+                                            data-title="<?php echo $book->getTitle(); ?>"
+                                            data-author="<?php echo $book->getAuthor(); ?>"
+                                            data-publicationyear="<?php echo $book->getPublicationYear(); ?>"
+                                            data-genre="<?php echo $book->getGenre(); ?>"
+                                            data-stock="<?php echo $book->getStock(); ?>"
+                                            data-image="<?php echo $book->getImage(); ?>"
+                                    >
+                                        Edytuj
+                                    </button>
+
                                     <button>Usuń</button>
                                 </div>
                             </td>
@@ -132,6 +142,7 @@ include('header.php');
             <input name="genre" type="text" placeholder="Gatunek">
             <input name="stock" type="number" placeholder="Liczba egzemplarzy" min="0">
             <input class="file-upload" name="file" type="file"><br/>
+            <input type="hidden" id="hiddenFilePath" name="hiddenFilePath" value="">
             <button type="submit">Zaktualizuj</button>
         </form>
     </div>
