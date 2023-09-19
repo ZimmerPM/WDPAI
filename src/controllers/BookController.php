@@ -87,6 +87,13 @@ class BookController extends AppController
                 $response['book'] = [
                     'author' => $book->getAuthor(),
                     'title' => $book->getTitle(),
+                    'publicationyear' => $book->getPublicationYear(),
+                    'genre' => $book->getGenre(),
+                    'stock' => $book->getStock(),
+                    'availability' => $book->isAvailable() ? 'Dostępna' : 'Niedostępna',
+                    'image' => $book->getImage(),
+
+
                     // dodaj resztę właściwości książki jeśli chcesz
                 ];
             } else {

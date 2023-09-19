@@ -75,28 +75,49 @@ document.addEventListener("DOMContentLoaded", function() {
             method: 'POST',
             body: formData
         })
-            .then(response => {
-                return response.text(); // Pobierz zawartość odpowiedzi jako tekst
-            })
+            .then(response => response.json())
             .then(data => {
-                console.log(data); // Wyświetl zawartość odpowiedzi jako tekst
-                try {
-                    const jsonData = JSON.parse(data); // Spróbuj sparsować tekst jako JSON
-                    handleResponse(jsonData); // Przetwórz jako JSON, jeśli się powiedzie
-                } catch (error) {
-                    console.error('Error parsing JSON:', error); // Obsłuż błąd parsowania JSON
+                if (data.messages && data.messages.length) {
+                    alert(data.messages.join(", "));
+                } else if (data.book) {
+                    alert("Książka dodana pomyślnie!");
+                    addBookModal.style.display = "none";
+                    clearForm(addBookForm);
+                    addBookToUI(data.book);
                 }
             })
             .catch(error => console.error('Error:', error));
     });
 
-    function handleResponse(data) {
-        if (data.messages && data.messages.length) {
-            alert(data.messages.join(", "));
-        } else if (data.book) {
-            alert("Książka dodana pomyślnie!");
-            addBookModal.style.display = "none";
-            clearForm(addBookForm);
-        }
+    function addBookToUI(book) {
+        const booksContainer = document.querySelector('.books-container');
+        let bookDiv = document.createElement('div');
+        bookDiv.className = 'book-entry';
+
+        bookDiv.innerHTML = `
+        <div class="book-cover">
+            <img src="${book.image}" alt="${book.title}">
+        </div>
+        <table class="catalog-table">
+            <tbody>
+                <tr>
+                    <td>${book.title}</td>
+                    <td>${book.author}</td>
+                    <td>${book.publicationyear}</td>
+                    <td>${book.genre}</td>
+                    <td>${book.availability}</td>
+                    <td>${book.stock}</td>
+                    <td>
+                        <div class="btn-container">
+                            <button>Edytuj</button>
+                            <button>Usuń</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    `;
+
+        booksContainer.appendChild(bookDiv);
     }
 });
