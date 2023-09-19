@@ -9,17 +9,14 @@
     <!-- Preconnects for Performance Improvement -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
     <!-- Twoje style CSS -->
     <link rel="stylesheet" type="text/css" href="public/css/style.css">
     <link rel="stylesheet" type="text/css" href="public/css/table-styles.css">
     <link rel="stylesheet" type="text/css" href="public/css/admin-styles.css">
     <link rel="stylesheet" type="text/css" href="public/css/modal-styles.css">
-
-
     <script src="public/js/search.js" defer></script>
     <script src="public/js/add-book.js" defer></script>
-
+    <script src="public/js/edit-book.js" defer></script>
     <title>Panel Administratora</title>
 </head>
 
@@ -32,9 +29,7 @@ include('header.php');
 <div class="admin-head-container">
     <!-- Sekcja z przyciskiem Dodaj pozycję -->
     <div class="admin-button-container">
-
         <a href="/usersManagement" class="users-management-link">Zarządzanie użytkownikami</a>
-
         <button id="openAddBookModal" class="add-button">Dodaj pozycję do katalogu</button>
     </div>
     <div class="search-container">
@@ -82,7 +77,7 @@ include('header.php');
                         <?php if (isset($_SESSION['user'])): ?>
                             <td>
                                 <div class="btn-container">
-                                        <button>Edytuj</button>
+                                    <button class="edit-btn">Edytuj</button>
                                     <button>Usuń</button>
                                 </div>
                             </td>
@@ -100,7 +95,7 @@ include('header.php');
     <div class="modal-content">
         <span class="close-button">&times;</span>
         <h2>Dodaj pozycję do katalogu</h2>
-        <div class="modal-messageBox" ></div>
+        <div class="modal-messageBox"></div>
         <form action="addBook" method="POST" enctype="multipart/form-data">
             <?php if (isset($messages)): ?>
                 <?php foreach ($messages as $message): ?>
@@ -114,6 +109,30 @@ include('header.php');
             <input name="stock" type="number" placeholder="Liczba egzemplarzy" min="0">
             <input class="file-upload" name="file" type="file"><br/>
             <button type="submit">Dodaj</button>
+        </form>
+    </div>
+</section>
+
+<!-- Formularz edycji książek -->
+<section id="editBookModal" class="modal" style="display: none">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>Edytuj pozycję w katalogu</h2>
+        <div class="modal-messageBox"></div>
+        <form action="editBook" method="POST" enctype="multipart/form-data">
+            <?php if (isset($messages)): ?>
+                <?php foreach ($messages as $message): ?>
+                    <?php echo $message; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
+            <input type="hidden" name="book_id" id="editBookId">
+            <input name="author" type="text" placeholder="Autor">
+            <input name="title" type="text" placeholder="Tytuł">
+            <input name="publicationyear" type="text" placeholder="Rok wydania">
+            <input name="genre" type="text" placeholder="Gatunek">
+            <input name="stock" type="number" placeholder="Liczba egzemplarzy" min="0">
+            <input class="file-upload" name="file" type="file"><br/>
+            <button type="submit">Zaktualizuj</button>
         </form>
     </div>
 </section>

@@ -1,5 +1,6 @@
 .vscode/
 .idea/
 public/uploads/
+old-dumps/
 config.php
 .env
