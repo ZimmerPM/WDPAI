@@ -23,8 +23,7 @@ class BookController extends AppController
 
     }
 
-    public function search()
-    {
+    public function search() {
         header('Content-type: application/json');
         $response = [];
 
@@ -46,7 +45,12 @@ class BookController extends AppController
                     'image' => $book->getImage()
                 ];
             }
-            $response['isLoggedIn'] = isset($_SESSION['user']); // Dodawanie informacji o zalogowaniu
+
+            $response['isLoggedIn'] = isset($_SESSION['user']);
+
+            if (isset($_SESSION['user'])) {
+                $response['role'] = $_SESSION['user']['role'];
+            }
         }
 
         echo json_encode($response);
