@@ -90,20 +90,11 @@ class BookController extends AppController
                 $bookRepository = new BookRepository();
                 $bookRepository->insertBook($book);
 
-                $response['book'] = [
-                    'author' => $book->getAuthor(),
-                    'title' => $book->getTitle(),
-                    'publicationyear' => $book->getPublicationYear(),
-                    'genre' => $book->getGenre(),
-                    'stock' => $book->getStock(),
-                    'availability' => $book->isAvailable() ? 'Dostępna' : 'Niedostępna',
-                    'image' => $book->getImage(),
-
-
-                    // dodaj resztę właściwości książki jeśli chcesz
-                ];
+                $response['status'] = 'success';
+                $response['message'] = 'Książka została dodana pomyślnie.';
             } else {
-                $response['messages'] = $this->message;
+                $response['status'] = 'error';
+                $response['message'] = $this->message ?: 'Błąd podczas dodawania książki.';
             }
         }
 
@@ -135,7 +126,8 @@ class BookController extends AppController
         }
 
         if ($this->isPost()) {
-            $bookId = $_POST['id'];  // Zakładam, że przesyłasz ID książki, którą chcesz edytować
+            $bookId = $_POST['id'];
+
 
             if (is_uploaded_file($_FILES['file']['tmp_name']) && $this->validate($_FILES['file'])) {
                 move_uploaded_file(
@@ -158,15 +150,41 @@ class BookController extends AppController
                 );
 
                 $bookRepository = new BookRepository();
-                $bookRepository->updateBook($book, $bookId);
+                $bookRepository->updateBook($book);
 
                 $response['status'] = 'success';
                 $response['message'] = 'Książka została zaktualizowana pomyślnie.';
+
+
+            } elseif (!is_uploaded_file($_FILES['file']['tmp_name'])) {
+
+                $stock = $_POST['stock'];
+                $availability = $stock > 0 ? true : false;
+                $image = $_POST['hiddenFilePath'];
+
+                $book = new Book(
+                    $bookId,
+                    $_POST['author'],
+                    $_POST['title'],
+                    $_POST['publicationyear'],
+                    $_POST['genre'],
+                    $availability,
+                    $stock,
+                    $image
+                );
+
+                $bookRepository = new BookRepository();
+                $bookRepository->updateBook($book);
+
+                $response['status'] = 'success';
+                $response['message'] = 'Książka została zaktualizowana pomyślnie.';
+
+            }
+
             } else {
                 $response['status'] = 'error';
                 $response['messages'] = $this->message;
             }
-        }
 
         header('Content-Type: application/json');
         echo json_encode($response);

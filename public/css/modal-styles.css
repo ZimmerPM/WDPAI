@@ -100,8 +100,12 @@
     font-family: 'Sarabun', sans-serif;
 }
 
-
 #editBookModal button {
     padding: 0.75em 2em;
     text-align: center;
+}
+
+.modal-content button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.6;
 }

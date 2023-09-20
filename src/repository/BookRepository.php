@@ -137,7 +137,7 @@ class BookRepository extends Repository
         }
     }
 
-    public function updateBook(Book $book, int $bookId)
+    public function updateBook(Book $book)
     {
         $stmt = $this->database->connect()->prepare('
         UPDATE books
@@ -150,7 +150,7 @@ class BookRepository extends Repository
         $stmt->bindParam(':genre', $book->getGenre(), PDO::PARAM_STR);
         $stmt->bindParam(':stock', $book->getStock(), PDO::PARAM_INT);
         $stmt->bindParam(':image', $book->getImage(), PDO::PARAM_STR);
-        $stmt->bindParam(':id', $bookId, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $book->getId(), PDO::PARAM_INT);
         $stmt->execute();
     }
 

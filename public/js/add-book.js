@@ -2,8 +2,9 @@ document.addEventListener("DOMContentLoaded", function() {
     const addBookModal = document.getElementById("addBookModal");
     const addBookForm = addBookModal.querySelector("form");
     const openAddBookModalButton = document.getElementById("openAddBookModal");
-    const closeButton = document.querySelector(".close-button");
-    const messageBox = document.querySelector(".modal-messageBox");
+    const closeButton = addBookModal.querySelector(".close-button");
+    const messageBox = addBookModal.querySelector(".modal-messageBox");
+    const submitButton = addBookForm.querySelector('button[type="submit"]');
 
     function clearForm(form) {
         for (let element of form.elements) {
@@ -47,6 +48,8 @@ document.addEventListener("DOMContentLoaded", function() {
     openAddBookModalButton.addEventListener("click", function() {
         addBookModal.style.display = "block";
         messageBox.innerText = "";
+        submitButton.disabled = false; // Włączenie przycisku "Dodaj"
+        submitButton.innerText = "Dodaj";
     });
 
     closeButton.addEventListener("click", function() {
@@ -56,8 +59,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     document.addEventListener("keydown", function(event) {
         if (event.key === "Escape" && addBookModal.style.display === "block") {
-            addBookModal.style.display = "none";
-            clearForm(addBookForm);
+            closeButton.click();
         }
     });
 
@@ -77,47 +79,25 @@ document.addEventListener("DOMContentLoaded", function() {
         })
             .then(response => response.json())
             .then(data => {
-                if (data.messages && data.messages.length) {
-                    alert(data.messages.join(", "));
-                } else if (data.book) {
-                    alert("Książka dodana pomyślnie!");
-                    addBookModal.style.display = "none";
-                    clearForm(addBookForm);
-                    addBookToUI(data.book);
+                if (data.status === 'success') {
+                    messageBox.innerHTML = `<p style="color: green">${data.message}</p>`;
+
+                    // Dezaktywacja przycisku "Dodaj" i zmiana jego napisu
+                    submitButton.disabled = true;
+                    submitButton.innerText = "Dodano";
+
+                    // Aktywacja możliwości zamknięcia okna klikając poza nim
+                    addBookModal.addEventListener("click", function(event) {
+                        if (event.target === addBookModal) {
+                            closeButton.click();
+                        }
+                    });
+                } else {
+                    messageBox.innerHTML = `<p style="color: red">${data.message}</p>`;
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+            });
     });
-
-    function addBookToUI(book) {
-        const booksContainer = document.querySelector('.books-container');
-        let bookDiv = document.createElement('div');
-        bookDiv.className = 'book-entry';
-
-        bookDiv.innerHTML = `
-        <div class="book-cover">
-            <img src="${book.image}" alt="${book.title}">
-        </div>
-        <table class="catalog-table">
-            <tbody>
-                <tr>
-                    <td>${book.title}</td>
-                    <td>${book.author}</td>
-                    <td>${book.publicationyear}</td>
-                    <td>${book.genre}</td>
-                    <td>${book.availability}</td>
-                    <td>${book.stock}</td>
-                    <td>
-                        <div class="btn-container">
-                            <button>Edytuj</button>
-                            <button>Usuń</button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    `;
-
-        booksContainer.appendChild(bookDiv);
-    }
 });
