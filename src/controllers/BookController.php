@@ -36,6 +36,7 @@ class BookController extends AppController
 
             foreach ($books as $book) {
                 $response['books'][] = [
+                    'id' => $book->getId(),
                     'title' => $book->getTitle(),
                     'author' => $book->getAuthor(),
                     'publicationyear' => $book->getPublicationYear(),
@@ -76,6 +77,7 @@ class BookController extends AppController
                 $availability = $stock > 0 ? true : false;
 
                 $book = new Book(
+                    null,  // Tu jest zmiana - dodanie tymczasowego ID
                     $_POST['author'],
                     $_POST['title'],
                     $_POST['publicationyear'],
@@ -124,5 +126,51 @@ class BookController extends AppController
         return true;
     }
 
+    public function editBook()
+    {
+        $response = [];
+
+        if (!$this->isAdmin()) {
+            die("Brak uprawnień do wejścia na podaną stronę!");
+        }
+
+        if ($this->isPost()) {
+            $bookId = $_POST['id'];  // Zakładam, że przesyłasz ID książki, którą chcesz edytować
+
+            if (is_uploaded_file($_FILES['file']['tmp_name']) && $this->validate($_FILES['file'])) {
+                move_uploaded_file(
+                    $_FILES['file']['tmp_name'],
+                    dirname(__DIR__) . self::UPLOAD_DIRECTORY . $_FILES['file']['name']
+                );
+
+                $stock = $_POST['stock'];
+                $availability = $stock > 0 ? true : false;
+
+                $book = new Book(
+                    $bookId,
+                    $_POST['author'],
+                    $_POST['title'],
+                    $_POST['publicationyear'],
+                    $_POST['genre'],
+                    $availability,
+                    $stock,
+                    "public/uploads/" . $_FILES['file']['name']
+                );
+
+                $bookRepository = new BookRepository();
+                $bookRepository->updateBook($book, $bookId);
+
+                $response['status'] = 'success';
+                $response['message'] = 'Książka została zaktualizowana pomyślnie.';
+            } else {
+                $response['status'] = 'error';
+                $response['messages'] = $this->message;
+            }
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit;
+    }
 
 }

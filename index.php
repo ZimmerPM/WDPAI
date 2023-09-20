@@ -32,6 +32,7 @@ if ($httpMethod == 'GET' && $path == 'register') {
     Router::get('adminPanel', 'AdminController');
     Router::get('usersManagement', 'AdminController');
     Router::post('addBook', 'AdminController');
+    Router::post('editBook', 'AdminController');
 
 
     Router::run($path);

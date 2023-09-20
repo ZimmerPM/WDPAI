@@ -21,6 +21,7 @@ class BookRepository extends Repository
         $result = [];
         foreach ($books as $book) {
             $result[] = new Book(
+                $book['id'],
                 $book['author'],
                 $book['title'],
                 $book['publicationyear'],
@@ -29,6 +30,7 @@ class BookRepository extends Repository
                 $book['stock'],
                 $book['image']
             );
+
         }
 
         return $result;
@@ -54,6 +56,7 @@ class BookRepository extends Repository
         $result = [];
         foreach ($books as $book) {
             $result[] = new Book(
+                $book['id'],
                 $book['author'],
                 $book['title'],
                 $book['publicationyear'],
@@ -62,6 +65,7 @@ class BookRepository extends Repository
                 $book['stock'],
                 $book['image']
             );
+
         }
 
         return $result;
@@ -132,6 +136,25 @@ class BookRepository extends Repository
             throw $e;  // Rzucenie wyjątku dalej, aby móc go obsłużyć w kodzie wywołującym
         }
     }
+
+    public function updateBook(Book $book, int $bookId)
+    {
+        $stmt = $this->database->connect()->prepare('
+        UPDATE books
+        SET title = :title, publicationyear = :publicationyear, genre = :genre, stock = :stock, image = :image
+        WHERE id = :id
+    ');
+
+        $stmt->bindParam(':title', $book->getTitle(), PDO::PARAM_STR);
+        $stmt->bindParam(':publicationyear', $book->getPublicationYear(), PDO::PARAM_INT);
+        $stmt->bindParam(':genre', $book->getGenre(), PDO::PARAM_STR);
+        $stmt->bindParam(':stock', $book->getStock(), PDO::PARAM_INT);
+        $stmt->bindParam(':image', $book->getImage(), PDO::PARAM_STR);
+        $stmt->bindParam(':id', $bookId, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+
 
 }
 ?>

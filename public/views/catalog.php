@@ -54,7 +54,7 @@ include('header.php');
 <div class="books-container">
     <?php if (isset($books))
     {foreach ($books as $book): ?>
-        <div class="book-entry">
+        <div class="book-entry" data-id="<?php echo $book->getId(); ?>">
             <div class="book-cover">
                 <img src="<?php echo $book->getImage(); ?>" alt="<?php echo $book->getTitle(); ?>">
             </div>

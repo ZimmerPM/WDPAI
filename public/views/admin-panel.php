@@ -44,6 +44,7 @@ include('header.php');
     <table class="catalog-table">
         <thead>
         <tr>
+            <th>ID</th>
             <th>Tytuł</th>
             <th>Autor</th>
             <th>Rok wydania</th>
@@ -68,6 +69,7 @@ include('header.php');
                 <table class="catalog-table">
                     <tbody>
                     <tr>
+                        <td><?php echo $book->getId(); ?></td>
                         <td><?php echo $book->getTitle(); ?></td>
                         <td><?php echo $book->getAuthor(); ?></td>
                         <td><?php echo $book->getPublicationYear(); ?></td>
@@ -78,6 +80,7 @@ include('header.php');
                             <td>
                                 <div class="btn-container">
                                     <button class="edit-btn"
+                                            data-id="<?php echo $book->getId(); ?>"
                                             data-title="<?php echo $book->getTitle(); ?>"
                                             data-author="<?php echo $book->getAuthor(); ?>"
                                             data-publicationyear="<?php echo $book->getPublicationYear(); ?>"

@@ -1,5 +1,6 @@
 <?php
 
+require_once 'BookController.php';
 require_once __DIR__.'/../repository/BookRepository.php';
 require_once __DIR__.'/../repository/UserRepository.php';
 

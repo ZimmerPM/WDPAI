@@ -1,18 +1,23 @@
 const editModal = document.getElementById("editBookModal");
 const editForm = editModal.querySelector("form");
 const hiddenFilePathInput = document.getElementById("hiddenFilePath");
+const editBookIdField = document.getElementById('editBookId');
+const messageBox = editModal.querySelector(".modal-messageBox");
 
 // Nasłuchiwanie na przycisk edycji
 document.querySelectorAll(".edit-btn").forEach(button => {
     button.addEventListener("click", function() {
-        const row = this.closest("tr");
 
+
+        // Ustawienie wartości w formularzu z danych przycisku
         const title = this.getAttribute("data-title");
         const author = this.getAttribute("data-author");
         const publicationYear = this.getAttribute("data-publicationyear");
         const genre = this.getAttribute("data-genre");
         const stock = this.getAttribute("data-stock");
         const image = this.getAttribute("data-image");
+        const bookId = this.getAttribute("data-id");
+        editBookIdField.value = bookId;
 
         // Ustawienie wartości w formularzu
         editForm.querySelector("[name='title']").value = title;
@@ -56,3 +61,37 @@ document.querySelectorAll(".edit-btn").forEach(button => {
 editModal.querySelector(".close-button").addEventListener("click", function() {
     editModal.style.display = "none";
 });
+
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Escape" && editModal.style.display === "block") {
+        editModal.style.display = "none";
+    }
+});
+
+// Nasłuchiwanie na przycisk wysyłania formularza
+editForm.addEventListener('submit', function(event) {
+    event.preventDefault();  // Zapobiega domyślnemu działaniu formularza
+
+    const formData = new FormData(editForm);
+
+    fetch('/editBook', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            if(data.status === 'success') {
+                messageBox.innerHTML = `<p style="color: green">${data.message}</p>`;
+                setTimeout(() => {
+                    messageBox.innerHTML = '';
+                    editModal.style.display = "none";
+                }, 1500);
+            } else {
+                messageBox.innerHTML = `<p style="color: red">${data.message}</p>`;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+});
+

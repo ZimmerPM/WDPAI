@@ -5,7 +5,6 @@ document.querySelector(".search-input").addEventListener("keydown", function(e) 
     }
 });
 
-
 function searchFunction() {
     let query = document.querySelector(".search-input").value;
 
@@ -18,7 +17,6 @@ function searchFunction() {
     })
         .then(response => response.json())
         .then(data => {
-            console.log("Response data:", data);
             let bookContainer = document.querySelector(".books-container");
             bookContainer.innerHTML = "";
 
@@ -37,9 +35,6 @@ function searchFunction() {
 }
 
 function renderBook(book, isLoggedIn, role) {
-    console.log("Rendering book:", book.title);
-    console.log("isLoggedIn:", isLoggedIn);
-    console.log("role:", role);
     let bookContainer = document.querySelector(".books-container");
     let bookDiv = document.createElement("div");
     bookDiv.className = "book-entry";
@@ -55,6 +50,14 @@ function renderBook(book, isLoggedIn, role) {
     bookTable.className = "catalog-table";
     let bookTBody = document.createElement("tbody");
     let bookRow = document.createElement("tr");
+
+    const currentPath = window.location.pathname;
+
+    if (currentPath === '/adminPanel') {
+        let idCell = document.createElement("td");
+        idCell.textContent = book.id;
+        bookRow.appendChild(idCell);
+    }
 
     let titleCell = document.createElement("td");
     titleCell.textContent = book.title;
@@ -75,8 +78,6 @@ function renderBook(book, isLoggedIn, role) {
     bookRow.appendChild(genreCell);
     bookRow.appendChild(availabilityCell);
     bookRow.appendChild(stockCell);
-
-    const currentPath = window.location.pathname;
 
     if (isLoggedIn && role === "user") {
         let operationCell = document.createElement("td");

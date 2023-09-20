@@ -2,6 +2,7 @@
 
 class Book
 {
+    private $id;
     private $author;
     private $title;
     private $publicationyear;
@@ -9,10 +10,12 @@ class Book
     private $availability;
     private $stock;
 
+
     private $image;
 
-    public function __construct($author, $title, $publicationyear, $genre, $availability, $stock, $image)
+    public function __construct($id, $author, $title, $publicationyear, $genre, $availability, $stock, $image)
     {
+        $this->id = $id;
         $this->author = $author;
         $this->title = $title;
         $this->publicationyear = $publicationyear;
@@ -22,6 +25,15 @@ class Book
         $this->image = $image;
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
     public function getAuthor()
     {
         return $this->author;
