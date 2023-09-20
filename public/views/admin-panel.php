@@ -138,7 +138,7 @@ include('header.php');
                     <?php echo $message; ?>
                 <?php endforeach; ?>
             <?php endif; ?>
-            <input type="hidden" name="book_id" id="editBookId">
+            <input type="hidden" name="id" id="editBookId">
             <input name="author" type="text" placeholder="Autor">
             <input name="title" type="text" placeholder="Tytuł">
             <input name="publicationyear" type="text" placeholder="Rok wydania">

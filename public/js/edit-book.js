@@ -74,6 +74,11 @@ editForm.addEventListener('submit', function(event) {
 
     const formData = new FormData(editForm);
 
+    for (var pair of formData.entries()) {
+        console.log(pair[0]+ ', ' + pair[1]);
+    }
+
+
     fetch('/editBook', {
         method: 'POST',
         body: formData
@@ -82,6 +87,7 @@ editForm.addEventListener('submit', function(event) {
         .then(data => {
             if(data.status === 'success') {
                 messageBox.innerHTML = `<p style="color: green">${data.message}</p>`;
+                alert("Książka zaktualizowana pomyślnie!");
                 setTimeout(() => {
                     messageBox.innerHTML = '';
                     editModal.style.display = "none";
