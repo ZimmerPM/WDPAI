@@ -118,15 +118,13 @@ class UserRepository extends Repository
         $pdo = $this->database->connect();
 
         try {
-
-
+            $pdo->beginTransaction();
 
             $id = $user->getId();
-            error_log("ID użytkownika to: " . $id);  // Wypisanie wartości ID do logó
+            error_log("ID użytkownika to: " . $id);  // Wypisanie wartości ID do logu
 
             $email = $user->getEmail();
             $role = $user->getRole();
-            $id = $user->getId();
 
             if(empty($id)) {
                 error_log("Błąd: ID użytkownika jest puste!");
@@ -141,14 +139,10 @@ class UserRepository extends Repository
 
             // Aktualizacja tabeli users
             $stmt = $pdo->prepare('
-        UPDATE users 
-        SET email = :email, role = :role
-        WHERE id = :id
-    ');
-
-            $email = $user->getEmail();
-            $role = $user->getRole();
-            $id = $user->getId();
+            UPDATE users 
+            SET email = :email, role = :role
+            WHERE id = :id
+        ');
 
             $stmt->bindParam(':email', $email, PDO::PARAM_STR);
             $stmt->bindParam(':role', $role, PDO::PARAM_STR);
@@ -158,10 +152,10 @@ class UserRepository extends Repository
 
             // Aktualizacja tabeli userdetails
             $stmt = $pdo->prepare('
-        UPDATE userdetails
-        SET name = :name, lastname = :lastname
-        WHERE user_id = :user_id
-    ');
+            UPDATE userdetails
+            SET name = :name, lastname = :lastname
+            WHERE user_id = :user_id
+        ');
 
             $name = $user->getName();
             $lastname = $user->getLastname();
@@ -172,9 +166,10 @@ class UserRepository extends Repository
 
             $stmt->execute();
 
-
+            $pdo->commit();
 
         } catch (PDOException $e) {
+            $pdo->rollBack();
             throw new Exception("Błąd podczas aktualizacji danych użytkownika: " . $e->getMessage());
         }
     }
