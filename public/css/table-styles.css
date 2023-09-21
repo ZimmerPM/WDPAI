@@ -199,6 +199,19 @@
 	font-size: 0.75em;
 }
 
+.user-table th:nth-child(1),  /* zmień "n" na numer kolumny liczby egzemplarzy */
+.user-table td:nth-child(1) {  /* to samo dla komórek z wartościami */
+	width: 3.5em;  /* Przykładowa szerokość, możemy dostosować wg potrzeb */
+}
+
+.user-table th:nth-child(4),  /* zmień "n" na numer kolumny liczby egzemplarzy */
+.user-table td:nth-child(4) {  /* to samo dla komórek z wartościami */
+	width: 7em;  /* Przykładowa szerokość, możemy dostosować wg potrzeb */
+}
+
+
+
+
 @media only screen and (max-width: 800px) {
 	/* Ukrywanie obrazków w książkach */
 	.book-entry .book-cover {

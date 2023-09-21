@@ -34,6 +34,8 @@ if ($httpMethod == 'GET' && $path == 'register') {
     Router::post('addBook', 'AdminController');
     Router::post('editBook', 'AdminController');
     Router::post('removeBook', 'AdminController');
+    Router::post('editUser','AdminController');
+
 
     Router::run($path);
 }

@@ -42,7 +42,7 @@ class RegistrationController extends AppController
         }
 
         // Zapis nowego użytkownika w bazie danych
-        $userRepository->addUser(new User($email, $password, $name, $lastname, 'user'));
+        $userRepository->addUser(new User(null, $email, $password, $name, $lastname, 'user'));
 
         // Po udanej rejestracji przekierowujemy użytkownika do strony logowania
         $url = "http://$_SERVER[HTTP_HOST]/login";
