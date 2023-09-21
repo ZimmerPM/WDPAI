@@ -7,8 +7,6 @@
     <script src="https://kit.fontawesome.com/faceb1bdbd.js" crossorigin="anonymous"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&family=Poppins:wght@100;200;300;400;500&family=Sarabun:wght@100;200;300;400;500&display=swap" rel="stylesheet">
-
-    <!-- Preconnects for Performance Improvement -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -22,10 +20,7 @@
 </head>
 
 <body class="catalog">
-
-<?php
-include('header.php');
-?>
+<?php include('header.php'); ?>
 
 <div class="search-container">
     <input type="text" class="search-input" placeholder="Wyszukaj...">
@@ -52,43 +47,48 @@ include('header.php');
 </div>
 
 <div class="books-container">
-    <?php if (isset($books))
-    {foreach ($books as $book): ?>
-        <div class="book-entry" data-id="<?php echo $book->getId(); ?>">
-            <div class="book-cover">
-                <img src="<?php echo $book->getImage(); ?>" alt="<?php echo $book->getTitle(); ?>">
-            </div>
-            <table class="catalog-table">
-                <tbody>
-                <tr>
-                    <td><?php echo $book->getTitle(); ?></td>
-                    <td><?php echo $book->getAuthor(); ?></td>
-                    <td><?php echo $book->getPublicationYear(); ?></td>
-                    <td><?php echo $book->getGenre(); ?></td>
-                    <td><?php echo $book->isAvailable() ? 'Dostępna' : 'Niedostępna'; ?></td>
-                    <td><?php echo $book->getStock(); ?></td>
-                    <?php if (isset($_SESSION['user'])): ?>
-                        <td>
-                            <div class="btn-container">
-                                <?php if ($book->isAvailable() && $_SESSION['user']['role'] != "admin"): ?>
-                                    <button>Wypożycz</button>
-                                <?php else: ?>
-                                    <button disabled>Wypożycz</button>
-                                <?php endif; ?>
+    <?php if (isset($books)) {
+        foreach ($books as $book): ?>
+            <div class="book-entry" data-id="<?php echo $book->getId(); ?>">
+                <div class="book-cover">
+                    <img src="<?php echo $book->getImage(); ?>" alt="<?php echo $book->getTitle(); ?>">
+                </div>
+                <table class="catalog-table">
+                    <tbody>
+                    <tr>
+                        <td><?php echo $book->getTitle(); ?></td>
+                        <td><?php echo $book->getAuthor(); ?></td>
+                        <td><?php echo $book->getPublicationYear(); ?></td>
+                        <td><?php echo $book->getGenre(); ?></td>
+                        <td><?php echo $book->isAvailable() ? 'Dostępna' : 'Niedostępna'; ?></td>
+                        <td><?php echo $book->getStock(); ?></td>
+                        <?php if (isset($_SESSION['user'])): ?>
+                            <td>
+                                <div class="btn-container">
+                                    <?php if ($book->isAvailable() && $_SESSION['user']['role'] != "admin"): ?>
+                                        <form method="POST" action="borrow">
+                                            <input type="hidden" name="bookId" value="<?php echo $book->getId(); ?>">
+                                            <button type="submit">Wypożycz</button>
+                                        </form>
 
-                                <?php if ($_SESSION['user']['role'] != "admin"): ?>
-                                    <button class="reserve-btn">Rezerwuj</button>
-                                <?php else: ?>
-                                    <button class="reserve-btn" disabled>Rezerwuj</button>
-                                <?php endif; ?>
-                            </div>
-                        </td>
-                    <?php endif; ?>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    <?php endforeach; } ?>
+                                    <?php else: ?>
+                                        <button disabled>Wypożycz</button>
+                                    <?php endif; ?>
+
+                                    <?php if ($_SESSION['user']['role'] != "admin"): ?>
+                                        <button class="reserve-btn">Rezerwuj</button>
+                                    <?php else: ?>
+                                        <button class="reserve-btn" disabled>Rezerwuj</button>
+                                    <?php endif; ?>
+                                </div>
+                            </td>
+                        <?php endif; ?>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        <?php endforeach;
+    } ?>
 </div>
 </body>
 </html>
