@@ -88,4 +88,39 @@ class AdminController extends BookController
         exit;
     }
 
+    public function removeUser()
+    {
+        $response = [];
+
+        if (!$this->isAdmin()) {
+            die("Brak uprawnień do wejścia na podaną stronę!");
+        }
+
+        if ($this->isPost()) {
+            // Odczytanie surowych danych POST w formacie JSON
+            $inputJSON = file_get_contents('php://input');
+            $input = json_decode($inputJSON, true);
+            $userId = $input['id'];
+
+            $userRepository = new UserRepository();
+            $result = $userRepository->deleteUser($userId);
+
+            if ($result) { // Jeśli operacja usuwania się powiodła
+                $response['status'] = 'success';
+                $response['message'] = 'Użytkownik został usunięty pomyślnie.';
+            } else {
+                $response['status'] = 'error';
+                $response['message'] = 'Wystąpił błąd podczas usuwania użytkownika!';
+            }
+        } else {
+            $response['status'] = 'error';
+            $response['message'] = 'Nieprawidłowe żądanie!';
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit;
+    }
+
+
 }

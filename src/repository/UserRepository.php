@@ -121,21 +121,9 @@ class UserRepository extends Repository
             $pdo->beginTransaction();
 
             $id = $user->getId();
-            error_log("ID użytkownika to: " . $id);  // Wypisanie wartości ID do logu
-
             $email = $user->getEmail();
             $role = $user->getRole();
 
-            if(empty($id)) {
-                error_log("Błąd: ID użytkownika jest puste!");
-            } else {
-                error_log("ID użytkownika to: " . $id);
-            }
-
-            $stmt = $pdo->prepare('SELECT id FROM users');
-            $stmt->execute();
-            $allIds = $stmt->fetchAll(PDO::FETCH_COLUMN);
-            error_log("Wszystkie ID z tabeli users: " . implode(", ", $allIds));
 
             // Aktualizacja tabeli users
             $stmt = $pdo->prepare('
@@ -171,6 +159,37 @@ class UserRepository extends Repository
         } catch (PDOException $e) {
             $pdo->rollBack();
             throw new Exception("Błąd podczas aktualizacji danych użytkownika: " . $e->getMessage());
+        }
+    }
+
+    public function deleteUser(int $userId): bool
+    {
+        $pdo = $this->database->connect();
+
+        try {
+            // Rozpoczęcie transakcji
+            $pdo->beginTransaction();
+
+            // Usuwanie powiązanych rekordów z tabeli userdetails
+            $stmt = $pdo->prepare('DELETE FROM userdetails WHERE user_id = :id');
+            $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
+            $stmt->execute();
+
+            // Usuwanie użytkownika z tabeli users
+            $stmt = $pdo->prepare('DELETE FROM users WHERE id = :id');
+            $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
+            $stmt->execute();
+
+            // Zatwierdzenie zmian w transakcji
+            $pdo->commit();
+
+            // Zwracanie prawdy, jeśli przynajmniej jeden użytkownik został usunięty
+            return $stmt->rowCount() > 0;
+
+        } catch (\Exception $e) {
+            // Wycofanie zmian w transakcji w przypadku błędu
+            $pdo->rollBack();
+            throw $e;  // Rzucenie wyjątku dalej, aby móc go obsłużyć w kodzie wywołującym
         }
     }
 }

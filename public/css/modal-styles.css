@@ -18,7 +18,7 @@
     z-index: 1000;  /* Aby zapewnić, że modal będzie na wierzchu */
 }
 
-#deleteBookModal{
+#deleteBookModal, #deleteUserModal{
     position: fixed;
     top: 0;
     left: 0;
@@ -72,9 +72,8 @@
     width: 100%;
 }
 
-#deleteBookModal .modal-content {
+#deleteBookModal .modal-content, #deleteUserModal .modal-content {
     padding: 1.5em 0;
-
 }
 
 .modal-content h2{
@@ -149,7 +148,7 @@
     margin: 2em;
 }
 
-.close-button-delete {
+.close-button-delete, .close-button-delete-user {
     position: absolute;
     right: 10px;
     top: 10px;
@@ -158,14 +157,14 @@
     cursor: pointer;
 }
 
-.close-button-delete:hover {
+.close-button-delete:hover, .close-button-delete-user:hover {
     background-color: #9F7E69;
     color: #F2EFC7;
     border-radius: 20%;  /* To doda kształt koła wokół symbolu "x" */
     transition: background-color 0.3s, color 0.3s;  /* Płynna zmiana */
 }
 
-#deleteBookModal p{
+#deleteBookModal p, #deleteUserModal p{
     font-family: 'Sarabun', cursive;
     text-align: center;
     margin: 3em;

@@ -18,6 +18,7 @@
 
 
     <script src="public/js/edit-user.js" defer></script>
+    <script src="public/js/remove-user.js" defer></script>
 
     <title>Zarządzanie użytkownikami</title>
 </head>
@@ -103,6 +104,19 @@ include('header.php');
     </div>
 </section>
 
+<!-- Modal potwierdzenia usunięcia użytkownika -->
+<section id="deleteUserModal" class="modal" style="display: none">
+    <div class="modal-content">
+        <span class="close-button-delete-user">&times;</span>
+        <h2>Usuń użytkownika</h2>
+        <div class="modal-messageBox"></div>
+        <p>Czy na pewno chcesz usunąć tego użytkownika?</p>
+        <div class="delete-confirmation">
+            <button id="confirmDeleteUser">Tak, usuń</button>
+            <button id="cancelDeleteUser">Anuluj</button>
+        </div>
+    </div>
+</section>
 
 </body>
 </html>
