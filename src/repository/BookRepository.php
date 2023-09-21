@@ -10,8 +10,8 @@ class BookRepository extends Repository
         $stmt = $this->database->connect()->prepare('
              SELECT books.*, authors.name as author
         FROM books
-        INNER JOIN booksauthors ON books.id = booksauthors.book_id
-        INNER JOIN authors ON authors.id = booksauthors.author_id
+        INNER JOIN books_authors ON books.id = books_authors.book_id
+        INNER JOIN authors ON authors.id = books_authors.author_id
         ORDER BY authors.name ASC;
         ');
 
@@ -43,8 +43,8 @@ class BookRepository extends Repository
         $stmt = $this->database->connect()->prepare('
         SELECT books.*, authors.name as author
         FROM books
-        INNER JOIN booksauthors ON books.id = booksauthors.book_id
-        INNER JOIN authors ON authors.id = booksauthors.author_id
+        INNER JOIN books_authors ON books.id = books_authors.book_id
+        INNER JOIN authors ON authors.id = books_authors.author_id
         WHERE LOWER(books.title) LIKE :query OR LOWER(authors.name) LIKE :query OR LOWER(books.genre) LIKE :query
         ORDER BY authors.name ASC
     ');
@@ -122,8 +122,8 @@ class BookRepository extends Repository
 
             $bookId = $pdo->lastInsertId();
 
-            // 4. Dodaj relację w tabeli booksauthors
-            $stmt = $pdo->prepare('INSERT INTO booksauthors (book_id, author_id) VALUES (:book_id, :author_id)');
+            // 4. Dodaj relację w tabeli books_authors
+            $stmt = $pdo->prepare('INSERT INTO books_authors (book_id, author_id) VALUES (:book_id, :author_id)');
             $stmt->bindParam(':book_id', $bookId, PDO::PARAM_INT);
             $stmt->bindParam(':author_id', $authorId, PDO::PARAM_INT);
             $stmt->execute();
@@ -194,8 +194,8 @@ class BookRepository extends Repository
             $stmt->bindParam(':id', $book->getId(), PDO::PARAM_INT);
             $stmt->execute();
 
-            // 4. Aktualizuj relację w tabeli booksauthors
-            $stmt = $pdo->prepare('UPDATE booksauthors SET author_id = :author_id WHERE book_id = :book_id');
+            // 4. Aktualizuj relację w tabeli books_authors
+            $stmt = $pdo->prepare('UPDATE books_authors SET author_id = :author_id WHERE book_id = :book_id');
             $stmt->bindParam(':book_id', $book->getId(), PDO::PARAM_INT);
             $stmt->bindParam(':author_id', $authorId, PDO::PARAM_INT);
             $stmt->execute();
@@ -228,8 +228,8 @@ class BookRepository extends Repository
             // Rozpoczęcie transakcji
             $pdo->beginTransaction();
 
-            // 1. Usuwanie relacji z tabeli booksauthors
-            $stmt = $pdo->prepare('DELETE FROM booksauthors WHERE book_id = :id');
+            // 1. Usuwanie relacji z tabeli books_authors
+            $stmt = $pdo->prepare('DELETE FROM books_authors WHERE book_id = :id');
             $stmt->bindParam(':id', $bookId, PDO::PARAM_INT);
             $stmt->execute();
 

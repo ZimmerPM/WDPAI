@@ -10,7 +10,7 @@ class UserRepository extends Repository
         $stmt = $this->database->connect()->prepare('
             SELECT u.id, u.email, u.password, ud.name, ud.lastname, u.role
             FROM public.users u
-            LEFT JOIN public.userdetails ud ON u.id = ud.user_id
+            LEFT JOIN public.user_details ud ON u.id = ud.user_id
             WHERE u.email = :email
         ');
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
@@ -52,7 +52,7 @@ class UserRepository extends Repository
             $userId = $stmt->fetchColumn();
 
             $stmt = $database->prepare('
-                INSERT INTO public.userdetails (user_id, name, lastname)
+                INSERT INTO public.user_details (user_id, name, lastname)
                 VALUES (?, ?, ?)
             ');
 
@@ -90,7 +90,7 @@ class UserRepository extends Repository
         $stmt = $this->database->connect()->prepare('
         SELECT u.id, u.email, u.password, ud.name, ud.lastname, u.role
         FROM public.users u
-        LEFT JOIN public.userdetails ud ON u.id = ud.user_id
+        LEFT JOIN public.user_details ud ON u.id = ud.user_id
         ORDER BY u.role, u.id
     ');
 
@@ -138,9 +138,9 @@ class UserRepository extends Repository
 
             $stmt->execute();
 
-            // Aktualizacja tabeli userdetails
+            // Aktualizacja tabeli user_details
             $stmt = $pdo->prepare('
-            UPDATE userdetails
+            UPDATE user_details
             SET name = :name, lastname = :lastname
             WHERE user_id = :user_id
         ');
@@ -170,8 +170,8 @@ class UserRepository extends Repository
             // Rozpoczęcie transakcji
             $pdo->beginTransaction();
 
-            // Usuwanie powiązanych rekordów z tabeli userdetails
-            $stmt = $pdo->prepare('DELETE FROM userdetails WHERE user_id = :id');
+            // Usuwanie powiązanych rekordów z tabeli user_details
+            $stmt = $pdo->prepare('DELETE FROM user_details WHERE user_id = :id');
             $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
             $stmt->execute();
 
