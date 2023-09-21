@@ -130,31 +130,126 @@ class BookRepository extends Repository
 
             // Zatwierdzenie zmian w transakcji
             $pdo->commit();
+
+            return [
+                'id' => $bookId,
+                'title' => $title,
+                'author' => $authorName,
+                'publicationyear' => $publicationYear,
+                'genre' => $genre,
+                'availability' => $availability,
+                'stock' => $stock,
+                'image' => $image
+            ];
+
+        } catch (\Exception $e) {
+            // Wycofanie zmian w transakcji w przypadku błędu
+            $pdo->rollBack();
+            throw $e;  // Rzucenie wyjątku dalej, aby móc go obsłużyć w kodzie wywołującym
+        }
+
+        return null;
+    }
+
+    public function updateBook(Book $book)
+    {
+        $pdo = $this->database->connect();
+
+        try {
+            // Rozpoczęcie transakcji
+            $pdo->beginTransaction();
+
+            $authorName = $book->getAuthor();
+
+            // 1. Sprawdź, czy autor istnieje
+            $stmt = $pdo->prepare('SELECT id FROM authors WHERE name = :author');
+            $stmt->bindParam(':author', $authorName, PDO::PARAM_STR);
+            $stmt->execute();
+
+            $author = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            // 2. Jeśli nie istnieje, dodaj go
+            if (!$author) {
+                $stmt = $pdo->prepare('INSERT INTO authors (name) VALUES (:author)');
+                $stmt->bindParam(':author', $authorName, PDO::PARAM_STR);
+                $stmt->execute();
+
+                $authorId = $pdo->lastInsertId();
+            } else {
+                $authorId = $author['id'];
+            }
+
+            // 3. Aktualizuj książkę
+            $stmt = $pdo->prepare('
+            UPDATE books
+            SET title = :title, publicationyear = :publicationyear, genre = :genre, stock = :stock, image = :image
+            WHERE id = :id
+        ');
+
+            $stmt->bindParam(':title', $book->getTitle(), PDO::PARAM_STR);
+            $stmt->bindParam(':publicationyear', $book->getPublicationYear(), PDO::PARAM_INT);
+            $stmt->bindParam(':genre', $book->getGenre(), PDO::PARAM_STR);
+            $stmt->bindParam(':stock', $book->getStock(), PDO::PARAM_INT);
+            $stmt->bindParam(':image', $book->getImage(), PDO::PARAM_STR);
+            $stmt->bindParam(':id', $book->getId(), PDO::PARAM_INT);
+            $stmt->execute();
+
+            // 4. Aktualizuj relację w tabeli booksauthors
+            $stmt = $pdo->prepare('UPDATE booksauthors SET author_id = :author_id WHERE book_id = :book_id');
+            $stmt->bindParam(':book_id', $book->getId(), PDO::PARAM_INT);
+            $stmt->bindParam(':author_id', $authorId, PDO::PARAM_INT);
+            $stmt->execute();
+
+            // Zatwierdzenie zmian w transakcji
+            $pdo->commit();
+
+            return [
+                'id' => $book->getId(),
+                'title' => $book->getTitle(),
+                'author' => $book->getAuthor(),
+                'publicationyear' => $book->getPublicationYear(),
+                'genre' => $book->getGenre(),
+                'stock' => $book->getStock(),
+                'image' => $book->getImage()
+            ];
+
+        } catch (\Exception $e) {
+            // Wycofanie zmian w transakcji w przypadku błędu
+            $pdo->rollBack();
+            throw $e;
+        }
+    }
+
+    public function deleteBook(int $bookId): bool
+    {
+        $pdo = $this->database->connect();
+
+        try {
+            // Rozpoczęcie transakcji
+            $pdo->beginTransaction();
+
+            // 1. Usuwanie relacji z tabeli booksauthors
+            $stmt = $pdo->prepare('DELETE FROM booksauthors WHERE book_id = :id');
+            $stmt->bindParam(':id', $bookId, PDO::PARAM_INT);
+            $stmt->execute();
+
+            // 2. Usuwanie książki z tabeli books
+            $stmt = $pdo->prepare('DELETE FROM books WHERE id = :id');
+            $stmt->bindParam(':id', $bookId, PDO::PARAM_INT);
+            $stmt->execute();
+
+            // Zatwierdzenie zmian w transakcji
+            $pdo->commit();
+
+            // Zwracanie prawdy, jeśli przynajmniej jedna książka została usunięta
+            return $stmt->rowCount() > 0;
+
         } catch (\Exception $e) {
             // Wycofanie zmian w transakcji w przypadku błędu
             $pdo->rollBack();
             throw $e;  // Rzucenie wyjątku dalej, aby móc go obsłużyć w kodzie wywołującym
         }
     }
-
-    public function updateBook(Book $book)
-    {
-        $stmt = $this->database->connect()->prepare('
-        UPDATE books
-        SET title = :title, publicationyear = :publicationyear, genre = :genre, stock = :stock, image = :image
-        WHERE id = :id
-    ');
-
-        $stmt->bindParam(':title', $book->getTitle(), PDO::PARAM_STR);
-        $stmt->bindParam(':publicationyear', $book->getPublicationYear(), PDO::PARAM_INT);
-        $stmt->bindParam(':genre', $book->getGenre(), PDO::PARAM_STR);
-        $stmt->bindParam(':stock', $book->getStock(), PDO::PARAM_INT);
-        $stmt->bindParam(':image', $book->getImage(), PDO::PARAM_STR);
-        $stmt->bindParam(':id', $book->getId(), PDO::PARAM_INT);
-        $stmt->execute();
-    }
-
-
 
 }
 ?>

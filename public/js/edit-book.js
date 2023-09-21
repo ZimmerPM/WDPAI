@@ -58,14 +58,11 @@ document.addEventListener("DOMContentLoaded", function() {
     editForm.addEventListener('submit', function(event) {
         event.preventDefault();
 
-
-
         const formData = new FormData(editForm);
 
         for (var pair of formData.entries()) {
             console.log(pair[0]+ ', ' + pair[1]);
         }
-
 
         fetch('/editBook', {
             method: 'POST',
@@ -75,9 +72,22 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(data => {
                 if (data.status === 'success') {
                     messageBox.innerHTML = `<p style="color: green">${data.message}</p>`;
-
                     submitButton.disabled = true;
                     submitButton.innerText = "Wykonano";
+
+                    // Aktualizuj widok książki po edycji
+                    const bookId = editBookIdField.value;
+                    const editedEntry = document.querySelector(`.edit-btn[data-id="${bookId}"]`).closest('.book-entry');
+
+                    editedEntry.querySelector(`td:nth-child(2)`).textContent = formData.get("title");
+                    editedEntry.querySelector(`td:nth-child(3)`).textContent = formData.get("author");
+                    editedEntry.querySelector(`td:nth-child(4)`).textContent = formData.get("publicationyear");
+                    editedEntry.querySelector(`td:nth-child(5)`).textContent = formData.get("genre");
+                    editedEntry.querySelector(`td:nth-child(7)`).textContent = formData.get("stock");
+
+                    // Aktualizacja obrazka
+                    const newImagePath = data.book.image;
+                    editedEntry.querySelector('.book-cover img').src = newImagePath;
 
                     editModal.addEventListener("click", function(event) {
                         if (event.target === editModal) {

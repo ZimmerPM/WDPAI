@@ -14,9 +14,13 @@
     <link rel="stylesheet" type="text/css" href="public/css/table-styles.css">
     <link rel="stylesheet" type="text/css" href="public/css/admin-styles.css">
     <link rel="stylesheet" type="text/css" href="public/css/modal-styles.css">
+
     <script src="public/js/search.js" defer></script>
     <script src="public/js/add-book.js" defer></script>
     <script src="public/js/edit-book.js" defer></script>
+    <script src="public/js/remove-book.js" defer></script>
+
+
     <title>Panel Administratora</title>
 </head>
 
@@ -91,7 +95,8 @@ include('header.php');
                                         Edytuj
                                     </button>
 
-                                    <button>Usuń</button>
+                                    <button class="delete-btn" data-id="<?php echo $book->getId(); ?>">Usuń</button>
+
                                 </div>
                             </td>
                         <?php endif; ?>
@@ -148,6 +153,20 @@ include('header.php');
             <input type="hidden" id="hiddenFilePath" name="hiddenFilePath" value="">
             <button type="submit">Zaktualizuj</button>
         </form>
+    </div>
+</section>
+
+<!-- Modal potwierdzenia usunięcia -->
+<section id="deleteBookModal" class="modal" style="display: none">
+    <div class="modal-content">
+        <span class="close-button-delete">&times;</span>
+        <h2>Usuń pozycję z katalogu</h2>
+        <div class="modal-messageBox"></div>
+        <p>Czy na pewno chcesz usunąć tę książkę?</p>
+        <div class="delete-confirmation">
+            <button id="confirmDelete">Tak, usuń</button>
+            <button id="cancelDelete">Anuluj</button>
+        </div>
     </div>
 </section>
 

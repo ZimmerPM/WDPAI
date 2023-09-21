@@ -23,7 +23,8 @@ class BookController extends AppController
 
     }
 
-    public function search() {
+    public function search()
+    {
         header('Content-type: application/json');
         $response = [];
 
@@ -77,7 +78,7 @@ class BookController extends AppController
                 $availability = $stock > 0 ? true : false;
 
                 $book = new Book(
-                    null,  // Tu jest zmiana - dodanie tymczasowego ID
+                    null,
                     $_POST['author'],
                     $_POST['title'],
                     $_POST['publicationyear'],
@@ -88,10 +89,16 @@ class BookController extends AppController
                 );
 
                 $bookRepository = new BookRepository();
-                $bookRepository->insertBook($book);
+                $bookData = $bookRepository->insertBook($book);
 
-                $response['status'] = 'success';
-                $response['message'] = 'Książka została dodana pomyślnie.';
+                if ($bookData) {
+                    $response['status'] = 'success';
+                    $response['message'] = 'Książka została dodana pomyślnie.';
+                    $response['book'] = $bookData;  // Dodajemy tutaj informacje o książce
+                } else {
+                    $response['status'] = 'error';
+                    $response['message'] = $this->message ?: 'Błąd podczas dodawania książki.';
+                }
             } else {
                 $response['status'] = 'error';
                 $response['message'] = $this->message ?: 'Błąd podczas dodawania książki.';
@@ -103,19 +110,6 @@ class BookController extends AppController
         exit;
     }
 
-    private function validate(array $file): bool
-    {
-
-        if ($file['size'] > self::MAX_FILE_SIZE) {
-            $this->message[] = 'Plik jest zbyt duży!';
-            return false;
-        }
-        if (!isset($file['type']) || !in_array($file['type'], self::SUPPORTED_TYPES)) {
-            $this->message[] = 'Nieprawidłowy format pliku!';
-            return false;
-        }
-        return true;
-    }
 
     public function editBook()
     {
@@ -131,8 +125,7 @@ class BookController extends AppController
             $availability = $stock > 0 ? true : false;
 
             // Jeśli plik został przesłany
-            if (is_uploaded_file($_FILES['file']['tmp_name']))
-            {
+            if (is_uploaded_file($_FILES['file']['tmp_name'])) {
                 $imagePath = "public/uploads/" . $_FILES['file']['name'];
 
                 if (!$this->validate($_FILES['file'])) {
@@ -144,9 +137,7 @@ class BookController extends AppController
                 }
 
                 move_uploaded_file($_FILES['file']['tmp_name'], dirname(__DIR__) . self::UPLOAD_DIRECTORY . $_FILES['file']['name']);
-            }
-            else
-            {
+            } else {
                 $imagePath = $_POST['hiddenFilePath'];
             }
 
@@ -162,7 +153,9 @@ class BookController extends AppController
             );
 
             $bookRepository = new BookRepository();
-            $bookRepository->updateBook($book);
+            $updatedBook = $bookRepository->updateBook($book);
+
+            $response['book'] = $updatedBook;
 
             $response['status'] = 'success';
             $response['message'] = 'Książka została zaktualizowana pomyślnie.';
@@ -176,5 +169,53 @@ class BookController extends AppController
         exit;
     }
 
+    public function removeBook()
+    {
+        $response = [];
 
+        if (!$this->isAdmin()) {
+            die("Brak uprawnień do wejścia na podaną stronę!");
+        }
+
+        if ($this->isPost()) {
+            // Odczytanie surowych danych POST w formacie JSON
+            $inputJSON = file_get_contents('php://input');
+            $input = json_decode($inputJSON, true);
+            $bookId = $input['id'];
+
+            $bookRepository = new BookRepository();
+            $result = $bookRepository->deleteBook($bookId);
+
+            if ($result) { // Jeśli operacja usuwania się powiodła
+                $response['status'] = 'success';
+                $response['message'] = 'Książka została usunięta pomyślnie.';
+            } else {
+                $response['status'] = 'error';
+                $response['message'] = 'Wystąpił błąd podczas usuwania książki!';
+            }
+        } else {
+            $response['status'] = 'error';
+            $response['message'] = 'Nieprawidłowe żądanie!';
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit;
+
+    }
+
+    private function validate(array $file): bool
+    {
+
+        if ($file['size'] > self::MAX_FILE_SIZE) {
+            $this->message[] = 'Plik jest zbyt duży!';
+            return false;
+        }
+        if (!isset($file['type']) || !in_array($file['type'], self::SUPPORTED_TYPES)) {
+            $this->message[] = 'Nieprawidłowy format pliku!';
+            return false;
+        }
+        return true;
+    }
 }
+
