@@ -29,6 +29,7 @@ class SecurityController extends AppController
         }
 
         $_SESSION['user'] = [
+            'id' => $user->getId(),
             'email' => $user->getEmail(),
             'name' => $user->getName(),
             'lastname' => $user->getLastname(),

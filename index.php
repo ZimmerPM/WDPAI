@@ -39,8 +39,9 @@ if ($httpMethod == 'GET' && $path == 'register') {
     Router::post('editUser','AdminController');
     Router::post('removeUser','AdminController');
 
+    Router::get('loans', 'BorrowController');
     Router::post('borrow', 'BorrowController');
-
+    Router::get('reservations', 'BorrowController');
 
     Router::run($path);
 }

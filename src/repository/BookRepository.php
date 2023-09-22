@@ -251,14 +251,13 @@ class BookRepository extends Repository
         }
     }
 
-    public function setBookStatus(int $bookId, string $status): void
+    public function setCopyStatus(int $copyId, string $status): void
     {
         $stmt = $this->database->connect()->prepare('
-        UPDATE books SET status = :status WHERE id = :bookId
-    ');
+            UPDATE book_copies SET status = :status WHERE id = :copyId
+        ');
         $stmt->bindParam(':status', $status, PDO::PARAM_STR);
-        $stmt->bindParam(':bookId', $bookId, PDO::PARAM_INT);
-
+        $stmt->bindParam(':copyId', $copyId, PDO::PARAM_INT);
         $stmt->execute();
     }
 }

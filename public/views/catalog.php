@@ -5,17 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/faceb1bdbd.js" crossorigin="anonymous"></script>
-
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&family=Poppins:wght@100;200;300;400;500&family=Sarabun:wght@100;200;300;400;500&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
     <link rel="stylesheet" type="text/css" href="public/css/style.css">
     <link rel="stylesheet" type="text/css" href="public/css/table-styles.css">
     <link rel="stylesheet" type="text/css" href="public/css/admin-styles.css">
-
     <script src="public/js/search.js" defer></script>
-
     <title>Katalog książek</title>
 </head>
 
@@ -66,15 +62,13 @@
                             <td>
                                 <div class="btn-container">
                                     <?php if ($book->isAvailable() && $_SESSION['user']['role'] != "admin"): ?>
-                                        <form method="POST" action="borrow">
+                                        <form action="borrow" method="POST">
                                             <input type="hidden" name="bookId" value="<?php echo $book->getId(); ?>">
                                             <button type="submit">Wypożycz</button>
                                         </form>
-
                                     <?php else: ?>
                                         <button disabled>Wypożycz</button>
                                     <?php endif; ?>
-
                                     <?php if ($_SESSION['user']['role'] != "admin"): ?>
                                         <button class="reserve-btn">Rezerwuj</button>
                                     <?php else: ?>
@@ -87,8 +81,8 @@
                     </tbody>
                 </table>
             </div>
-        <?php endforeach;
-    } ?>
+        <?php endforeach; } ?>
 </div>
 </body>
 </html>
+

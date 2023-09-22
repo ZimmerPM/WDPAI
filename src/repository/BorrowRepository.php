@@ -3,7 +3,7 @@
 require_once __DIR__.'/../models/BorrowedBook.php';
 require_once 'Repository.php';
 
-class BorrowedBookRepository extends Repository
+class BorrowRepository extends Repository
 {
     public function getTableName(): string
     {
@@ -45,6 +45,24 @@ class BorrowedBookRepository extends Repository
         $stmt->bindParam(':expectedReturnDate', $expectedReturnDate, PDO::PARAM_STR);
 
         $stmt->execute();
+    }
+
+
+    public function getAvailableCopyId(int $bookId): ?int
+    {
+        $stmt = $this->database->connect()->prepare('
+        SELECT id FROM book_copies
+        WHERE book_id = :bookId AND status = \'available\'
+        LIMIT 1
+    ');
+        $stmt->bindParam(':bookId', $bookId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        var_dump($result); // Debugowanie
+
+        return $result ? (int) $result['id'] : null;
     }
 
     // Tutaj możesz dodać więcej metod związanych z operacjami na wypożyczonych książkach.

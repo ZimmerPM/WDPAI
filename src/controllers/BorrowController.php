@@ -1,42 +1,70 @@
 <?php
 
 require_once 'AppController.php';
-require_once __DIR__.'/../repository/BorrowedBookRepository.php';
+require_once __DIR__.'/../repository/BorrowRepository.php';
 require_once __DIR__.'/../repository/BookRepository.php';
 
 class BorrowController extends AppController
 {
-    private BorrowedBookRepository $borrowedBookRepository;
+    private BorrowRepository $borrowRepository;
     private BookRepository $bookRepository;
 
     public function __construct()
     {
         parent::__construct();
-        $this->borrowedBookRepository = new BorrowedBookRepository();
+        $this->borrowRepository = new BorrowRepository();
         $this->bookRepository = new BookRepository();
     }
 
-    public function borrow(int $bookId)
+
+    public function loans()
+    {
+        if ($this->isLoggedIn())
+        {
+            return $this->render('loans');
+        }
+    }
+
+    public function reservations()
+    {
+        if ($this->isLoggedIn())
+        {
+            return $this->render('reservations');
+        }
+    }
+
+
+    public function borrow()
     {
         if (!$this->isLoggedIn()) {
-            $this->render('login', ['messages' => ['Please log in to borrow a book']]);
+            return;
+        }
+
+        if (!isset($_POST['bookId'])) {
+            $this->render('borrow-error', ['message' => 'Niepoprawne ID książki']);
             return;
         }
 
         $bookId = $_POST['bookId'];
+        $copyId = $this->borrowRepository->getAvailableCopyId($bookId);
 
-        $userId = $_SESSION['id'];
+        if (!$copyId) {
+            $this->render('borrow-error', ['message' => 'Brak dostępnych egzemplarzy tej książki.']);
+            return;
+        }
+
+        $userId = $_SESSION['user']['id'];
         $borrowedDate = date('Y-m-d');
         $expectedReturnDate = date('Y-m-d', strtotime('+30 days'));
 
         try {
-            $this->borrowedBookRepository->addBorrowedBook($userId, $bookId, $borrowedDate, $expectedReturnDate);
-            $this->bookRepository->setBookStatus($bookId, 'borrowed');
-            $this->render('borrow-success', ['message' => 'Book borrowed successfully']);
+            $this->borrowRepository->addBorrowedBook($userId, $copyId, $borrowedDate, $expectedReturnDate);
+            $this->bookRepository->setCopyStatus($copyId, 'borrowed');
+            $this->render('borrow-success', ['message' => 'Książka pomyślnie wypożyczona']);
         } catch (Exception $e) {
-            $this->render('error', ['message' => 'Error borrowing book: ' . $e->getMessage()]);
+            $this->render('borrow-error', ['message' => 'Błąd wypożyczenia książki: ' . $e->getMessage()]);
         }
     }
-
-    // Możesz dodać więcej metod do obsługi innych operacji związanych z wypożyczaniem, np. zwrot książek.
 }
+
+

@@ -22,11 +22,11 @@
     <?php endif; ?>
 
     <?php if (isset($_SESSION['user'])): ?>
-        <a href="link2.html" class="nav-button <?php echo ($_SERVER['REQUEST_URI'] == 'link2.html') ? 'active' : ''; ?>">
+        <a href="/loans" class="nav-button <?php echo ($_SERVER['REQUEST_URI'] == '/loans') ? 'active' : ''; ?>">
             <i class="fa-solid fa-book-open"></i> <span>Wypożyczenia</span>
         </a>
 
-        <a href="link3.html" class="nav-button <?php echo ($_SERVER['REQUEST_URI'] == 'link3.html') ? 'active' : ''; ?>">
+        <a href="/reservations" class="nav-button <?php echo ($_SERVER['REQUEST_URI'] == '/reservations') ? 'active' : ''; ?>">
             <i class="fa-regular fa-calendar-check"></i> <span>Rezerwacje</span>
         </a>
 

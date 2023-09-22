@@ -5,6 +5,7 @@ require_once 'src/controllers/SecurityController.php';
 require_once 'src/controllers/BookController.php';
 require_once 'src/controllers/RegistrationController.php';
 require_once 'src/controllers/AdminController.php';
+require_once 'src/controllers/BorrowController.php';
 
 class Router 
 {

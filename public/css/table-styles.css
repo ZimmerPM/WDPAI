@@ -5,7 +5,7 @@
 	margin-bottom: 2.5em;
 }
 
-.catalog-table, .user-table {
+.catalog-table, .user-table, .loans-table, .reservations-table{
 	margin-top: 2em;
 	border-radius: 1em;
 	box-shadow: 0 0 0 1px #ccc inset;
@@ -18,15 +18,15 @@
 	table-layout: fixed;
 }
 
-.catalog-table th, .user-table th,
-.catalog-table td, .user-table td{
+.catalog-table th, .user-table th, .loans-table th, .reservations-table th,
+.catalog-table td, .user-table td, .loans-table td, .reservations-table td{
 	padding: 10px;
 	text-align: center;
 	white-space: normal;
 	word-wrap: break-word;
 }
 
-.catalog-table th, .user-table th{
+.catalog-table th, .user-table th, .loans-table th, .reservations-table th{
 	font-family: "Sarabun", sans-serif;
 	font-size: 1.1em;
 	background-color: #f7ffe0;
@@ -46,11 +46,11 @@
 	visibility: hidden;
 }
 
-.catalog-table tr, .user-table tr {
+.catalog-table tr, .user-table tr, .loans-table tr, .reservations-table tr {
 	height: auto;
 }
 
-.catalog-table td, .user-table td {
+.catalog-table td, .user-table td, .loans-table td, .reservations-table td {
 	border: 1px solid #5b5b6295;
 }
 
@@ -208,6 +208,89 @@
 .user-table td:nth-child(4) {  /* to samo dla komórek z wartościami */
 	width: 7em;  /* Przykładowa szerokość, możemy dostosować wg potrzeb */
 }
+
+
+
+.loans-table th, .reservations-table th{
+	height: 3em;
+}
+
+.loans-table tr:nth-child(odd), .reservations-table tr:nth-child(odd) {
+	background-color: #d2bba0;
+	color: #5b5b62;
+}
+
+.loans-table tr:nth-child(even), .reservations-table tr:nth-child(even) {
+	background-color: rgba(159, 126, 105, 0.9);
+	color: #f2efc7;
+}
+
+.loans-table, .reservations-table{
+	width: 96%;
+	margin: 2em;
+}
+
+.loans-table td .loans-management-buttons, .reservations-table td .reservations-management-buttons{
+	width: 20%;
+	margin: 0.2em 0.4em;
+	padding: 0.8em 1.5em; /* Dopasowanie paddingu, może wymagać zmiany dla tekstu "Ranga administratora" */
+	font-family: 'Comfortaa', cursive;
+	font-size: 0.8em;
+	background-color: #5b5b62;
+	color: #f2efc7;
+	border: none;
+	border-radius: 0.8em;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+.loans-table td .loans-management-buttons:hover, .reservations-table td .reservations-management-buttons:hover {
+	background-color: #444;
+}
+
+.loans-table td .loans-management-buttons:disabled, .reservations-table td .reservations-management-buttons:disabled {
+	background-color: #c2c2c2;
+	cursor: not-allowed;
+	color: #1c1c1c;
+}
+
+.loans-table td .loans-management-buttons:disabled:hover, .reservations-table td .reservations-management-buttons:disabled:hover{
+	background-color: #c2c2c2;
+	color: #f2efc7;
+	transition: color 0.3s;
+}
+
+.loans-table td .loans-management-buttons, .reservations-table td .reservations-management-buttons {
+	padding: 0.6em 0.6em; /* Ponowne dostosowanie paddingu dla przycisków */
+	font-size: 0.7em;
+}
+
+.loans-table th:last-child, .reservations-table th:last-child, /* zmień "n" na numer kolumny liczby egzemplarzy */
+.loans-table td:last-child, .reservations-table td:last-child {  /* to samo dla komórek z wartościami */
+	width: 16em;  /* Przykładowa szerokość, możemy dostosować wg potrzeb */
+}
+
+.loans h2, h3
+{
+	font-family: "Sarabun", sans-serif;
+	text-align: center;
+	color: #5b5b62;
+	margin: 2em auto 1em auto;
+}
+
+.loans h3{
+	margin-top: 5em;
+}
+
+.reservations h2
+{
+	font-family: "Sarabun", sans-serif;
+	text-align: center;
+	color: #5b5b62;
+	margin: 2em auto 1em auto;
+}
+
+
 
 
 
