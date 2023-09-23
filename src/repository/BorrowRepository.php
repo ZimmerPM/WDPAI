@@ -10,6 +10,52 @@ class BorrowRepository extends Repository
         return 'borrowed_books';
     }
 
+
+    public function getAvailableCopyId(int $bookId): ?int
+    {
+        $stmt = $this->database->connect()->prepare('
+        SELECT id FROM book_copies
+        WHERE book_id = :bookId AND status = \'available\'
+        LIMIT 1
+    ');
+        $stmt->bindParam(':bookId', $bookId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+        return $result ? (int)$result['id'] : null;
+    }
+
+    // Tutaj możesz dodać więcej metod związanych z operacjami na wypożyczonych książkach.
+
+
+    public function reserveBook(int $userId, int $copyId): void
+    {
+        $date = new DateTime();
+        $reservationDate = $date->format('Y-m-d');
+        $reservationEnd = $date->modify('+7 days')->format('Y-m-d'); // Zmiana na odpowiedni okres rezerwacji
+
+        $stmt = $this->database->connect()->prepare('
+            INSERT INTO reserved_books (user_id, copy_id, reservation_date, reservation_end)
+            VALUES (:userId, :copyId, :reservationDate, :reservationEnd)
+        ');
+        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmt->bindParam(':copyId', $copyId, PDO::PARAM_INT);
+        $stmt->bindParam(':reservationDate', $reservationDate, PDO::PARAM_STR);
+        $stmt->bindParam(':reservationEnd', $reservationEnd, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        // Aktualizacja statusu kopii
+        $stmt = $this->database->connect()->prepare('
+            UPDATE book_copies SET status = \'reserved\' WHERE id = :copyId
+        ');
+        $stmt->bindParam(':copyId', $copyId, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+
     public function getBorrowedBooksByUserId(int $userId): array
     {
         $stmt = $this->database->connect()->prepare(
@@ -46,24 +92,8 @@ class BorrowRepository extends Repository
 
         $stmt->execute();
     }
-
-
-    public function getAvailableCopyId(int $bookId): ?int
-    {
-        $stmt = $this->database->connect()->prepare('
-        SELECT id FROM book_copies
-        WHERE book_id = :bookId AND status = \'available\'
-        LIMIT 1
-    ');
-        $stmt->bindParam(':bookId', $bookId, PDO::PARAM_INT);
-        $stmt->execute();
-
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        var_dump($result); // Debugowanie
-
-        return $result ? (int) $result['id'] : null;
-    }
-
-    // Tutaj możesz dodać więcej metod związanych z operacjami na wypożyczonych książkach.
 }
+
+
+
+

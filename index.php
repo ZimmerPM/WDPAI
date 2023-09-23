@@ -42,6 +42,7 @@ if ($httpMethod == 'GET' && $path == 'register') {
     Router::get('loans', 'BorrowController');
     Router::post('borrow', 'BorrowController');
     Router::get('reservations', 'BorrowController');
+    Router::post('reserve', 'BorrowController');
 
     Router::run($path);
 }

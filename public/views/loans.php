@@ -10,7 +10,6 @@
     <link rel="stylesheet" type="text/css" href="public/css/style.css">
     <link rel="stylesheet" type="text/css" href="public/css/table-styles.css">
     <link rel="stylesheet" type="text/css" href="public/css/modal-styles.css">
-    <link rel="stylesheet" type="text/css" href="public/css/admin-styles.css">
     <title>Wypożyczenia</title>
 </head>
 <body class="loans">
@@ -21,9 +20,9 @@
         $role = $_SESSION['user']['role'];
         if($role == 'admin') {
             ?>
+            <h2>Wypożyczenia bieżące</h2>
             <table class="loans-table" id="loansTableAdmin">
                 <thead>
-                <h2>Wypożyczenia bieżące</h2>
                 <tr>
                     <th>ID Użytkownika</th>
                     <th>Imię i Nazwisko</th>
@@ -101,6 +100,7 @@
             <?php
         } elseif($role == 'user') {
             ?>
+            <h2>Wypożyczenia bieżące</h2>
             <table class="loans-table" id="loansTableUser">
                 <thead>
                 <tr>

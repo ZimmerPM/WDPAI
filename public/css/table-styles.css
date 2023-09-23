@@ -46,12 +46,19 @@
 	visibility: hidden;
 }
 
+
 .catalog-table tr, .user-table tr, .loans-table tr, .reservations-table tr {
 	height: auto;
 }
 
 .catalog-table td, .user-table td, .loans-table td, .reservations-table td {
 	border: 1px solid #5b5b6295;
+}
+
+
+.catalog-table tbody tr{
+	height: 5em;
+	line-height: 1.5em;
 }
 
 .catalog-table td .btn-container {

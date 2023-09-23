@@ -10,9 +10,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" type="text/css" href="public/css/style.css">
     <link rel="stylesheet" type="text/css" href="public/css/table-styles.css">
-    <link rel="stylesheet" type="text/css" href="public/css/admin-styles.css">
+    <link rel="stylesheet" type="text/css" href="public/css/modal-styles.css">
+
     <script src="public/js/search.js" defer></script>
+    <script src="public/js/borrow-book.js" defer></script>
+
     <title>Katalog książek</title>
+
 </head>
 
 <body class="catalog">
@@ -35,7 +39,7 @@
             <th>Dostępność</th>
             <th>Liczba dostępnych egzemplarzy</th>
             <?php if (isset($_SESSION['user'])): ?>
-                <th>Operacje</th>
+                <th>Akcja</th>
             <?php endif; ?>
         </tr>
         </thead>
@@ -59,29 +63,36 @@
                         <td><?php echo $book->isAvailable() ? 'Dostępna' : 'Niedostępna'; ?></td>
                         <td><?php echo $book->getStock(); ?></td>
                         <?php if (isset($_SESSION['user'])): ?>
-                            <td>
-                                <div class="btn-container">
-                                    <?php if ($book->isAvailable() && $_SESSION['user']['role'] != "admin"): ?>
-                                        <form action="borrow" method="POST">
-                                            <input type="hidden" name="bookId" value="<?php echo $book->getId(); ?>">
-                                            <button type="submit">Wypożycz</button>
-                                        </form>
-                                    <?php else: ?>
-                                        <button disabled>Wypożycz</button>
-                                    <?php endif; ?>
-                                    <?php if ($_SESSION['user']['role'] != "admin"): ?>
-                                        <button class="reserve-btn">Rezerwuj</button>
-                                    <?php else: ?>
-                                        <button class="reserve-btn" disabled>Rezerwuj</button>
-                                    <?php endif; ?>
-                                </div>
-                            </td>
+                        <td>
+                            <div class="btn-container">
+                                <?php if ($book->isAvailable() && $_SESSION['user']['role'] != "admin"): ?>
+                                    <button class="borrow-btn" data-book-id="<?php echo $book->getId(); ?>" data-book-title="<?php echo $book->getTitle(); ?>">Wypożycz</button>
+                                <?php else: ?>
+                                    <button disabled>Wypożycz</button>
+                                <?php endif; ?>
+                            </div>
+                        </td>
                         <?php endif; ?>
                     </tr>
                     </tbody>
                 </table>
             </div>
         <?php endforeach; } ?>
+</div>
+
+
+<!-- Modal -->
+
+<div id="reserveModal" class="modal" style="display: none">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <div class="modal-messageBox"></div>
+        <p>Czy na pewno chcesz zarezerwować egzemplarz książki "<span id="bookTitle"></span>" do wypożyczenia?</p>
+        <div class="reserve-confirmation">
+            <button id="confirmReserve">Rezerwuj</button>
+            <button id="cancelReserve">Anuluj</button>
+        </div>
+    </div>
 </div>
 </body>
 </html>

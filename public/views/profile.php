@@ -13,7 +13,6 @@
 
     <link rel="stylesheet" type="text/css" href="public/css/style.css">
     <link rel="stylesheet" type="text/css" href="public/css/modal-styles.css">
-    <link rel="stylesheet" type="text/css" href="public/css/admin-styles.css">
 
     <script src="public/js/change-password.js" defer></script>
 
