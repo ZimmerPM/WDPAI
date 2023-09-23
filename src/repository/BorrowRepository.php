@@ -29,44 +29,30 @@ class BorrowRepository extends Repository
         return $result ? (int)$result['id'] : null;
     }
 
-    // Tutaj możesz dodać więcej metod związanych z operacjami na wypożyczonych książkach.
-
 
     public function reserveBook(int $userId, int $copyId): void
     {
         $pdo = $this->database->connect();
 
         try {
-            // Rozpoczęcie transakcji
             $pdo->beginTransaction();
 
             $date = new DateTime();
             $reservationDate = $date->format('Y-m-d');
             $reservationEnd = $date->modify('+7 days')->format('Y-m-d');
 
-            $stmt = $pdo->prepare('
-            INSERT INTO reserved_books (user_id, copy_id, reservation_date, reservation_end)
-            VALUES (:userId, :copyId, :reservationDate, :reservationEnd)
-        ');
-            $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
-            $stmt->bindParam(':copyId', $copyId, PDO::PARAM_INT);
-            $stmt->bindParam(':reservationDate', $reservationDate, PDO::PARAM_STR);
-            $stmt->bindParam(':reservationEnd', $reservationEnd, PDO::PARAM_STR);
+            $this->addRecordToTable('reserved_books', [
+                'user_id' => $userId,
+                'copy_id' => $copyId,
+                'reservation_date' => $reservationDate,
+                'reservation_end' => $reservationEnd,
+            ]);
 
-            $stmt->execute();
+            $this->setCopyStatus($copyId, 'reserved');
 
-            // Aktualizacja statusu kopii
-            $stmt = $pdo->prepare('
-            UPDATE book_copies SET status = \'reserved\' WHERE id = :copyId
-        ');
-            $stmt->bindParam(':copyId', $copyId, PDO::PARAM_INT);
-            $stmt->execute();
-
-            // Zatwierdzenie transakcji
             $pdo->commit();
 
         } catch (\PDOException $e) {
-            // Wycofanie transakcji w przypadku błędu
             $pdo->rollBack();
             throw new \Exception("Error reserving the book: " . $e->getMessage());
         }
@@ -101,8 +87,8 @@ class BorrowRepository extends Repository
                 $reservation['reservation_date'],
                 $reservation['reservation_end'],
                 $reservation['title'],
-                $reservation['authors'], // Dodajemy autorów książki do obiektu ReservedBook
-                null // userName jest ustawione na null, ponieważ nie jest używane w tym kontekście
+                $reservation['authors'],
+                null
             );
         }
 
@@ -115,10 +101,8 @@ class BorrowRepository extends Repository
         $pdo = $this->database->connect();
 
         try {
-            // Rozpoczęcie transakcji
             $pdo->beginTransaction();
 
-            // Pobranie copy_id z tabeli reserved_books
             $stmt = $pdo->prepare('SELECT copy_id FROM reserved_books WHERE id = :reservationId');
             $stmt->bindParam(':reservationId', $reservationId, PDO::PARAM_INT);
             $stmt->execute();
@@ -128,27 +112,19 @@ class BorrowRepository extends Repository
                 throw new \Exception("Reservation not found");
             }
 
-            // Usunięcie rezerwacji z tabeli reserved_books
-            $stmt = $pdo->prepare('DELETE FROM reserved_books WHERE id = :reservationId');
-            $stmt->bindParam(':reservationId', $reservationId, PDO::PARAM_INT);
-            $stmt->execute();
+            $this->deleteRecordFromTable('reserved_books', $reservationId);
+            $this->setCopyStatus($copyId, 'available');
 
-            // Aktualizacja statusu kopii
-            $stmt = $pdo->prepare('UPDATE book_copies SET status = \'available\' WHERE id = :copyId');
-            $stmt->bindParam(':copyId', $copyId, PDO::PARAM_INT);
-            $stmt->execute();
-
-            // Zatwierdzenie transakcji
             $pdo->commit();
         } catch (\PDOException $e) {
-            // Wycofanie transakcji w przypadku błędu
             $pdo->rollBack();
             throw new \Exception("Error cancelling the reservation: " . $e->getMessage());
         }
     }
 
 
-    public function getAllReservations(): array {
+    public function getAllReservations(): array
+    {
         $stmt = $this->database->connect()->prepare("
         SELECT reserved_books.*, books.title as title, 
         STRING_AGG(authors.name, ', ') as authors, 
@@ -177,8 +153,8 @@ class BorrowRepository extends Repository
                 $reservation['reservation_date'],
                 $reservation['reservation_end'],
                 $reservation['title'],
-                $reservation['authors'], // Zaktualizowano do 'authors'
-                $reservation['user_name'] // Dopasowano kolejność parametrów do konstruktora klasy ReservedBook
+                $reservation['authors'],
+                $reservation['user_name']
             );
         }
 
@@ -186,62 +162,98 @@ class BorrowRepository extends Repository
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public function getBorrowedBooksByUserId(int $userId): array
+    public function addBorrowedBook(int $userId, int $copyId, string $borrowedDate, string $expectedReturnDate): void
     {
-        $stmt = $this->database->connect()->prepare(
-            'SELECT * FROM borrowed_books WHERE user_id = :userId'
-        );
-        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
-        $stmt->execute();
+        $this->addRecordToTable('borrowed_books', [
+            'user_id' => $userId,
+            'copy_id' => $copyId,
+            'borrowed_date' => $borrowedDate,
+            'expected_return_date' => $expectedReturnDate,
+        ]);
+    }
 
-        $borrowedBooks = [];
-        foreach ($stmt as $row) {
-            $borrowedBook = new BorrowedBook(
-                $row['id'],
-                $row['user_id'],
-                $row['copy_id'],
-                $row['borrowed_date'],
-                $row['expected_return_date'],
-                $row['actual_return_date']
-            );
-            $borrowedBooks[] = $borrowedBook;
+
+    public function executeBookLending(int $reservationId): void
+    {
+        {
+            $pdo = $this->database->connect();
+
+            try {
+                $pdo->beginTransaction();
+
+                // Pobranie informacji o rezerwacji
+                $stmt = $pdo->prepare('SELECT user_id, copy_id FROM reserved_books WHERE id = :reservationId');
+                $stmt->bindParam(':reservationId', $reservationId, PDO::PARAM_INT);
+                $stmt->execute();
+
+                $reservation = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if (!$reservation) {
+                    throw new \Exception("Reservation not found");
+                }
+
+                $userId = $reservation['user_id'];
+                $copyId = $reservation['copy_id'];
+
+                // Usunięcie rezerwacji
+                $this->deleteRecordFromTable('reserved_books', $reservationId);
+
+                // Dodanie rekordu do tabeli borrowed_books
+                $date = new DateTime();
+                $borrowedDate = $date->format('Y-m-d');
+                $expectedReturnDate = $date->modify('+30 days')->format('Y-m-d');
+
+                $this->addBorrowedBook($userId, $copyId, $borrowedDate, $expectedReturnDate);
+
+                // Zmiana statusu kopii książki na 'borrowed'
+                $this->setCopyStatus($copyId, 'borrowed');
+
+                $pdo->commit();
+            } catch (\PDOException $e) {
+                $pdo->rollBack();
+                throw new \Exception("Error lending the book: " . $e->getMessage());
+            }
+        }
+    }
+
+
+
+    private function addRecordToTable(string $tableName, array $data): void
+    {
+        $columns = implode(', ', array_keys($data));
+        $values = ':' . implode(', :', array_keys($data));
+
+        $stmt = $this->database->connect()->prepare("
+            INSERT INTO $tableName ($columns)
+            VALUES ($values)
+        ");
+
+        foreach ($data as $key => $value) {
+            $stmt->bindValue(":$key", $value);
         }
 
-        return $borrowedBooks;
-    }
-
-    public function addBorrowedBook(int $userId, int $copyId, string $borrowedDate, string $expectedReturnDate)
-    {
-        $stmt = $this->database->connect()->prepare(
-            'INSERT INTO borrowed_books (user_id, copy_id, borrowed_date, expected_return_date) VALUES (:userId, :copyId, :borrowedDate, :expectedReturnDate)'
-        );
-        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
-        $stmt->bindParam(':copyId', $copyId, PDO::PARAM_INT);
-        $stmt->bindParam(':borrowedDate', $borrowedDate, PDO::PARAM_STR);
-        $stmt->bindParam(':expectedReturnDate', $expectedReturnDate, PDO::PARAM_STR);
-
         $stmt->execute();
     }
+
+
+    private function setCopyStatus(int $copyId, string $status): void
+    {
+        $stmt = $this->database->connect()->prepare('
+            UPDATE book_copies SET status = :status WHERE id = :copyId
+        ');
+        $stmt->bindParam(':status', $status, PDO::PARAM_STR);
+        $stmt->bindParam(':copyId', $copyId, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+    private function deleteRecordFromTable(string $tableName, int $id): void
+    {
+        $stmt = $this->database->connect()->prepare("
+            DELETE FROM $tableName WHERE id = :id
+        ");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+
 }
-
-
-
-

@@ -1,50 +1,49 @@
 document.addEventListener('DOMContentLoaded', () => {
     const userRole = document.body.getAttribute('data-role');
-    if (userRole !== 'admin') return; // Sprawdzamy, czy zalogowany użytkownik jest administratorem
+    if (userRole !== 'admin') return;
 
-    // Używamy nowego modalu dla admina
-    const cancelModal = document.getElementById('cancelModalAdmin');
-    const closeBtn = cancelModal.querySelector('.close-button');
-    const confirmBtn = document.getElementById('adminConfirmCancel');
-    const cancelBtn = document.getElementById('adminCancelCancel');
-    const reservationTitleSpan = document.getElementById('adminReservationTitle');
-    const userNameSpan = document.getElementById('userName'); // Span dla imienia i nazwiska użytkownika
-    const messageBox = cancelModal.querySelector('.modal-messageBox');
+    const lendModal = document.getElementById('lendModalAdmin');
+    const closeBtn = lendModal.querySelector('.close-button');
+    const confirmBtn = document.getElementById('adminConfirmLend');
+    const cancelBtn = document.getElementById('adminCancelLend');
+    const lendTitleSpan = document.getElementById('adminLendTitle');
+    const userNameSpan = document.getElementById('lendUserName');
+    const messageBox = lendModal.querySelector('.modal-messageBox');
 
     let reservationId;
-    let isCancellationSuccess = false;
+    let isLendSuccess = false;
 
     const resetModal = () => {
         messageBox.innerHTML = '';
         confirmBtn.disabled = false;
         cancelBtn.disabled = false;
-        isCancellationSuccess = false;
+        isLendSuccess = false;
     };
 
-    document.querySelectorAll('.reservations-management-buttons.cancel-button').forEach(button => {
+    document.querySelectorAll('.reservations-management-buttons.lend-button').forEach(button => {
         button.addEventListener('click', () => {
             reservationId = button.getAttribute('data-reservation-id');
-            const reservationTitle = button.closest('tr').querySelector('td:nth-child(5)').textContent;
+            const lendTitle = button.closest('tr').querySelector('td:nth-child(5)').textContent;
             const userName = button.closest('tr').querySelector('td:nth-child(2)').textContent;
 
-            reservationTitleSpan.textContent = reservationTitle;
-            userNameSpan.textContent = userName; // Ustawiamy imię i nazwisko użytkownika
-            cancelModal.style.display = 'block';
+            lendTitleSpan.textContent = lendTitle;
+            userNameSpan.textContent = userName;
+            lendModal.style.display = 'block';
         });
     });
 
     closeBtn.addEventListener('click', () => {
-        cancelModal.style.display = 'none';
+        lendModal.style.display = 'none';
         resetModal();
     });
 
     cancelBtn.addEventListener('click', () => {
-        cancelModal.style.display = 'none';
+        lendModal.style.display = 'none';
         resetModal();
     });
 
     confirmBtn.addEventListener('click', () => {
-        fetch('/adminCancelReservation', {
+        fetch('/lendBook', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -54,10 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    messageBox.innerHTML = `<p style="color: green">Rezerwacja została anulowana!</p>`;
+                    messageBox.innerHTML = `<p style="color: green">Książka została wypożyczona!</p>`;
                     confirmBtn.disabled = true;
                     cancelBtn.disabled = true;
-                    isCancellationSuccess = true;
+                    isLendSuccess = true;
 
                     // Usuń wiersz z tabeli
                     const reservationRow = document.querySelector(`.reservations-management-buttons[data-reservation-id="${reservationId}"]`).closest('tr');
@@ -65,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         reservationRow.remove();
                     }
                 } else {
-                    messageBox.innerHTML = `<p style="color: red">Wystąpił błąd podczas anulowania rezerwacji.</p>`;
+                    messageBox.innerHTML = `<p style="color: red">Wystąpił błąd podczas wypożyczania książki.</p>`;
                 }
             })
             .catch((error) => {
@@ -76,14 +75,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
-            cancelModal.style.display = 'none';
+            lendModal.style.display = 'none';
             resetModal();
         }
     });
 
     window.addEventListener('click', (event) => {
-        if (event.target === cancelModal && isCancellationSuccess) {
-            cancelModal.style.display = 'none';
+        if (event.target === lendModal && isLendSuccess) {
+            lendModal.style.display = 'none';
             resetModal();
         }
     });

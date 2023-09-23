@@ -119,43 +119,47 @@ class BorrowController extends AppController
         }
     }
 
-
-
-
-
-
-
-    public function borrow()
-    {
-        if (!$this->isLoggedIn()) {
-            return;
+    public function lendBook() {
+        // Sprawdzenie, czy użytkownik jest administratorem
+        if (!$this->isAdmin()) {
+            http_response_code(403);
+            echo json_encode(['success' => false, 'message' => 'Forbidden: Only administrators can lend books']);
+            exit;
         }
 
-        if (!isset($_POST['bookId'])) {
-            $this->render('borrow-error', ['message' => 'Niepoprawne ID książki']);
-            return;
+        // Sprawdzenie metody żądania
+        if (!$this->isPost()) {
+            http_response_code(405);
+            echo json_encode(['success' => false, 'message' => 'Method Not Allowed']);
+            exit;
         }
 
-        $bookId = $_POST['bookId'];
-        $copyId = $this->borrowRepository->getAvailableCopyId($bookId);
+        // Pobranie danych z ciała żądania
+        $inputJSON = file_get_contents('php://input');
+        $input = json_decode($inputJSON, TRUE);
 
-        if (!$copyId) {
-            $this->render('borrow-error', ['message' => 'Brak dostępnych egzemplarzy tej książki.']);
-            return;
+        // Sprawdzenie, czy reservationId jest ustawione
+        if (!isset($input['reservationId'])) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Bad Request: reservationId is required']);
+            exit;
         }
 
-        $userId = $_SESSION['user']['id'];
-        $borrowedDate = date('Y-m-d');
-        $expectedReturnDate = date('Y-m-d', strtotime('+30 days'));
+        $reservationId = (int)$input['reservationId'];
 
+        // Wywołanie metody repozytorium do wypożyczenia książki
         try {
-            $this->borrowRepository->addBorrowedBook($userId, $copyId, $borrowedDate, $expectedReturnDate);
-            $this->bookRepository->setCopyStatus($copyId, 'borrowed');
-            $this->render('borrow-success', ['message' => 'Książka pomyślnie wypożyczona']);
+            $this->borrowRepository->executeBookLending($reservationId);
+            http_response_code(200);
+            echo json_encode(['success' => true, 'message' => 'Book has been lent successfully']);
         } catch (Exception $e) {
-            $this->render('borrow-error', ['message' => 'Błąd wypożyczenia książki: ' . $e->getMessage()]);
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Internal Server Error: ' . $e->getMessage()]);
         }
     }
+
+
+
 }
 
 

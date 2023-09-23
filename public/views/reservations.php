@@ -15,6 +15,7 @@
 
     <script src="public/js/cancel-reservation.js" defer></script>
     <script src="public/js/cancel-reservation-admin.js" defer></script>
+    <script src="public/js/lend-book-admin.js" defer></script>
 
     <title>Rezerwacje</title>
 </head>
@@ -121,6 +122,17 @@
         </div>
     </div>
 </div>
+
+<div id="lendModalAdmin" class="modal" style="display: none">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <div class="modal-messageBox"></div>
+        <p>Czy na pewno chcesz wypożyczyć książkę "<span id="adminLendTitle"></span>" użytkownikowi <span id="lendUserName"></span>?</p>
+        <div class="lend-confirmation">
+            <button id="adminConfirmLend">Tak</button>
+            <button id="adminCancelLend">Cofnij</button>
+        </div>
+    </div>
 
 
 </body>
