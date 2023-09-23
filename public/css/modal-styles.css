@@ -49,7 +49,7 @@
 
 }
 
-#cancelModal{
+#cancelModal, #cancelModalAdmin{
     position: fixed;
     top: 0;
     left: 0;
@@ -205,7 +205,7 @@
     opacity: 0.6;
 }
 
-#reserveModal, #cancelModal p{
+#reserveModal, #cancelModal, #cancelModalAdmin p{
     font-family: 'Sarabun', cursive;
     text-align: center;
     line-height: 1.5em;

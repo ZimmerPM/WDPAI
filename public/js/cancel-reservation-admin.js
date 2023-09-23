@@ -1,12 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     const userRole = document.body.getAttribute('data-role');
-    if (userRole !== 'user') return; // Jeśli zalogowany użytkownik nie jest "user", przerwij działanie skryptu
+    if (userRole !== 'admin') return; // Sprawdzamy, czy zalogowany użytkownik jest administratorem
 
-    const cancelModal = document.getElementById('cancelModal');
+    // Używamy nowego modalu dla admina
+    const cancelModal = document.getElementById('cancelModalAdmin');
     const closeBtn = cancelModal.querySelector('.close-button');
-    const confirmBtn = document.getElementById('confirmCancel');
-    const cancelBtn = document.getElementById('cancelCancel');
-    const reservationTitleSpan = document.getElementById('reservationTitle');
+    const confirmBtn = document.getElementById('adminConfirmCancel');
+    const cancelBtn = document.getElementById('adminCancelCancel');
+    const reservationTitleSpan = document.getElementById('adminReservationTitle');
+    const userNameSpan = document.getElementById('userName'); // Span dla imienia i nazwiska użytkownika
     const messageBox = cancelModal.querySelector('.modal-messageBox');
 
     let reservationId;
@@ -19,12 +21,14 @@ document.addEventListener('DOMContentLoaded', () => {
         isCancellationSuccess = false;
     };
 
-    document.querySelectorAll('.reservations-management-buttons').forEach(button => {
+    document.querySelectorAll('.reservations-management-buttons.cancel-button').forEach(button => {
         button.addEventListener('click', () => {
             reservationId = button.getAttribute('data-reservation-id');
-            const reservationTitle = button.closest('tr').querySelector('td:nth-child(3)').textContent;
+            const reservationTitle = button.closest('tr').querySelector('td:nth-child(5)').textContent;
+            const userName = button.closest('tr').querySelector('td:nth-child(2)').textContent;
 
             reservationTitleSpan.textContent = reservationTitle;
+            userNameSpan.textContent = userName; // Ustawiamy imię i nazwisko użytkownika
             cancelModal.style.display = 'block';
         });
     });
@@ -40,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     confirmBtn.addEventListener('click', () => {
-        fetch('/cancelReservation', {
+        fetch('adminCancelReservation', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

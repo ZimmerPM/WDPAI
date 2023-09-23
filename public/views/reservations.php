@@ -14,6 +14,7 @@
     <link rel="stylesheet" type="text/css" href="public/css/modal-styles.css">
 
     <script src="public/js/cancel-reservation.js" defer></script>
+    <script src="public/js/cancel-reservation-admin.js" defer></script>
 
     <title>Rezerwacje</title>
 </head>
@@ -108,6 +109,19 @@
         </div>
     </div>
 </div>
+
+<div id="cancelModalAdmin" class="modal" style="display: none">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <div class="modal-messageBox"></div>
+        <p>Czy na pewno chcesz anulować rezerwację książki "<span id="adminReservationTitle"></span>" przez użytkownika <span id="userName"></span>?</p>
+        <div class="cancel-confirmation">
+            <button id="adminConfirmCancel">Tak</button>
+            <button id="adminCancelCancel">Cofnij</button>
+        </div>
+    </div>
+</div>
+
 
 </body>
 </html>

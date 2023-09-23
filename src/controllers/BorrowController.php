@@ -92,7 +92,32 @@ class BorrowController extends AppController
     }
 
 
+    public function adminCancelReservation() {
+        // Sprawdzenie, czy zalogowany użytkownik jest administratorem
+        if (!$this->isAdmin()) {
+            echo json_encode(['success' => false, 'message' => 'Brak uprawnień do anulowania rezerwacji']);
+            return;
+        }
 
+        // Sprawdzenie, czy metoda jest POST
+        if ($this->isPost()) {
+            // Pobranie danych z żądania
+            $data = json_decode(file_get_contents('php://input'), true);
+            $reservationId = $data['reservationId'];
+
+            // Utworzenie repozytorium
+            $borrowRepository = new BorrowRepository();
+
+            try {
+                // Anulowanie rezerwacji książki
+                $borrowRepository->cancelBookReservation($reservationId);
+                echo json_encode(['success' => true]);
+            } catch (\Exception $e) {
+                // Obsługa błędu
+                echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+            }
+        }
+    }
 
 
 
