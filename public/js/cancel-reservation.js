@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const userRole = document.body.getAttribute('data-role');
+    if (userRole !== 'user') return; // Jeśli zalogowany użytkownik nie jest "user", przerwij działanie skryptu
+
     const cancelModal = document.getElementById('cancelModal');
     const closeBtn = cancelModal.querySelector('.close-button');
     const confirmBtn = document.getElementById('confirmCancel');

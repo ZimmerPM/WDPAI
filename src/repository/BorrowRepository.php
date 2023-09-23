@@ -76,11 +76,15 @@ class BorrowRepository extends Repository
     public function getReservationsForUser(int $userId): array
     {
         $stmt = $this->database->connect()->prepare('
-        SELECT reserved_books.*, books.title as title
+        SELECT reserved_books.*, books.title as title, 
+               STRING_AGG(authors.name, \', \') as authors
         FROM reserved_books
         INNER JOIN book_copies ON reserved_books.copy_id = book_copies.id
         INNER JOIN books ON book_copies.book_id = books.id
+        LEFT JOIN books_authors ON books.id = books_authors.book_id
+        LEFT JOIN authors ON books_authors.author_id = authors.id
         WHERE reserved_books.user_id = :userId
+        GROUP BY reserved_books.id, books.title
         ORDER BY reserved_books.reservation_date
     ');
         $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
@@ -96,12 +100,15 @@ class BorrowRepository extends Repository
                 $reservation['copy_id'],
                 $reservation['reservation_date'],
                 $reservation['reservation_end'],
-                $reservation['title'] // Dodajemy tytuł książki do obiektu ReservedBook
+                $reservation['title'],
+                $reservation['authors'], // Dodajemy autorów książki do obiektu ReservedBook
+                null // userName jest ustawione na null, ponieważ nie jest używane w tym kontekście
             );
         }
 
         return $result;
     }
+
 
     public function cancelBookReservation(int $reservationId): void
     {
@@ -141,6 +148,42 @@ class BorrowRepository extends Repository
     }
 
 
+    public function getAllReservations(): array {
+        $stmt = $this->database->connect()->prepare("
+        SELECT reserved_books.*, books.title as title, 
+        STRING_AGG(authors.name, ', ') as authors, 
+        CONCAT(user_details.name, ' ', user_details.lastname) as user_name,
+        users.id as user_id
+        FROM reserved_books
+        INNER JOIN book_copies ON reserved_books.copy_id = book_copies.id
+        INNER JOIN books ON book_copies.book_id = books.id
+        INNER JOIN users ON reserved_books.user_id = users.id
+        INNER JOIN user_details ON users.id = user_details.user_id
+        LEFT JOIN books_authors ON books.id = books_authors.book_id
+        LEFT JOIN authors ON books_authors.author_id = authors.id
+        GROUP BY reserved_books.id, books.title, user_name, users.id
+        ORDER BY users.id, reserved_books.reservation_date
+    ");
+        $stmt->execute();
+
+        $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $result = [];
+        foreach ($reservations as $reservation) {
+            $result[] = new ReservedBook(
+                $reservation['id'],
+                $reservation['user_id'],
+                $reservation['copy_id'],
+                $reservation['reservation_date'],
+                $reservation['reservation_end'],
+                $reservation['title'],
+                $reservation['authors'], // Zaktualizowano do 'authors'
+                $reservation['user_name'] // Dopasowano kolejność parametrów do konstruktora klasy ReservedBook
+            );
+        }
+
+        return $result;
+    }
 
 
 

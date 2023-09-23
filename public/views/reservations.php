@@ -17,54 +17,49 @@
 
     <title>Rezerwacje</title>
 </head>
-<body class="reservations">
+<body class="reservations" data-role="<?php echo $_SESSION['user']['role']; ?>">
 <?php include('header.php'); ?>
 <section>
     <?php
     if(isset($_SESSION['user'])) {
-        $role = $_SESSION['user']['role'];
-        if($role == 'admin') {
-            ?>
-            <h2>Bieżące rezerwacje</h2>
-            <table class="reservations-table" id="reservationsTableAdmin">
-                <thead>
+    $role = $_SESSION['user']['role'];
+    if($role == 'admin') {
+    ?>
+    <h2>Bieżące rezerwacje</h2>
+    <table class="reservations-table" id="reservationsTableAdmin">
+        <thead>
+        <tr>
+            <th>ID Użytkownika</th>
+            <th>Imię i Nazwisko</th>
+            <th>ID Egzemplarza</th>
+            <th>Autor</th>
+            <th>Tytuł Książki</th>
+            <th>Data Rezerwacji</th>
+            <th>Rezerwacja Do</th>
+            <th>Akcje</th>
+        </tr>
+        </thead>
+        <tbody id="reservationsTableBodyAdmin">
+        <?php if (isset($reservations)): ?>
+            <?php foreach ($reservations as $reservation): ?>
                 <tr>
-                    <th>ID Użytkownika</th>
-                    <th>Imię i Nazwisko</th>
-                    <th>ID Egzemplarza</th>
-                    <th>Tytuł Książki</th>
-                    <th>Data Rezerwacji</th>
-                    <th>Rezerwacja Do</th>
-                    <th>Akcje</th>
-                </tr>
-                </thead>
-                <tbody id="reservationsTableBodyAdmin">
-                <!-- Przykładowe rekordy: -->
-                <tr>
-                    <td>1</td>
-                    <td>Jan Kowalski</td>
-                    <td>101</td>
-                    <td>Władca Pierścieni</td>
-                    <td>2023-09-20</td>
-                    <td>2023-09-27</td>
+                    <td><?php echo $reservation->getUserId(); ?></td>
+                    <td><?php echo $reservation->getUserName(); ?></td>
+                    <td><?php echo $reservation->getCopyId(); ?></td>
+                    <td><?php echo $reservation->getAuthor(); ?></td> <!-- Dodane pole Autor -->
+                    <td><?php echo $reservation->getTitle(); ?></td>
+                    <td><?php echo $reservation->getReservationDate(); ?></td>
+                    <td><?php echo $reservation->getReservationEnd(); ?></td>
                     <td>
-                        <button class="reservations-management-buttons">Anuluj</button>
+                        <button class="reservations-management-buttons lend-button" data-reservation-id="<?php echo $reservation->getId(); ?>">Wypożycz</button>
+                        <button class="reservations-management-buttons cancel-button" data-reservation-id="<?php echo $reservation->getId(); ?>">Anuluj</button>
                     </td>
                 </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Maria Nowak</td>
-                    <td>102</td>
-                    <td>Harry Potter</td>
-                    <td>2023-09-21</td>
-                    <td>2023-09-28</td>
-                    <td>
-                        <button class="reservations-management-buttons">Anuluj</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <?php
+            <?php endforeach; ?>
+        <?php endif; ?>
+        </tbody>
+    </table>
+    <?php
         } elseif($role == 'user') {
             ?>
             <h2>Twoje rezerwacje</h2>
@@ -72,6 +67,7 @@
                 <thead>
                 <tr>
                     <th>ID Egzemplarza</th>
+                    <th>Autor</th>
                     <th>Tytuł Książki</th>
                     <th>Data Rezerwacji</th>
                     <th>Rezerwacja Do</th>
@@ -83,11 +79,12 @@
                     <?php foreach ($reservations as $reservation): ?>
                         <tr>
                             <td><?php echo $reservation->getCopyId(); ?></td>
+                            <td><?php echo $reservation->getAuthor(); ?></td>
                             <td><?php echo $reservation->getTitle(); ?></td>
                             <td><?php echo $reservation->getReservationDate(); ?></td>
                             <td><?php echo $reservation->getReservationEnd(); ?></td>
                             <td>
-                                <button class='reservations-management-buttons' data-reservation-id='<?php echo $reservation->getId(); ?>'>Anuluj</button>
+                                <button class='reservations-management-buttons cancel-button' data-reservation-id='<?php echo $reservation->getId(); ?>'>Anuluj</button>
                             </td>
                         </tr>
                     <?php endforeach; ?>

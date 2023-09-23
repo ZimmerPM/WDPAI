@@ -27,16 +27,23 @@ class BorrowController extends AppController
 
     public function reservations()
     {
-        if ($this->isLoggedIn())
-        {
-            $userId = $_SESSION['user']['id'];
+        if ($this->isLoggedIn()) {
             $borrowRepository = new BorrowRepository();
-            $reservations = $borrowRepository->getReservationsForUser($userId);
 
+            // Sprawdzenie, czy zalogowany użytkownik jest administratorem
+            if ($this->isAdmin()) {
+                // Pobranie wszystkich rezerwacji dla administratora
+                $reservations = $borrowRepository->getAllReservations();
+            } else {
+                // Pobranie rezerwacji tylko dla zalogowanego użytkownika
+                $userId = $_SESSION['user']['id'];
+                $reservations = $borrowRepository->getReservationsForUser($userId);
+            }
+
+            // Renderowanie widoku z przekazaniem listy rezerwacji
             return $this->render('reservations', ['reservations' => $reservations]);
         }
     }
-
 
 
     public function reserve()

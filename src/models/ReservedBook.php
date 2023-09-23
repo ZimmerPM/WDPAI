@@ -4,12 +4,14 @@ class ReservedBook
 {
     private $id;
     private $userId;
+    private $userName; // Dodane pole na imię i nazwisko użytkownika
     private $copyId;
     private $reservationDate;
     private $reservationEnd;
     private $title;
+    private $author; // Dodane pole na autora książki
 
-    public function __construct($id, $userId, $copyId, $reservationDate, $reservationEnd, $title)
+    public function __construct($id, $userId, $copyId, $reservationDate, $reservationEnd, $title, $author ,$userName = null)
     {
         $this->id = $id;
         $this->userId = $userId;
@@ -17,6 +19,8 @@ class ReservedBook
         $this->reservationDate = $reservationDate;
         $this->reservationEnd = $reservationEnd;
         $this->title = $title;
+        $this->author = $author;
+        $this->userName = $userName;     // Inicjalizacja nowego pola wartością domyślną null
     }
 
     public function getId()
@@ -79,5 +83,24 @@ class ReservedBook
         $this->title = $title;
     }
 
+    public function getUserName()
+    {
+        return $this->userName;
+    }
+
+    public function setUserName($userName): void
+    {
+        $this->userName = $userName;
+    }
+
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    public function setAuthor($author): void
+    {
+        $this->author = $author;
+    }
 
 }
