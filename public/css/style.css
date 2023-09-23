@@ -269,6 +269,10 @@ nav .nav-button.active:hover {
     text-align: center;
 }
 
+#reservations-table-message{
+    height: 5em;
+}
+
 .profile-container {
     height: 100%;
     margin-top: 5em;

@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const lendTitleSpan = document.getElementById('adminLendTitle');
     const userNameSpan = document.getElementById('lendUserName');
     const messageBox = lendModal.querySelector('.modal-messageBox');
+    const reservationsTableBodyAdmin = document.getElementById('reservationsTableBodyAdmin');
 
     let reservationId;
     let isLendSuccess = false;
@@ -18,6 +19,15 @@ document.addEventListener('DOMContentLoaded', () => {
         confirmBtn.disabled = false;
         cancelBtn.disabled = false;
         isLendSuccess = false;
+    };
+
+    const checkAndUpdateTable = () => {
+        if (reservationsTableBodyAdmin.querySelectorAll('tr').length === 0) {
+            reservationsTableBodyAdmin.innerHTML = `
+                <tr>
+                    <td colspan="8" class="no-results-message" id="reservations-table-message">Tabela rezerwacji jest pusta</td>
+                </tr>`;
+        }
     };
 
     document.querySelectorAll('.reservations-management-buttons.lend-button').forEach(button => {
@@ -58,11 +68,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     cancelBtn.disabled = true;
                     isLendSuccess = true;
 
-                    // Usuń wiersz z tabeli
                     const reservationRow = document.querySelector(`.reservations-management-buttons[data-reservation-id="${reservationId}"]`).closest('tr');
                     if (reservationRow) {
                         reservationRow.remove();
                     }
+
+                    checkAndUpdateTable();
                 } else {
                     messageBox.innerHTML = `<p style="color: red">Wystąpił błąd podczas wypożyczania książki.</p>`;
                 }

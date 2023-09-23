@@ -42,7 +42,7 @@
         </tr>
         </thead>
         <tbody id="reservationsTableBodyAdmin">
-        <?php if (isset($reservations)): ?>
+        <?php if (isset($reservations) && count($reservations) > 0): ?>
             <?php foreach ($reservations as $reservation): ?>
                 <tr>
                     <td><?php echo $reservation->getUserId(); ?></td>
@@ -58,6 +58,10 @@
                     </td>
                 </tr>
             <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="8" class="no-results-message" id="reservations-table-message">Tabela rezerwacji jest pusta</td>
+            </tr>
         <?php endif; ?>
         </tbody>
     </table>
@@ -77,7 +81,7 @@
                 </tr>
                 </thead>
                 <tbody id="reservationsTableBodyUser">
-                <?php if (isset($reservations)): ?>
+                <?php if (isset($reservations) && count($reservations) > 0): ?>
                     <?php foreach ($reservations as $reservation): ?>
                         <tr>
                             <td><?php echo $reservation->getCopyId(); ?></td>
@@ -90,6 +94,10 @@
                             </td>
                         </tr>
                     <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="6" class="no-results-message" id="reservations-table-message">Tabela rezerwacji jest pusta</td>
+                    </tr>
                 <?php endif; ?>
                 </tbody>
             </table>
