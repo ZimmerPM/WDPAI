@@ -91,10 +91,6 @@ function renderBook(book, isLoggedIn, role) {
         }
         btnContainer.appendChild(operationButton);
 
-        let reserveButton = document.createElement("button");
-        reserveButton.textContent = "Rezerwuj";
-        btnContainer.appendChild(reserveButton);
-
         operationCell.appendChild(btnContainer);
         bookRow.appendChild(operationCell);
     }
@@ -109,11 +105,6 @@ function renderBook(book, isLoggedIn, role) {
             operationButton.textContent = "Wypożycz";
             operationButton.disabled = true;
             btnContainer.appendChild(operationButton);
-
-            let reserveButton = document.createElement("button");
-            reserveButton.textContent = "Rezerwuj";
-            reserveButton.disabled = true;
-            btnContainer.appendChild(reserveButton);
         } else if (currentPath === '/adminPanel') {
             let editButton = document.createElement("button");
             editButton.textContent = "Edytuj";

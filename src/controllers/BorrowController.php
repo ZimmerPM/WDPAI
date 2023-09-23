@@ -29,7 +29,11 @@ class BorrowController extends AppController
     {
         if ($this->isLoggedIn())
         {
-            return $this->render('reservations');
+            $userId = $_SESSION['user']['id'];
+            $borrowRepository = new BorrowRepository();
+            $reservations = $borrowRepository->getReservationsForUser($userId);
+
+            return $this->render('reservations', ['reservations' => $reservations]);
         }
     }
 
@@ -59,6 +63,26 @@ class BorrowController extends AppController
         }
     }
 
+    public function cancelReservation()
+    {
+        if (!$this->isLoggedIn()) {
+            return;
+        }
+
+        if ($this->isPost()) {
+            $data = json_decode(file_get_contents('php://input'), true);
+            $reservationId = $data['reservationId'];
+
+            $borrowRepository = new BorrowRepository();
+
+            try {
+                $borrowRepository->cancelBookReservation($reservationId);
+                echo json_encode(['success' => true]);
+            } catch (\Exception $e) {
+                echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+            }
+        }
+    }
 
 
 

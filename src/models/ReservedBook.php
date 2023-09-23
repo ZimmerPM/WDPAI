@@ -7,14 +7,16 @@ class ReservedBook
     private $copyId;
     private $reservationDate;
     private $reservationEnd;
+    private $title;
 
-    public function __construct($id, $userId, $copyId, $reservationDate, $reservationEnd)
+    public function __construct($id, $userId, $copyId, $reservationDate, $reservationEnd, $title)
     {
         $this->id = $id;
         $this->userId = $userId;
         $this->copyId = $copyId;
         $this->reservationDate = $reservationDate;
         $this->reservationEnd = $reservationEnd;
+        $this->title = $title;
     }
 
     public function getId()
@@ -65,6 +67,16 @@ class ReservedBook
     public function setReservationEnd($reservationEnd): void
     {
         $this->reservationEnd = $reservationEnd;
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    public function setTitle($title): void
+    {
+        $this->title = $title;
     }
 
 
