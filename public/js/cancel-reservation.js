@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const userRole = document.body.getAttribute('data-role');
-    if (userRole !== 'user') return; // Jeśli zalogowany użytkownik nie jest "user", przerwij działanie skryptu
+    if (userRole !== 'user') return;
 
     const cancelModal = document.getElementById('cancelModal');
     const closeBtn = cancelModal.querySelector('.close-button');
@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelBtn = document.getElementById('cancelCancel');
     const reservationTitleSpan = document.getElementById('reservationTitle');
     const messageBox = cancelModal.querySelector('.modal-messageBox');
+    const reservationsTableBodyUser = document.getElementById('reservationsTableBodyUser');
 
     let reservationId;
     let isCancellationSuccess = false;
@@ -17,6 +18,15 @@ document.addEventListener('DOMContentLoaded', () => {
         confirmBtn.disabled = false;
         cancelBtn.disabled = false;
         isCancellationSuccess = false;
+    };
+
+    const checkAndUpdateTable = () => {
+        if (reservationsTableBodyUser.querySelectorAll('tr').length === 0) {
+            reservationsTableBodyUser.innerHTML = `
+                <tr>
+                    <td colspan="6" class="no-results-message" id="reservations-table-message">Tabela rezerwacji jest pusta</td>
+                </tr>`;
+        }
     };
 
     document.querySelectorAll('.reservations-management-buttons').forEach(button => {
@@ -55,11 +65,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     cancelBtn.disabled = true;
                     isCancellationSuccess = true;
 
-                    // Usuń wiersz z tabeli
                     const reservationRow = document.querySelector(`.reservations-management-buttons[data-reservation-id="${reservationId}"]`).closest('tr');
                     if (reservationRow) {
                         reservationRow.remove();
                     }
+
+                    checkAndUpdateTable();
                 } else {
                     messageBox.innerHTML = `<p style="color: red">Wystąpił błąd podczas anulowania rezerwacji.</p>`;
                 }
@@ -83,4 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
             resetModal();
         }
     });
+
+    checkAndUpdateTable(); // Sprawdzaj tabelę po załadowaniu strony
 });
