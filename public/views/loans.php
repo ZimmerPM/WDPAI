@@ -7,18 +7,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&family=Poppins:wght@100;200;300;400;500&family=Sarabun:wght@100;200;300;400;500&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link rel="stylesheet" type="text/css" href="public/css/style.css">
     <link rel="stylesheet" type="text/css" href="public/css/table-styles.css">
     <link rel="stylesheet" type="text/css" href="public/css/modal-styles.css">
+
+    <script src="public/js/cancel-loan.js" defer></script>
+
+
     <title>Wypożyczenia</title>
+
 </head>
-<body class="loans">
+
+<body class="loans" data-role="<?php echo $_SESSION['user']['role']; ?>">
 <?php include('header.php'); ?>
 <section>
     <?php
-    if(isset($_SESSION['user'])) {
+    if (isset($_SESSION['user'])) {
         $role = $_SESSION['user']['role'];
-        if($role == 'admin') {
+        if ($role === 'admin') {
             ?>
             <h2>Wypożyczenia bieżące</h2>
             <table class="loans-table" id="loansTableAdmin">
@@ -27,6 +34,7 @@
                     <th>ID Użytkownika</th>
                     <th>Imię i Nazwisko</th>
                     <th>ID Egzemplarza</th>
+                    <th>Autor</th>
                     <th>Tytuł Książki</th>
                     <th>Data Wypożyczenia</th>
                     <th>Termin Zwrotu</th>
@@ -34,161 +42,115 @@
                 </tr>
                 </thead>
                 <tbody id="loansTableBodyAdmin">
-                <tr>
-                    <td>1</td>
-                    <td>Jan Kowalski</td>
-                    <td>101</td>
-                    <td>Władca Pierścieni</td>
-                    <td>2023-09-20</td>
-                    <td>2023-09-27</td>
-                    <td>
-                        <button class="loans-management-buttons">Zwróć</button>
-                        <button class="loans-management-buttons">Anuluj</button>
-                    </td>
-                </tr>
-                <!-- Dodatkowe rekordy -->
-                <tr>
-                    <td>2</td>
-                    <td>Maria Nowak</td>
-                    <td>102</td>
-                    <td>Hobbit</td>
-                    <td>2023-09-18</td>
-                    <td>2023-09-25</td>
-                    <td>
-                        <button class="loans-management-buttons">Zwróć</button>
-                        <button class="loans-management-buttons">Anuluj</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Anna Wiśniewska</td>
-                    <td>103</td>
-                    <td>Dune</td>
-                    <td>2023-09-15</td>
-                    <td>2023-09-22</td>
-                    <td>
-                        <button class="loans-management-buttons">Zwróć</button>
-                        <button class="loans-management-buttons">Anuluj</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>Piotr Zieliński</td>
-                    <td>104</td>
-                    <td>Pan Tadeusz</td>
-                    <td>2023-09-12</td>
-                    <td>2023-09-19</td>
-                    <td>
-                        <button class="loans-management-buttons">Zwróć</button>
-                        <button class="loans-management-buttons">Anuluj</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>Katarzyna Dąbrowska</td>
-                    <td>105</td>
-                    <td>Potop</td>
-                    <td>2023-09-10</td>
-                    <td>2023-09-17</td>
-                    <td>
-                        <button class="loans-management-buttons">Zwróć</button>
-                        <button class="loans-management-buttons">Anuluj</button>
-                    </td>
-                </tr>
+                <?php if (isset($loans) && is_array($loans)): ?>
+                    <?php foreach ($loans as $loan): ?>
+                        <tr>
+                            <td><?= $loan->getUserId() ?></td>
+                            <td><?= $loan->getUserName() ?></td>
+                            <td><?= $loan->getCopyId() ?></td>
+                            <td><?= $loan->getAuthor() ?></td>
+                            <td><?= $loan->getTitle() ?></td>
+                            <td><?= $loan->getBorrowedDate() ?></td>
+                            <td><?= $loan->getExpectedReturnDate() ?></td>
+                            <td>
+                                <button class="loans-management-buttons return-button" data-loan-id="<?php echo $loan->getId(); ?>">Zwróć</button>
+                                <button class="loans-management-buttons cancel-button" data-loan-id="<?php echo $loan->getId(); ?>">Anuluj</button>
+                            </td>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
                 </tbody>
             </table>
             <?php
-        } elseif($role == 'user') {
+        } elseif ($role === 'user') {
             ?>
             <h2>Wypożyczenia bieżące</h2>
             <table class="loans-table" id="loansTableUser">
                 <thead>
                 <tr>
                     <th>ID Egzemplarza</th>
+                    <th>Autor</th>
                     <th>Tytuł Książki</th>
                     <th>Data Wypożyczenia</th>
                     <th>Termin Zwrotu</th>
                 </tr>
                 </thead>
                 <tbody id="loansTableBodyUser">
-                <tr>
-                    <td>101</td>
-                    <td>Władca Pierścieni</td>
-                    <td>2023-09-20</td>
-                    <td>2023-09-27</td>
-                </tr>
-                <!-- Dodatkowe rekordy -->
-                <tr>
-                    <td>102</td>
-                    <td>Hobbit</td>
-                    <td>2023-09-18</td>
-                    <td>2023-09-25</td>
-                </tr>
-                <tr>
-                    <td>103</td>
-                    <td>Dune</td>
-                    <td>2023-09-15</td>
-                    <td>2023-09-22</td>
-                </tr>
-                <tr>
-                    <td>104</td>
-                    <td>Pan Tadeusz</td>
-                    <td>2023-09-12</td>
-                    <td>2023-09-19</td>
-                </tr>
-                <tr>
-                    <td>105</td>
-                    <td>Potop</td>
-                    <td>2023-09-10</td>
-                    <td>2023-09-17</td>
-                </tr>
+                <?php if (isset($loans) && is_array($loans)): ?>
+                    <?php foreach ($loans as $loan): ?>
+                        <tr>
+                            <td><?= $loan->getCopyId() ?></td>
+                            <td><?= $loan->getAuthor() ?></td>
+                            <td><?= $loan->getTitle() ?></td>
+                            <td><?= $loan->getBorrowedDate() ?></td>
+                            <td><?= $loan->getExpectedReturnDate() ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
                 </tbody>
             </table>
             <?php
         }
     }
     ?>
-
-    <section>
-        <h3>Wypożyczenia archiwalne</h3>
-        <?php
-        if (isset($_SESSION['user'])) {
-            $role = $_SESSION['user']['role'];
-            $userId = $_SESSION['user']['id'];
-
-            // Tutaj należy pobrać dane z bazy danych z tabeli archive_loans
-            // dla zalogowanego użytkownika lub dla wszystkich użytkowników, jeśli zalogowany to admin
-            // Pamiętaj o implementacji tego zapytania w zależności od Twojego połączenia z bazą danych
-            ?>
-            <table class="loans-table">
-                <thead>
-                <tr>
-                    <?php if ($role === 'admin') echo "<th>ID Użytkownika</th>"; ?>
-                    <?php if ($role === 'admin') echo "<th>Imię i Nazwisko</th>"; ?>
-                    <th>ID Egzemplarza</th>
-                    <th>Tytuł Książki</th>
-                    <th>Data Wypożyczenia</th>
-                    <th>Data Zwrotu</th>
-                </tr>
-                </thead>
-                <tbody>
-                <!-- Dla celów demonstracyjnych dodaję kilka statycznych rekordów -->
-                <?php for ($i = 1; $i <= 5; $i++): ?>
-                    <tr>
-                        <?php if ($role === 'admin') echo "<td>$i</td>"; ?>
-                        <?php if ($role === 'admin') echo "<td>Jan Kowalski</td>"; ?>
-                        <td>10$i</td>
-                        <td>Przykładowa Książka $i</td>
-                        <td>2023-0$i-20</td>
-                        <td>2023-0$i-27</td>
-                    </tr>
-                <?php endfor; ?>
-                </tbody>
-            </table>
-            <?php
-        }
-        ?>
-    </section>
 </section>
+
+<section>
+    <h3>Wypożyczenia archiwalne</h3>
+    <?php
+    if (isset($_SESSION['user'])) {
+        $role = $_SESSION['user']['role'];
+        $userId = $_SESSION['user']['id'];
+        // Pobieranie danych z bazy danych
+        ?>
+        <table class="loans-table">
+            <thead>
+            <tr>
+                <?php if ($role === 'admin') echo "<th>ID Użytkownika</th>"; ?>
+                <?php if ($role === 'admin') echo "<th>Imię i Nazwisko</th>"; ?>
+                <th>ID Egzemplarza</th>
+                <th>Tytuł Książki</th>
+                <th>Data Wypożyczenia</th>
+                <th>Data Zwrotu</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            // Jeżeli $archivedLoans jest dostępne i jest to tablica, iteruj przez elementy i wyświetl je
+            ?>
+            </tbody>
+        </table>
+        <?php
+    }
+    ?>
+
+</section>
+<!-- Modal dla zwrotu książki -->
+<div id="returnModalAdmin" class="modal" style="display: none">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <div class="modal-messageBox"></div>
+        <p>Czy na pewno chcesz zatwierdzić zwrot książki "<span id="returnBookTitle"></span>" przez użytkownika <span id="returnUserName"></span>?</p>
+        <div class="return-confirmation">
+            <button id="adminConfirmReturn">Tak</button>
+            <button id="adminCancelReturn">Cofnij</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal dla anulowania wypożyczenia -->
+<div id="cancelLoanModalAdmin" class="modal" style="display: none">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <div class="modal-messageBox"></div>
+        <p>Czy na pewno chcesz anulować wypożyczenie książki "<span id="cancelLoanBookTitle"></span>" przez użytkownika <span id="cancelLoanUserName"></span>?</p>
+        <div class="cancel-loan-confirmation">
+            <button id="adminConfirmCancelLoan">Tak</button>
+            <button id="adminCancelCancelLoan">Cofnij</button>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

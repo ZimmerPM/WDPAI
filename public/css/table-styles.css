@@ -287,9 +287,15 @@
 	font-size: 0.7em;
 }
 
-.loans-table th:last-child, .reservations-table  th:last-child, /* zmień "n" na numer kolumny liczby egzemplarzy */
-.loans-table td:last-child, .reservations-table td:last-child {  /* to samo dla komórek z wartościami */
-	width: 16em;  /* Przykładowa szerokość, możemy dostosować wg potrzeb */
+.loans-table th:last-child, .reservations-table  th:last-child,
+.loans-table td:last-child, .reservations-table td:last-child {
+	width: 16em;
+}
+
+#reservationsTableUser th:last-child,
+#reservationsTableBodyUser td last-child
+{
+	width: auto;
 }
 
 

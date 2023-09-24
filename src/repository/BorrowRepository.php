@@ -256,4 +256,132 @@ class BorrowRepository extends Repository
     }
 
 
+
+    public function getLoansForUser(int $userId): array
+    {
+        $stmt = $this->database->connect()->prepare('
+        SELECT borrowed_books.*, books.title as title, 
+               STRING_AGG(authors.name, \', \') as authors
+        FROM borrowed_books
+        INNER JOIN book_copies ON borrowed_books.copy_id = book_copies.id
+        INNER JOIN books ON book_copies.book_id = books.id
+        LEFT JOIN books_authors ON books.id = books_authors.book_id
+        LEFT JOIN authors ON books_authors.author_id = authors.id
+        WHERE borrowed_books.user_id = :userId
+        GROUP BY borrowed_books.id, books.title
+        ORDER BY borrowed_books.borrowed_date
+    ');
+        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $loans = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $result = [];
+        foreach ($loans as $loan) {
+            $result[] = new BorrowedBook(
+                $loan['id'],
+                $loan['user_id'],
+                $loan['copy_id'],
+                $loan['borrowed_date'],
+                $loan['expected_return_date'],
+                $loan['title'],
+                $loan['authors'],
+                $loan['actual_return_date']
+            );
+        }
+
+        return $result;
+    }
+
+
+    public function getAllLoans(): array
+    {
+        $stmt = $this->database->connect()->prepare('
+        SELECT borrowed_books.*, books.title as title, 
+               STRING_AGG(authors.name, \', \') as authors,
+               CONCAT(user_details.name, \' \', user_details.lastname) as user_name
+        FROM borrowed_books
+        INNER JOIN book_copies ON borrowed_books.copy_id = book_copies.id
+        INNER JOIN books ON book_copies.book_id = books.id
+        INNER JOIN users ON borrowed_books.user_id = users.id
+        INNER JOIN user_details ON users.id = user_details.user_id
+        LEFT JOIN books_authors ON books.id = books_authors.book_id
+        LEFT JOIN authors ON books_authors.author_id = authors.id
+        GROUP BY borrowed_books.id, books.title, user_name
+        ORDER BY borrowed_books.borrowed_date
+    ');
+        $stmt->execute();
+
+        $loans = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $result = [];
+        foreach ($loans as $loan) {
+            $result[] = new BorrowedBook(
+                $loan['id'],
+                $loan['user_id'],
+                $loan['copy_id'],
+                $loan['borrowed_date'],
+                $loan['expected_return_date'],
+                $loan['title'],
+                $loan['authors'],
+                $loan['actual_return_date'],
+                $loan['user_name']
+            );
+        }
+
+        return $result;
+    }
+
+    public function cancelBorrowedBook(int $loanId): void {
+        $pdo = $this->database->connect();
+
+        try {
+            $pdo->beginTransaction();
+
+            // Pobranie user_id dla danego wypożyczenia
+            $stmt = $pdo->prepare('SELECT user_id FROM borrowed_books WHERE id = :loanId');
+            $stmt->bindParam(':loanId', $loanId, PDO::PARAM_INT);
+            $stmt->execute();
+            $userId = $stmt->fetchColumn();
+
+            if (!$userId) {
+                throw new \Exception("User not found for the given loan");
+            }
+
+            // Pobranie copy_id dla danego wypożyczenia
+            $stmt = $pdo->prepare('SELECT copy_id FROM borrowed_books WHERE id = :loanId');
+            $stmt->bindParam(':loanId', $loanId, PDO::PARAM_INT);
+            $stmt->execute();
+            $copyId = $stmt->fetchColumn();
+
+            if (!$copyId) {
+                throw new \Exception("Loan not found");
+            }
+
+            // Usunięcie rekordu z borrowed_books
+            $this->deleteRecordFromTable('borrowed_books', $loanId);
+
+            // Dodanie rekordu do reserved_books
+            $date = new DateTime();
+            $reservationDate = $date->format('Y-m-d');
+            $reservationEnd = $date->modify('+7 days')->format('Y-m-d');
+
+            $this->addRecordToTable('reserved_books', [
+                'user_id' => $userId,
+                'copy_id' => $copyId,
+                'reservation_date' => $reservationDate,
+                'reservation_end' => $reservationEnd,
+            ]);
+
+            // Zmiana statusu kopii książki na 'reserved'
+            $this->setCopyStatus($copyId, 'reserved');
+
+            $pdo->commit();
+        } catch (\Throwable $e) {
+            $pdo->rollBack();
+            throw new \Exception("Error cancelling the loan: " . $e->getMessage());
+        }
+    }
+
+
 }

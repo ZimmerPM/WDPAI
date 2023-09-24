@@ -17,14 +17,6 @@ class BorrowController extends AppController
     }
 
 
-    public function loans()
-    {
-        if ($this->isLoggedIn())
-        {
-            return $this->render('loans');
-        }
-    }
-
     public function reservations()
     {
         if ($this->isLoggedIn()) {
@@ -45,6 +37,25 @@ class BorrowController extends AppController
         }
     }
 
+    public function loans()
+    {
+        if ($this->isLoggedIn()) {
+            $borrowRepository = new BorrowRepository();
+
+            // Sprawdzenie, czy zalogowany użytkownik jest administratorem
+            if ($this->isAdmin()) {
+                // Pobranie wszystkich wypożyczeń dla administratora
+                $loans = $borrowRepository->getAllLoans();
+            } else {
+                // Pobranie wypożyczeń tylko dla zalogowanego użytkownika
+                $userId = $_SESSION['user']['id'];
+                $loans = $borrowRepository->getLoansForUser($userId);
+            }
+
+            // Renderowanie widoku z przekazaniem listy wypożyczeń
+            return $this->render('loans', ['loans' => $loans]);
+        }
+    }
 
     public function reserve()
     {
@@ -158,6 +169,40 @@ class BorrowController extends AppController
         }
     }
 
+    public function cancelLoan() {
+        header('Content-Type: application/json');
+
+        // Sprawdzenie, czy zalogowany użytkownik jest administratorem
+        if (!$this->isAdmin()) {
+            echo json_encode(['success' => false, 'message' => 'Brak uprawnień do anulowania wypożyczenia']);
+            return;
+        }
+
+        // Sprawdzenie, czy metoda jest POST
+        if ($this->isPost()) {
+            // Pobranie danych z żądania
+            $data = json_decode(file_get_contents('php://input'), true);
+            $loanId = $data['loanId'];
+
+            // Walidacja loanId
+            if (empty($loanId) || !is_numeric($loanId)) {
+                echo json_encode(['success' => false, 'message' => 'Invalid loanId']);
+                return;
+            }
+
+            // Utworzenie repozytorium
+            $borrowRepository = new BorrowRepository();
+
+            try {
+                // Anulowanie wypożyczenia książki
+                $borrowRepository->cancelBorrowedBook((int)$loanId);
+                echo json_encode(['success' => true]);
+            } catch (\Exception $e) {
+                // Obsługa błędu
+                echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+            }
+        }
+    }
 
 
 }

@@ -21,17 +21,14 @@
         </a>
     <?php endif; ?>
 
-
-    <a href="/reservations" class="nav-button <?php echo ($_SERVER['REQUEST_URI'] == '/reservations') ? 'active' : ''; ?>">
-        <i class="fa-regular fa-calendar-check"></i> <span>Rezerwacje</span>
-    </a>
-
-
     <?php if (isset($_SESSION['user'])): ?>
+        <a href="/reservations" class="nav-button <?php echo ($_SERVER['REQUEST_URI'] == '/reservations') ? 'active' : ''; ?>">
+            <i class="fa-regular fa-calendar-check"></i> <span>Rezerwacje</span>
+        </a>
+
         <a href="/loans" class="nav-button <?php echo ($_SERVER['REQUEST_URI'] == '/loans') ? 'active' : ''; ?>">
             <i class="fa-solid fa-book-open"></i> <span>Wypożyczenia</span>
         </a>
-
 
         <a href="/profile" class="nav-button <?php echo ($_SERVER['REQUEST_URI'] == '/profile') ? 'active' : ''; ?>">
             <i class="fa-solid fa-user"></i> <span>Moje konto</span>
@@ -43,8 +40,6 @@
         <a href="/login" class="nav-button <?php echo ($_SERVER['REQUEST_URI'] == '/login') ? 'active' : ''; ?>">
             <i class="fa-solid fa-user-circle"></i> <span>Logowanie</span>
         </a>
-
-
         <a href="/register" class="nav-button <?php echo ($_SERVER['REQUEST_URI'] == '/register') ? 'active' : ''; ?>">
             <i class="fa-solid fa-user-plus"></i> <span>Rejestracja</span>
         </a>
