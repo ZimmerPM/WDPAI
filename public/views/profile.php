@@ -14,15 +14,18 @@
     <link rel="stylesheet" type="text/css" href="public/css/style.css">
     <link rel="stylesheet" type="text/css" href="public/css/modal-styles.css">
 
+
     <script src="public/js/change-password.js" defer></script>
 
     <title>Mój Profil</title>
 </head>
+
 <body class="profile">
 
 <?php
 include('header.php');
 ?>
+
 
 <div class="profile-container">
 

@@ -45,7 +45,7 @@ include('header.php');
 <!-- Katalog książek - taki sam jak w catalog -->
 <div class="header-container">
     <div class="empty-field"></div>
-    <table class="catalog-table">
+    <table class="catalog-table" id="admin-catalog">
         <thead>
         <tr>
             <th>ID</th>
@@ -70,7 +70,7 @@ include('header.php');
                 <div class="book-cover">
                     <img src="<?php echo $book->getImage(); ?>" alt="<?php echo $book->getTitle(); ?>" data-filename="<?php echo basename($book->getImage()); ?>">
                 </div>
-                <table class="catalog-table">
+                <table class="catalog-table" id="admin-catalog">
                     <tbody>
                     <tr>
                         <td><?php echo $book->getId(); ?></td>

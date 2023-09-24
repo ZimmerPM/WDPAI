@@ -29,7 +29,7 @@
 
 <div class="header-container">
     <div class="empty-field"></div>
-    <table class="catalog-table">
+    <table class="catalog-table" id="common-catalog">
         <thead>
         <tr>
             <th>Tytuł</th>
@@ -53,7 +53,7 @@
                 <div class="book-cover">
                     <img src="<?php echo $book->getImage(); ?>" alt="<?php echo $book->getTitle(); ?>">
                 </div>
-                <table class="catalog-table">
+                <table class="catalog-table" id="common-catalog">
                     <tbody>
                     <tr>
                         <td><?php echo $book->getTitle(); ?></td>

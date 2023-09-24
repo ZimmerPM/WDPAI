@@ -110,10 +110,6 @@
 	font-size: 0.75em;
 }
 
-.catalog .catalog-table th:nth-child(6),  /* zmień "n" na numer kolumny liczby egzemplarzy */
-.catalog .catalog-table td:nth-child(6) {  /* to samo dla komórek z wartościami */
-	width: 6em;  /* Przykładowa szerokość, możemy dostosować wg potrzeb */
-}
 
 
 .admin-panel .catalog-table th:nth-child(1),
@@ -121,6 +117,12 @@
 
 	width: 3em
 }
+
+.catalog .catalog-table th:nth-child(6),
+.catalog .catalog-table td:nth-child(6) {
+	width: 6em;
+}
+
 
 .admin-panel .catalog-table th:nth-child(7),
 .admin-panel .catalog-table td:nth-child(7) {
@@ -187,7 +189,7 @@
 }
 
 .user-table td .user-management-buttons {
-	width: 20%;+
+	width: 20%;
 	margin: 0.2em 0.4em;
 	padding: 0.8em 1.5em; /* Dopasowanie paddingu, może wymagać zmiany dla tekstu "Ranga administratora" */
 	font-family: 'Comfortaa', cursive;
@@ -292,13 +294,17 @@
 	width: 16em;
 }
 
+#loansTableUser th:last-child, #loansTableUser td:last-child{
+	width: auto;
+}
+
 #loans-archive-table td,
 #loans-archive-table th{
 	width: auto;
 }
 
 #reservationsTableUser th:last-child,
-#reservationsTableBodyUser td last-child
+#reservationsTableUser td:last-child
 {
 	width: auto;
 }
@@ -333,66 +339,225 @@
 }
 
 
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 920px) {
 	/* Ukrywanie obrazków w książkach */
 	.book-entry .book-cover {
 		display: none;
 	}
 
-	/* Ukrywanie opisów w menu nawigacyjnym */
-	nav .nav-button span {
-		display: none;
-	}
 
-	.empty-field{
+	.empty-field {
 		display: none;
 
 	}
 
 	.book-entry {
 
-		margin-left: 0em;
+		margin-left: 0;
 
 	}
 
 
+	#common-catalog th,
+	#common-catalog td,
+	#admin-catalog th,
+	#admin-catalog td {
+		width: auto;
+		font-size: 0.65em;
 
-	/* Ukrywanie nagłówków trzeciej, czwartej i piątej kolumny */
-	.catalog-table th:nth-child(3),
-	.catalog-table th:nth-child(4),
-	.catalog-table th:nth-child(5),
-	.catalog-table th:nth-child(7)
-	{
+	}
+
+
+	#common-catalog th:nth-child(3),
+	#common-catalog th:nth-child(4),
+	#common-catalog th:nth-child(5) {
 		display: none;
 	}
 
-	/* Ukrywanie danych trzeciej, czwartej i piątej kolumny */
-	.catalog-table td:nth-child(3),
-	.catalog-table td:nth-child(4),
-	.catalog-table td:nth-child(5),
-	.catalog-table td:nth-child(7)
-	{
+
+	#common-catalog td:nth-child(1),
+	#common-catalog td:nth-child(4),
+	#common-catalog td:nth-child(5) {
 		display: none;
 	}
 
-	.catalog-table tbody{
-		height: 4em;
+	#admin-catalog th:nth-child(1),
+	#admin-catalog th:nth-child(4),
+	#admin-catalog th:nth-child(5),
+	#admin-catalog th:nth-child(6) {
+
+		display: none;
 	}
-	.catalog-table td, .user-table td {
-		padding: 8px;
-		font-size: 14px;
+
+	#admin-catalog td:nth-child(1),
+	#admin-catalog td:nth-child(4),
+	#admin-catalog td:nth-child(5),
+	#admin-catalog td:nth-child(6) {
+
+		display: none;
 	}
-	.catalog-table td button {
-		min-width: 70px;
-		padding: 0.5em 1.5em;
+
+	.user-table th:nth-child(1),
+	.user-table td:nth-child(1),
+	.user-table th:nth-child(2),
+	.user-table td:nth-child(2) {
+
+		display: none;
+	}
+
+	.user-table th,
+	.user-table td {
+
+		height: auto;
+		width: auto;
+	}
+
+	.user-table th {
+
 		font-size: 0.7em;
-		margin-right: 2em;
 	}
 
-	.catalog-table th, .user-table th {
-		padding: 8px;
-		font-size: 14px;
+	.user-table td {
+
+		font-size: 0.65em;
 	}
 
 
+	.user-table th:nth-child(3),
+	.user-table td:nth-child(3),
+	.user-table th:nth-child(4),
+	.user-table td:nth-child(4) {
+		width: 20vw;
+	}
+
+	.user-table td:last-child {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+
+	}
+
+
+	.user-table td .user-management-buttons {
+		width: 100px;
+	}
+
+	.loans-archive-link {
+		font-size: 0.7em;
+	}
+
+	.archive-reverse-link {
+		font-size: 0.7em;
+	}
+
+	.loans-table th:last-child, .loans-table td:last-child {
+		width: auto;
+	}
+
+	.loans-table th {
+		font-size: 0.7em;
+	}
+
+	.loans-table td {
+		font-size: 0.65em;
+	}
+
+	.loans-table {
+		margin: auto;
+	}
+
+
+	#loansTableAdmin th:nth-child(1),
+	#loansTableAdmin td:nth-child(1),
+	#loansTableAdmin th:nth-child(3),
+	#loansTableAdmin td:nth-child(3),
+	#loansTableAdmin th:nth-child(4),
+	#loansTableAdmin td:nth-child(4) {
+		display: none;
+	}
+
+	#loansTableAdmin th {
+		font-size: 0.7em;
+	}
+
+	#loansTableAdmin td {
+		font-size: 0.65em;
+	}
+
+
+	#loansTableBodyAdmin td:last-child button {
+		width: 100%;
+	}
+
+
+	#loansArchiveTable th {
+		font-size: 0.65em;
+	}
+
+	#loansArchiveTable td {
+		font-size: 0.6em;
+	}
+
+	.reservations-table {
+		margin: auto;
+	}
+
+	.reservations-table th {
+		font-size: 0.7em;
+		word-wrap: break-word;
+		white-space: normal;
+	}
+
+	.reservations-table td {
+		font-size: 0.65em;
+	}
+
+
+	.reservations-table th:last-child,
+	.reservations-table td:last-child{
+		width: 200px;
+	}
+
+	#reservationsTableUser th:first-child,
+	#reservationsTableUser td:first-child,
+	#reservationsTableUser td:nth-child(2),
+	#reservationsTableUser th:nth-child(2){
+		display: none;
+	}
+
+	#reservationsTableUser th:last-child,
+	#reservationsTableUser td:last-child
+	{
+		width: 27vw;
+	}
+
+	#reservationsTableAdmin th:last-child,
+	#reservationsTableAdmin td:last-child
+	{
+		width: 25vw;
+		padding: 0;
+	}
+
+	#reservationsTableAdmin th:last-child button,
+	#reservationsTableAdmin td:last-child button
+	{
+		width: 20vw;
+	}
+
+	#reservationsTableAdmin th:first-child,
+	#reservationsTableAdmin td:first-child,
+	#reservationsTableAdmin td:nth-child(3),
+	#reservationsTableAdmin th:nth-child(3),
+	#reservationsTableAdmin td:nth-child(4),
+	#reservationsTableAdmin th:nth-child(4)
+	{
+		display: none;
+	}
+
+	#reservationsTableAdmin td {
+		font-size: 0.6em;
+	}
 }
+
+
+

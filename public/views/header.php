@@ -1,5 +1,5 @@
 <div class="top-bar">
-    <img class="logo" src="public/img/logo.svg" alt="logo">
+    <img class="logo" src="public/img/logo.svg" alt="logo" id="top-logo">
     <?php if (isset($_SESSION['user'])): ?>
         <span class="user-info"><?php echo $_SESSION['user']['name'] . " " . $_SESSION['user']['lastname']; ?></span>
     <?php else: ?>
@@ -36,6 +36,7 @@
         <a href="/profile" class="nav-button <?php echo ($_SERVER['REQUEST_URI'] == '/profile') ? 'active' : ''; ?>">
             <i class="fa-solid fa-user"></i> <span>Moje konto</span>
         </a>
+
         <a href="/logout" class="nav-button">
             <i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Wyloguj</span>
         </a>
