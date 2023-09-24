@@ -383,5 +383,119 @@ class BorrowRepository extends Repository
         }
     }
 
+    public function executeBookReturn(int $loanId): void
+    {
+        $pdo = $this->database->connect();
+
+        try {
+            $pdo->beginTransaction();
+
+            // Pobranie wszystkich danych dla danego wypożyczenia
+            $stmt = $pdo->prepare('SELECT * FROM borrowed_books WHERE id = :loanId');
+            $stmt->bindParam(':loanId', $loanId, PDO::PARAM_INT);
+            $stmt->execute();
+            $borrowedBook = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$borrowedBook) {
+                throw new \Exception("Loan not found");
+            }
+
+            // Ustawienie daty rzeczywistego zwrotu książki
+            $date = new DateTime();
+            $actualReturnDate = $date->format('Y-m-d');
+            $borrowedBook['actual_return_date'] = $actualReturnDate;
+
+            // Przeniesienie rekordu do tabeli archive_loans
+            $this->addRecordToTable('archive_loans', $borrowedBook);
+
+            // Usunięcie rekordu z tabeli borrowed_books
+            $this->deleteRecordFromTable('borrowed_books', $loanId);
+
+            // Zmiana statusu kopii książki na 'available'
+            $this->setCopyStatus($borrowedBook['copy_id'], 'available');
+
+            $pdo->commit();
+        } catch (\Throwable $e) {
+            $pdo->rollBack();
+            throw new \Exception("Error returning the book: " . $e->getMessage());
+        }
+    }
+
+    public function getAllArchiveLoans(): array
+    {
+        $stmt = $this->database->connect()->prepare('
+        SELECT archive_loans.*, books.title as title, 
+               STRING_AGG(authors.name, \', \') as authors,
+               CONCAT(user_details.name, \' \', user_details.lastname) as user_name
+        FROM archive_loans
+        INNER JOIN book_copies ON archive_loans.copy_id = book_copies.id
+        INNER JOIN books ON book_copies.book_id = books.id
+        INNER JOIN users ON archive_loans.user_id = users.id
+        INNER JOIN user_details ON users.id = user_details.user_id
+        LEFT JOIN books_authors ON books.id = books_authors.book_id
+        LEFT JOIN authors ON books_authors.author_id = authors.id
+        GROUP BY archive_loans.id, books.title, user_name
+        ORDER BY archive_loans.borrowed_date
+    ');
+        $stmt->execute();
+
+        $loans = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $result = [];
+        foreach ($loans as $loan) {
+            $result[] = new BorrowedBook(
+                $loan['id'],
+                $loan['user_id'],
+                $loan['copy_id'],
+                $loan['borrowed_date'],
+                $loan['expected_return_date'],
+                $loan['title'],
+                $loan['authors'],
+                $loan['actual_return_date'],
+                $loan['user_name']
+            );
+        }
+
+        return $result;
+    }
+
+    public function getArchiveLoansForUser(int $userId): array
+    {
+        $stmt = $this->database->connect()->prepare('
+    SELECT archive_loans.*, books.title as title, 
+           STRING_AGG(authors.name, \', \') as authors
+    FROM archive_loans
+    INNER JOIN book_copies ON archive_loans.copy_id = book_copies.id
+    INNER JOIN books ON book_copies.book_id = books.id
+    LEFT JOIN books_authors ON books.id = books_authors.book_id
+    LEFT JOIN authors ON books_authors.author_id = authors.id
+    WHERE archive_loans.user_id = :userId
+    GROUP BY archive_loans.id, books.title
+    ORDER BY archive_loans.borrowed_date
+    ');
+        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $archiveLoans = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $result = [];
+        foreach ($archiveLoans as $loan) {
+            $result[] = new BorrowedBook(
+                $loan['id'],
+                $loan['user_id'],
+                $loan['copy_id'],
+                $loan['borrowed_date'],
+                $loan['expected_return_date'],
+                $loan['title'],
+                $loan['authors'],
+                $loan['actual_return_date']
+            );
+        }
+
+        return $result;
+    }
+
+
+
 
 }

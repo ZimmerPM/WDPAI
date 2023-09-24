@@ -292,6 +292,11 @@
 	width: 16em;
 }
 
+#loans-archive-table td,
+#loans-archive-table th{
+	width: auto;
+}
+
 #reservationsTableUser th:last-child,
 #reservationsTableBodyUser td last-child
 {

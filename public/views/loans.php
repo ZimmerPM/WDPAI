@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="public/css/modal-styles.css">
 
     <script src="public/js/cancel-loan.js" defer></script>
+    <script src="public/js/return-book.js" defer></script>
 
 
     <title>Wypożyczenia</title>
@@ -21,6 +22,7 @@
 
 <body class="loans" data-role="<?php echo $_SESSION['user']['role']; ?>">
 <?php include('header.php'); ?>
+
 <section>
     <?php
     if (isset($_SESSION['user'])) {
@@ -42,7 +44,7 @@
                 </tr>
                 </thead>
                 <tbody id="loansTableBodyAdmin">
-                <?php if (isset($loans) && is_array($loans)): ?>
+                <?php if (isset($loans) && count($loans) > 0): ?>
                     <?php foreach ($loans as $loan): ?>
                         <tr>
                             <td><?= $loan->getUserId() ?></td>
@@ -56,9 +58,12 @@
                                 <button class="loans-management-buttons return-button" data-loan-id="<?php echo $loan->getId(); ?>">Zwróć</button>
                                 <button class="loans-management-buttons cancel-button" data-loan-id="<?php echo $loan->getId(); ?>">Anuluj</button>
                             </td>
-                            </td>
                         </tr>
                     <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="8" class="no-results-message" id="loans-table-message-admin">Tabela wypożyczeń jest pusta</td>
+                    </tr>
                 <?php endif; ?>
                 </tbody>
             </table>
@@ -77,7 +82,7 @@
                 </tr>
                 </thead>
                 <tbody id="loansTableBodyUser">
-                <?php if (isset($loans) && is_array($loans)): ?>
+                <?php if (isset($loans) && count($loans) > 0): ?>
                     <?php foreach ($loans as $loan): ?>
                         <tr>
                             <td><?= $loan->getCopyId() ?></td>
@@ -87,6 +92,10 @@
                             <td><?= $loan->getExpectedReturnDate() ?></td>
                         </tr>
                     <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="5" class="no-results-message" id="loans-table-message-user">Tabela wypożyczeń jest pusta</td>
+                    </tr>
                 <?php endif; ?>
                 </tbody>
             </table>
@@ -101,14 +110,14 @@
     <?php
     if (isset($_SESSION['user'])) {
         $role = $_SESSION['user']['role'];
-        $userId = $_SESSION['user']['id'];
-        // Pobieranie danych z bazy danych
         ?>
-        <table class="loans-table">
+        <table class="loans-table" id="loans-archive-table">
             <thead>
             <tr>
-                <?php if ($role === 'admin') echo "<th>ID Użytkownika</th>"; ?>
-                <?php if ($role === 'admin') echo "<th>Imię i Nazwisko</th>"; ?>
+                <?php if ($role === 'admin'): ?>
+                    <th>ID Użytkownika</th>
+                    <th>Imię i Nazwisko</th>
+                <?php endif; ?>
                 <th>ID Egzemplarza</th>
                 <th>Tytuł Książki</th>
                 <th>Data Wypożyczenia</th>
@@ -117,15 +126,33 @@
             </thead>
             <tbody>
             <?php
-            // Jeżeli $archivedLoans jest dostępne i jest to tablica, iteruj przez elementy i wyświetl je
-            ?>
+            if (isset($archivedLoans) && count($archivedLoans) > 0):
+                foreach ($archivedLoans as $loan):
+                    ?>
+                    <tr>
+                        <?php if ($role === 'admin'): ?>
+                            <td><?= $loan->getUserId() ?></td>
+                            <td><?= $loan->getUserName() ?></td>
+                        <?php endif; ?>
+                        <td><?= $loan->getCopyId() ?></td>
+                        <td><?= $loan->getTitle() ?></td>
+                        <td><?= $loan->getBorrowedDate() ?></td>
+                        <td><?= $loan->getActualReturnDate() ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="<?= $role === 'admin' ? '6' : '4' ?>" class="no-results-message">Tabela archiwalnych wypożyczeń jest pusta</td>
+                </tr>
+            <?php endif; ?>
             </tbody>
         </table>
         <?php
     }
     ?>
-
 </section>
+
+
 <!-- Modal dla zwrotu książki -->
 <div id="returnModalAdmin" class="modal" style="display: none">
     <div class="modal-content">

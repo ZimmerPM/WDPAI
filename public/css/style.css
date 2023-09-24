@@ -269,9 +269,12 @@ nav .nav-button.active:hover {
     text-align: center;
 }
 
-#reservations-table-message{
+#reservations-table-message,
+#loans-table-message-admin,
+#loans-table-message-user{
     height: 5em;
 }
+
 
 .profile-container {
     height: 100%;

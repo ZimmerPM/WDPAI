@@ -49,7 +49,7 @@
 
 }
 
-#cancelModal, #cancelModalAdmin, #lendModalAdmin, #cancelLoanModalAdmin{
+#cancelModal, #cancelModalAdmin, #lendModalAdmin, #cancelLoanModalAdmin, #returnModalAdmin{
     position: fixed;
     top: 0;
     left: 0;
@@ -192,12 +192,13 @@
 }
 
 .delete-confirmation, .reserve-confirmation, .cancel-confirmation, .lend-confirmation,
-.cancel-loan-confirmation{
+.cancel-loan-confirmation, .return-confirmation{
     display: flex;
     justify-content: center
 }
 
-.delete-confirmation button, .reserve-confirmation button, .cancel-confirmation button{
+.delete-confirmation button, .reserve-confirmation button, .cancel-confirmation button
+.lend-confirmation button, .cancel-loan-confirmation button, .return-confirmation button{
     margin: 1.2em;
 }
 
@@ -206,7 +207,8 @@
     opacity: 0.6;
 }
 
-#reserveModal, #cancelModal, #cancelModalAdmin #lendModalAdmin, #cancelLoanModalAdmin p{
+#reserveModal, #cancelModal, #cancelModalAdmin #lendModalAdmin,
+#cancelLoanModalAdmin, #returnModalAdmin p{
     font-family: 'Sarabun', cursive;
     text-align: center;
     line-height: 1.5em;

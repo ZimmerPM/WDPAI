@@ -46,16 +46,19 @@ class BorrowController extends AppController
             if ($this->isAdmin()) {
                 // Pobranie wszystkich wypożyczeń dla administratora
                 $loans = $borrowRepository->getAllLoans();
+                $archiveLoans = $borrowRepository->getAllArchiveLoans(); // Pobranie archiwalnych wypożyczeń
             } else {
                 // Pobranie wypożyczeń tylko dla zalogowanego użytkownika
                 $userId = $_SESSION['user']['id'];
                 $loans = $borrowRepository->getLoansForUser($userId);
+                $archiveLoans = $borrowRepository->getArchiveLoansForUser($userId); // Pobranie archiwalnych wypożyczeń dla użytkownika
             }
 
-            // Renderowanie widoku z przekazaniem listy wypożyczeń
-            return $this->render('loans', ['loans' => $loans]);
+            // Renderowanie widoku z przekazaniem listy wypożyczeń oraz archiwalnych wypożyczeń
+            return $this->render('loans', ['loans' => $loans, 'archivedLoans' => $archiveLoans]);
         }
     }
+
 
     public function reserve()
     {
@@ -204,6 +207,44 @@ class BorrowController extends AppController
         }
     }
 
+    public function returnBook() {
+        // Sprawdzenie, czy użytkownik jest administratorem
+        if (!$this->isAdmin()) {
+            http_response_code(403);
+            echo json_encode(['success' => false, 'message' => 'Forbidden: Only administrators can return books']);
+            exit;
+        }
+
+        // Sprawdzenie metody żądania
+        if (!$this->isPost()) {
+            http_response_code(405);
+            echo json_encode(['success' => false, 'message' => 'Method Not Allowed']);
+            exit;
+        }
+
+        // Pobranie danych z ciała żądania
+        $inputJSON = file_get_contents('php://input');
+        $input = json_decode($inputJSON, TRUE);
+
+        // Sprawdzenie, czy loanId jest ustawione
+        if (!isset($input['loanId'])) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Bad Request: loanId is required']);
+            exit;
+        }
+
+        $loanId = (int)$input['loanId'];
+
+        // Wywołanie metody repozytorium do zwrotu książki
+        try {
+            $this->borrowRepository->executeBookReturn($loanId);
+            http_response_code(200);
+            echo json_encode(['success' => true, 'message' => 'Book has been returned successfully']);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Internal Server Error: ' . $e->getMessage()]);
+        }
+    }
 
 }
 
