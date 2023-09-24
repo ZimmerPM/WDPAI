@@ -26,7 +26,10 @@
             <i class="fa-regular fa-calendar-check"></i> <span>Rezerwacje</span>
         </a>
 
-        <a href="/loans" class="nav-button <?php echo ($_SERVER['REQUEST_URI'] == '/loans') ? 'active' : ''; ?>">
+        <a href="/loans" class="nav-button
+        <?php
+        echo ($_SERVER['REQUEST_URI'] == '/loans' || $_SERVER['REQUEST_URI'] == '/loansArchive') ? 'active' : '';
+        ?>">
             <i class="fa-solid fa-book-open"></i> <span>Wypożyczenia</span>
         </a>
 

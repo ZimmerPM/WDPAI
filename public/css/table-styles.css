@@ -314,7 +314,7 @@
 }
 
 .loans h3{
-	margin-top: 5em;
+	margin-top: 3em;
 }
 
 .reservations h2
@@ -325,9 +325,12 @@
 	margin: 2em auto 1em auto;
 }
 
-
-
-
+#reservations-table-message,
+#loans-table-message-admin,
+#loans-table-message-user,
+#loans-table-message-archive{
+	height: 5em;
+}
 
 
 @media only screen and (max-width: 800px) {

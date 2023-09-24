@@ -15,13 +15,16 @@
     <script src="public/js/cancel-loan.js" defer></script>
     <script src="public/js/return-book.js" defer></script>
 
-
     <title>Wypożyczenia</title>
 
 </head>
 
 <body class="loans" data-role="<?php echo $_SESSION['user']['role']; ?>">
 <?php include('header.php'); ?>
+
+<div class="archive-button-container">
+    <a href="/loansArchive" class="loans-archive-link">Archiwum</a>
+</div>
 
 <section>
     <?php
@@ -104,54 +107,6 @@
     }
     ?>
 </section>
-
-<section>
-    <h3>Wypożyczenia archiwalne</h3>
-    <?php
-    if (isset($_SESSION['user'])) {
-        $role = $_SESSION['user']['role'];
-        ?>
-        <table class="loans-table" id="loans-archive-table">
-            <thead>
-            <tr>
-                <?php if ($role === 'admin'): ?>
-                    <th>ID Użytkownika</th>
-                    <th>Imię i Nazwisko</th>
-                <?php endif; ?>
-                <th>ID Egzemplarza</th>
-                <th>Tytuł Książki</th>
-                <th>Data Wypożyczenia</th>
-                <th>Data Zwrotu</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php
-            if (isset($archivedLoans) && count($archivedLoans) > 0):
-                foreach ($archivedLoans as $loan):
-                    ?>
-                    <tr>
-                        <?php if ($role === 'admin'): ?>
-                            <td><?= $loan->getUserId() ?></td>
-                            <td><?= $loan->getUserName() ?></td>
-                        <?php endif; ?>
-                        <td><?= $loan->getCopyId() ?></td>
-                        <td><?= $loan->getTitle() ?></td>
-                        <td><?= $loan->getBorrowedDate() ?></td>
-                        <td><?= $loan->getActualReturnDate() ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <tr>
-                    <td colspan="<?= $role === 'admin' ? '6' : '4' ?>" class="no-results-message">Tabela archiwalnych wypożyczeń jest pusta</td>
-                </tr>
-            <?php endif; ?>
-            </tbody>
-        </table>
-        <?php
-    }
-    ?>
-</section>
-
 
 <!-- Modal dla zwrotu książki -->
 <div id="returnModalAdmin" class="modal" style="display: none">

@@ -269,10 +269,31 @@ nav .nav-button.active:hover {
     text-align: center;
 }
 
-#reservations-table-message,
-#loans-table-message-admin,
-#loans-table-message-user{
-    height: 5em;
+
+
+.archive-button-container, .archive-reverse-container {
+    display: flex;
+    justify-content: center;
+}
+
+.loans-archive-link, .archive-reverse-link {
+    margin-top: 5em;
+    padding: 0.9em 5.1em;
+    font-family: "Comfortaa", cursive;
+    background-color: #5b5b62;
+    color: #f2efc7;
+    border: none;
+    border-radius: 0.8em;
+    cursor: pointer;
+    display:block;
+    font-size: 0.85em;
+    letter-spacing: 0.25em;
+    text-decoration: none;
+}
+
+.users-management-link {
+    margin: 3em auto 3em auto;
+
 }
 
 
@@ -282,7 +303,7 @@ nav .nav-button.active:hover {
     margin-left: 5em;
     display: flex;
     flex-direction: column;
-}
+    }
 
 .profile-name {
     font-family: 'Comfortaa', cursive;
@@ -331,6 +352,8 @@ nav .nav-button.active:hover {
     background-color: #444;
 }
 
+
+
 .admin-panel-button {
     font-family: 'Poppins', sans-serif;
     font-size: 1vw;
@@ -373,21 +396,21 @@ nav .nav-button.active:hover {
     background: #c2c2c2;
 }
 
-/*@media only screen and (max-device-width: 850px) {
-    .admin-panel-button {
-        width: 20vw;
-        font-size: 4vw;
-    }
-}*/
+    /*@media only screen and (max-device-width: 850px) {
+        .admin-panel-button {
+            width: 20vw;
+            font-size: 4vw;
+        }
+    }*/
 
-/* Odpowiednie style dla urządzeń mobilnych */
+    /* Odpowiednie style dla urządzeń mobilnych */
 @media only screen and (max-width: 600px) {
     .search-container {
         flex-direction: column;
     }
 
     .search-input,
-    .search-button {
+        search-button {
         margin-bottom: 0.5em;
     }
 }

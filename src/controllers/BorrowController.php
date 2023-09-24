@@ -46,16 +46,35 @@ class BorrowController extends AppController
             if ($this->isAdmin()) {
                 // Pobranie wszystkich wypożyczeń dla administratora
                 $loans = $borrowRepository->getAllLoans();
-                $archiveLoans = $borrowRepository->getAllArchiveLoans(); // Pobranie archiwalnych wypożyczeń
             } else {
                 // Pobranie wypożyczeń tylko dla zalogowanego użytkownika
                 $userId = $_SESSION['user']['id'];
                 $loans = $borrowRepository->getLoansForUser($userId);
+            }
+
+            // Renderowanie widoku z przekazaniem listy wypożyczeń oraz archiwalnych wypożyczeń
+            return $this->render('loans', ['loans' => $loans]);
+        }
+    }
+
+
+    public function loansArchive()
+    {
+        if ($this->isLoggedIn()) {
+            $borrowRepository = new BorrowRepository();
+
+            // Sprawdzenie, czy zalogowany użytkownik jest administratorem
+            if ($this->isAdmin()) {
+                // Pobranie wszystkich wypożyczeń dla administratora
+                $archiveLoans = $borrowRepository->getAllArchiveLoans(); // Pobranie archiwalnych wypożyczeń
+            } else {
+                // Pobranie wypożyczeń tylko dla zalogowanego użytkownika
+                $userId = $_SESSION['user']['id'];
                 $archiveLoans = $borrowRepository->getArchiveLoansForUser($userId); // Pobranie archiwalnych wypożyczeń dla użytkownika
             }
 
             // Renderowanie widoku z przekazaniem listy wypożyczeń oraz archiwalnych wypożyczeń
-            return $this->render('loans', ['loans' => $loans, 'archivedLoans' => $archiveLoans]);
+            return $this->render('loans-archive', ['archivedLoans' => $archiveLoans]);
         }
     }
 
