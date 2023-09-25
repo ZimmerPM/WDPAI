@@ -114,7 +114,7 @@ include('header.php');
         <span class="close-button">&times;</span>
         <h2>Dodaj pozycję do katalogu</h2>
         <div class="modal-messageBox"></div>
-        <form action="addBook" method="POST" enctype="multipart/form-data">
+        <form action="addBook" method="POST" enctype="multipart/form-data" id="addBookForm">
             <?php if (isset($messages)): ?>
                 <?php foreach ($messages as $message): ?>
                     <?php echo $message; ?>
@@ -137,7 +137,7 @@ include('header.php');
         <span class="close-button">&times;</span>
         <h2>Edytuj pozycję w katalogu</h2>
         <div class="modal-messageBox"></div>
-        <form action="editBook" method="POST" enctype="multipart/form-data">
+        <form action="editBook" method="POST" enctype="multipart/form-data" id="editBookForm">
             <?php if (isset($messages)): ?>
                 <?php foreach ($messages as $message): ?>
                     <?php echo $message; ?>
