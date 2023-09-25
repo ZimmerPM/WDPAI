@@ -31,6 +31,11 @@ function searchFunction() {
             data.books.forEach(book => {
                 renderBook(book, data.isLoggedIn, data.role);
             });
+
+            // Odśwież zdarzenia dla przycisków "Wypożycz"
+            if (window.assignBorrowEvent) {
+                window.assignBorrowEvent();
+            }
         });
 }
 
@@ -92,6 +97,9 @@ function renderBook(book, isLoggedIn, role) {
 
         let operationButton = document.createElement("button");
         operationButton.textContent = "Wypożycz";
+        operationButton.className = "borrow-btn"; // Dodajemy klasę do przycisku
+        operationButton.setAttribute('data-book-id', book.id); // Ustawiamy atrybut z ID książki
+        operationButton.setAttribute('data-book-title', book.title); // Ustawiamy atrybut z tytułem książki
         if (!book.availability) {
             operationButton.disabled = true;
         }

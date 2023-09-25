@@ -16,15 +16,22 @@ document.addEventListener('DOMContentLoaded', () => {
         isReservationSuccess = false;
     };
 
-    document.querySelectorAll('.borrow-btn').forEach(button => {
-        button.addEventListener('click', () => {
-            bookId = button.getAttribute('data-book-id');
-            const bookTitle = button.getAttribute('data-book-title');
+    function borrowButtonClick() {
+        bookId = this.getAttribute('data-book-id');
+        const bookTitle = this.getAttribute('data-book-title');
+        bookTitleSpan.textContent = bookTitle;
+        reserveModal.style.display = 'block';
+    }
 
-            bookTitleSpan.textContent = bookTitle;
-            reserveModal.style.display = 'block';
+    function assignBorrowEvent() {
+        document.querySelectorAll('.borrow-btn').forEach(button => {
+            button.removeEventListener('click', borrowButtonClick);
+            button.addEventListener('click', borrowButtonClick);
         });
-    });
+    }
+
+    window.assignBorrowEvent = assignBorrowEvent;
+    assignBorrowEvent();
 
     closeBtn.addEventListener('click', () => {
         reserveModal.style.display = 'none';
@@ -52,13 +59,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     confirmBtn.disabled = true;
                     cancelBtn.disabled = true;
 
-                    // Znajdź przycisk "Wypożycz" dla zarezerwowanej książki i ustaw go jako wyłączony
                     const borrowBtn = document.querySelector(`.borrow-btn[data-book-id="${bookId}"]`);
                     if (borrowBtn) {
                         borrowBtn.disabled = true;
                     }
 
-                    // Zaktualizuj liczbę dostępnych egzemplarzy
                     const bookEntry = document.querySelector(`.book-entry[data-id="${bookId}"]`);
                     if (bookEntry) {
                         const stockCell = bookEntry.querySelector('td:nth-child(6)');
@@ -67,8 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (!isNaN(currentStock)) {
                                 const newStock = currentStock - 1;
                                 stockCell.textContent = newStock;
-
-                                // Jeśli nowa liczba dostępnych egzemplarzy to 0, zmień dostępność na "Niedostępna"
                                 if (newStock === 0) {
                                     const availabilityCell = bookEntry.querySelector('td:nth-child(5)');
                                     if (availabilityCell) {
