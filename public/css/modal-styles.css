@@ -185,7 +185,7 @@
     transition: background-color 0.3s, color 0.3s;  /* Płynna zmiana */
 }
 
-#deleteBookModal p, #deleteUserModal p{
+#deleteBookModal p, #deleteUserModal p, #lendModalAdmin p, #cancelModalAdmin p{
     font-family: 'Sarabun', cursive;
     text-align: center;
     margin: 3em;
