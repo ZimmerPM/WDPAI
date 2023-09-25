@@ -264,8 +264,10 @@
         font-size: 0.8em;
     }
 
-    .delete-confirmation button, .reserve-confirmation button, .cancel-confirmation button
-    .lend-confirmation button, .cancel-loan-confirmation button, .return-confirmation button{
+
+    .delete-confirmation button, .reserve-confirmation button, .cancel-confirmation button,
+    .lend-confirmation button, .cancel-loan-confirmation button, .return-confirmation button
+    {
         width: 5em;
         text-align: center;
     }
