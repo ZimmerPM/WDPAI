@@ -528,7 +528,7 @@
 	#reservationsTableUser th:last-child,
 	#reservationsTableUser td:last-child
 	{
-		width: 27vw;
+		width: 30vw;
 	}
 
 	#reservationsTableAdmin th:last-child,
@@ -542,6 +542,7 @@
 	#reservationsTableAdmin td:last-child button
 	{
 		width: 20vw;
+		margin: 1em auto;
 	}
 
 	#reservationsTableAdmin th:first-child,

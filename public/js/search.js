@@ -48,10 +48,16 @@ function renderBook(book, isLoggedIn, role) {
 
     let bookTable = document.createElement("table");
     bookTable.className = "catalog-table";
+
+    const currentPath = window.location.pathname;
+    if (currentPath === '/catalog') {
+        bookTable.id = "common-catalog";
+    } else if (currentPath === '/adminPanel') {
+        bookTable.id = "admin-catalog";
+    }
     let bookTBody = document.createElement("tbody");
     let bookRow = document.createElement("tr");
 
-    const currentPath = window.location.pathname;
 
     if (currentPath === '/adminPanel') {
         let idCell = document.createElement("td");
