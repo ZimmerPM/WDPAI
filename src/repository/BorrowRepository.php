@@ -494,8 +494,4 @@ class BorrowRepository extends Repository
 
         return $result;
     }
-
-
-
-
 }
