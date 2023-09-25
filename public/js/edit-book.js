@@ -30,39 +30,43 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    document.querySelectorAll(".edit-btn").forEach(button => {
-        button.addEventListener("click", function() {
-            const title = this.getAttribute("data-title");
-            const author = this.getAttribute("data-author");
-            const publicationYear = this.getAttribute("data-publicationyear");
-            const genre = this.getAttribute("data-genre");
-            const stock = this.getAttribute("data-stock");
-            const image = this.getAttribute("data-image");
-            const bookId = this.getAttribute("data-id");
+    function updateEditForm(button) {
+        const bookId = button.getAttribute("data-id");
+        const title = button.getAttribute("data-title");
+        const author = button.getAttribute("data-author");
+        const publicationYear = button.getAttribute("data-publicationyear");
+        const genre = button.getAttribute("data-genre");
+        const stock = button.getAttribute("data-stock");
+        const image = button.getAttribute("data-image");
 
-            editBookIdField.value = bookId;
-            editForm.querySelector("[name='title']").value = title;
-            editForm.querySelector("[name='author']").value = author;
-            editForm.querySelector("[name='publicationyear']").value = publicationYear;
-            editForm.querySelector("[name='genre']").value = genre;
-            editForm.querySelector("[name='stock']").value = stock;
-            hiddenFilePathInput.value = image;
+        editBookIdField.value = bookId;
+        editForm.querySelector("[name='title']").value = title;
+        editForm.querySelector("[name='author']").value = author;
+        editForm.querySelector("[name='publicationyear']").value = publicationYear;
+        editForm.querySelector("[name='genre']").value = genre;
+        editForm.querySelector("[name='stock']").value = stock;
+        hiddenFilePathInput.value = image;
+    }
 
-            editModal.style.display = "block";
-            messageBox.innerText = "";
-            submitButton.disabled = false;
-            submitButton.innerText = "Aktualizuj";
+    const booksContainer = document.querySelector(".books-container");
+    if (booksContainer) {
+        booksContainer.addEventListener("click", function(event) {
+            const button = event.target.closest(".edit-btn");
+            if (button && booksContainer.contains(button)) {
+                clearForm(editForm);
+                updateEditForm(button); // Aktualizuje formularz danymi z klikniętego rekordu.
+                editModal.style.display = "block";
+                messageBox.innerText = "";
+                submitButton.disabled = false;
+                submitButton.innerText = "Aktualizuj";
+            }
         });
-    });
+    }
 
     editForm.addEventListener('submit', function(event) {
         event.preventDefault();
 
         const formData = new FormData(editForm);
-
-        for (var pair of formData.entries()) {
-            console.log(pair[0]+ ', ' + pair[1]);
-        }
 
         fetch('/editBook', {
             method: 'POST',
@@ -75,7 +79,6 @@ document.addEventListener("DOMContentLoaded", function() {
                     submitButton.disabled = true;
                     submitButton.innerText = "Wykonano";
 
-                    // Aktualizuj widok książki po edycji
                     const bookId = editBookIdField.value;
                     const editedEntry = document.querySelector(`.edit-btn[data-id="${bookId}"]`).closest('.book-entry');
 
@@ -85,7 +88,6 @@ document.addEventListener("DOMContentLoaded", function() {
                     editedEntry.querySelector(`td:nth-child(5)`).textContent = formData.get("genre");
                     editedEntry.querySelector(`td:nth-child(7)`).textContent = formData.get("stock");
 
-                    // Aktualizacja obrazka
                     const newImagePath = data.book.image;
                     editedEntry.querySelector('.book-cover img').src = newImagePath;
 

@@ -36,6 +36,7 @@ function searchFunction() {
             if (window.assignBorrowEvent) {
                 window.assignBorrowEvent();
             }
+            document.dispatchEvent(new CustomEvent('booksLoaded'));
         });
 }
 
@@ -129,6 +130,15 @@ function renderBook(book, isLoggedIn, role) {
             let editButton = document.createElement("button");
             editButton.textContent = "Edytuj";
             btnContainer.appendChild(editButton);
+
+            editButton.className = "edit-btn";
+            editButton.setAttribute('data-id', book.id);
+            editButton.setAttribute('data-title', book.title);
+            editButton.setAttribute('data-author', book.author);
+            editButton.setAttribute('data-publicationyear', book.publicationyear);
+            editButton.setAttribute('data-genre', book.genre);
+            editButton.setAttribute('data-stock', book.stock);
+            editButton.setAttribute('data-image', book.image);
 
             let deleteButton = document.createElement("button");
             deleteButton.textContent = "Usuń";
