@@ -97,12 +97,18 @@ function renderBook(book, isLoggedIn, role) {
 
         let operationButton = document.createElement("button");
         operationButton.textContent = "Wypożycz";
-        operationButton.className = "borrow-btn"; // Dodajemy klasę do przycisku
-        operationButton.setAttribute('data-book-id', book.id); // Ustawiamy atrybut z ID książki
-        operationButton.setAttribute('data-book-title', book.title); // Ustawiamy atrybut z tytułem książki
-        if (!book.availability) {
+        operationButton.className = "borrow-btn";
+        operationButton.setAttribute('data-book-id', book.id);
+        operationButton.setAttribute('data-book-title', book.title);
+
+        // Sprawdzamy czy liczba dostępnych egzemplarzy jest większa od 0
+        if (book.stock <= 0) {
+            availabilityCell.textContent = 'Niedostępna';
             operationButton.disabled = true;
+        } else {
+            availabilityCell.textContent = 'Dostępna';
         }
+
         btnContainer.appendChild(operationButton);
 
         operationCell.appendChild(btnContainer);
