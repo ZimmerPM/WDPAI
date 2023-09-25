@@ -32,10 +32,18 @@ function searchFunction() {
                 renderBook(book, data.isLoggedIn, data.role);
             });
 
-            // Odśwież zdarzenia dla przycisków "Wypożycz"
             if (window.assignBorrowEvent) {
                 window.assignBorrowEvent();
             }
+
+            // Dodanie obsługi zdarzeń dla nowo utworzonych przycisków "Usuń"
+            document.querySelectorAll(".delete-btn").forEach(function(button) {
+                button.addEventListener("click", function() {
+                    window.bookId = this.getAttribute("data-id");
+                    window.deleteBookModal.style.display = 'block';
+                });
+            });
+
             document.dispatchEvent(new CustomEvent('booksLoaded'));
         });
 }
@@ -142,6 +150,8 @@ function renderBook(book, isLoggedIn, role) {
 
             let deleteButton = document.createElement("button");
             deleteButton.textContent = "Usuń";
+            deleteButton.className = "delete-btn"; // Dodaj klasę do przycisku
+            deleteButton.setAttribute('data-id', book.id);
             btnContainer.appendChild(deleteButton);
         }
 

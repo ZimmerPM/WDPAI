@@ -1,11 +1,12 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const deleteBookModal = document.getElementById('deleteBookModal');
+    // Ustawienie zmiennych jako właściwości window, aby były dostępne globalnie
+    window.deleteBookModal = document.getElementById('deleteBookModal');
     const closeButton = deleteBookModal.querySelector('.close-button-delete');
     const confirmDeleteButton = document.getElementById('confirmDelete');
     const cancelDeleteButton = document.getElementById('cancelDelete');
     const modalMessageBox = deleteBookModal.querySelector('.modal-messageBox');
 
-    let bookId;
+    window.bookId = null;
 
     function closeDeleteModal() {
         deleteBookModal.style.display = 'none';
