@@ -17,7 +17,7 @@
 
     <script src="public/js/change-password.js" defer></script>
 
-    <title>Mój Profil</title>
+    <title>Moje konto</title>
 </head>
 
 <body class="profile">
@@ -62,7 +62,7 @@ include('header.php');
                 <input type="password" id="repeatPassword" name="repeatPassword" placeholder="Powtórz nowe hasło" required>
                 <span class="error" id="repeatPasswordError"></span>
 
-                <button type="submit">Zatwierdź</button>
+                <button type="submit" id="changePasswordSubmit">Zatwierdź</button>
             </form>
         </div>
     </section>

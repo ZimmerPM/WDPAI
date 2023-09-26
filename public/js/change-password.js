@@ -1,25 +1,16 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const passwordModal = document.getElementById("passwordModal");
     const openPasswordModalButton = document.getElementById("openPasswordModal");
     const closeButton = passwordModal.querySelector(".close-button");
     const messageBox = passwordModal.querySelector(".modal-messageBox");
+    const submitButton = document.getElementById("changePasswordSubmit"); // Dodano odwołanie do przycisku submit
 
     const newPasswordInput = document.getElementById("newPassword");
     const repeatPasswordInput = document.getElementById("repeatPassword");
 
-    openPasswordModalButton.addEventListener("click", function() {
-        passwordModal.style.display = "block";
-        messageBox.innerText = "";
+    let isChangeSuccess = false; // Dodano zmienną przechowującą stan operacji zmiany hasła
 
-        document.getElementById("currentPassword").value = "";
-        newPasswordInput.value = "";
-        repeatPasswordInput.value = "";
-
-        newPasswordInput.classList.remove('no-valid');
-        repeatPasswordInput.classList.remove('no-valid');
-    });
-
-    closeButton.addEventListener("click", function() {
+    function resetModal() { // Dodano funkcję resetującą modal
         passwordModal.style.display = "none";
         messageBox.innerText = "";
 
@@ -29,19 +20,26 @@ document.addEventListener("DOMContentLoaded", function() {
 
         newPasswordInput.classList.remove('no-valid');
         repeatPasswordInput.classList.remove('no-valid');
+    }
+
+    openPasswordModalButton.addEventListener("click", function () {
+        passwordModal.style.display = "block";
+        messageBox.innerText = "";
+
+        document.getElementById("currentPassword").value = "";
+        newPasswordInput.value = "";
+        repeatPasswordInput.value = "";
+
+        newPasswordInput.classList.remove('no-valid');
+        repeatPasswordInput.classList.remove('no-valid');
+        submitButton.disabled = false; // Włącz przycisk submit przy otwieraniu modalu
     });
 
-    document.addEventListener("keydown", function(event) {
+    closeButton.addEventListener("click", resetModal);
+
+    document.addEventListener("keydown", function (event) {
         if (event.key === "Escape" && passwordModal.style.display === "block") {
-            passwordModal.style.display = "none";
-            messageBox.innerText = "";
-
-            document.getElementById("currentPassword").value = "";
-            newPasswordInput.value = "";
-            repeatPasswordInput.value = "";
-
-            newPasswordInput.classList.remove('no-valid');
-            repeatPasswordInput.classList.remove('no-valid');
+            resetModal();
         }
     });
 
@@ -72,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const changePasswordForm = document.getElementById("changePasswordForm");
 
-    changePasswordForm.addEventListener("submit", function(e) {
+    changePasswordForm.addEventListener("submit", function (e) {
         e.preventDefault();
 
         const formData = new FormData(e.target);
@@ -95,9 +93,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function handleData(data) {
         if (data.success) {
-            alert("Hasło zostało zmienione!");
-            passwordModal.style.display = "none";
-            messageBox.innerText = "";
+            messageBox.innerHTML = '<p style="color: green">Hasło zostało zmienione!</p>'; // Zastąpiono alert komunikatem w messageBox
+            isChangeSuccess = true; // Ustawiono zmienną na true
+            submitButton.disabled = true; // Dezaktywowanie przycisku submit
         } else {
             messageBox.innerText = data.message;
         }
@@ -106,4 +104,12 @@ document.addEventListener("DOMContentLoaded", function() {
     function handleError(error) {
         messageBox.innerText = "Wystąpił nieoczekiwany błąd.";
     }
+
+    // Listener do zamykania modalu przez kliknięcie poza jego obszarem
+    window.addEventListener('click', (event) => {
+        if (event.target === passwordModal && isChangeSuccess) {
+            resetModal();
+            isChangeSuccess = false; // Resetowanie zmiennej
+        }
+    });
 });
